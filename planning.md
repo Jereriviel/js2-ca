@@ -1,0 +1,2 @@
+- Pagination: Max 10, then load more posts.
+- Profile:
