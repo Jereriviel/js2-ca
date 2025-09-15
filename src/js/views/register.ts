@@ -1,4 +1,5 @@
 import { registerUser, loginUser } from "../services/authService";
+import type { RegisterResponseData, LoginResponseData } from "../types/auth";
 import { router } from "../app";
 
 export function registerView() {
@@ -33,8 +34,16 @@ export function registerView() {
         }
 
         try {
-          await registerUser(name, email, password);
-          await loginUser(email, password);
+          const newUser: RegisterResponseData = await registerUser(
+            name,
+            email,
+            password
+          );
+          console.log("Registered:", newUser);
+
+          const loggedIn: LoginResponseData = await loginUser(email, password);
+          console.log("Logged in as:", loggedIn.name);
+
           router.navigate("/feed");
         } catch (error) {
           errorEl.textContent =

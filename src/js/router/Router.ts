@@ -1,9 +1,11 @@
+import { setNavigate } from "../utils/navigate";
+
 type ViewResult = {
   html: string;
-  init?: () => void;
+  init?: () => void | Promise<void>;
 };
 
-type View = () => ViewResult | Promise<ViewResult>;
+type View = (data?: any) => ViewResult | Promise<ViewResult>;
 
 interface Routes {
   [path: string]: View;
@@ -17,6 +19,8 @@ export class Router {
     this.routes = routes;
     this.outlet = outlet;
 
+    setNavigate((path: string) => this.navigate(path));
+
     window.addEventListener("popstate", () => {
       this.resolveRoute(location.pathname);
     });
@@ -24,22 +28,36 @@ export class Router {
     this.resolveRoute(location.pathname);
   }
 
-  navigate(path: string): void {
+  navigate(path: string, data?: any): void {
     if (location.pathname !== path) {
-      history.pushState({}, "", path);
+      history.pushState(data || {}, "", path);
       this.resolveRoute(path);
     }
   }
 
-  async resolveRoute(path: string): Promise<void> {
-    const view = this.routes[path] || this.routes["*"];
-    if (view) {
-      const { html, init } = await view();
-      this.outlet.innerHTML = html;
+  private async resolveRoute(path: string): Promise<void> {
+    let view;
 
-      if (init) {
-        init();
+    if (path.startsWith("/profile")) {
+      const parts = path.split("/");
+      const username = parts[2];
+      view = this.routes["/profile"];
+      if (view) {
+        const { html, init } = await view(username);
+        this.outlet.innerHTML = html;
+        if (init) await init();
+        return;
       }
     }
+
+    view = this.routes[path] || this.routes["*"];
+    if (!view) {
+      this.outlet.innerHTML = `<p>Route not found</p>`;
+      return;
+    }
+
+    const { html, init } = await view();
+    this.outlet.innerHTML = html;
+    if (init) await init();
   }
 }

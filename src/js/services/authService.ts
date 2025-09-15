@@ -1,23 +1,17 @@
 import { API_BASE } from "../constants";
 import { setUser } from "../store/userStore";
-
-interface RegisterResponse {
-  id: string;
-  name: string;
-  email: string;
-}
-
-interface LoginResponse {
-  accessToken: string;
-  name: string;
-  email: string;
-}
+import type {
+  RegisterResponseData,
+  RegisterResponse,
+  LoginResponseData,
+  LoginResponse,
+} from "../types/auth";
 
 export async function registerUser(
   name: string,
   email: string,
   password: string
-): Promise<RegisterResponse> {
+): Promise<RegisterResponseData> {
   const res = await fetch(`${API_BASE}/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -29,13 +23,15 @@ export async function registerUser(
     throw new Error(errorData.errors?.[0]?.message || "Registration failed");
   }
 
-  return await res.json();
+  const json: RegisterResponse = await res.json();
+  console.log("Is this the data:", json);
+  return json.data;
 }
 
 export async function loginUser(
   email: string,
   password: string
-): Promise<LoginResponse> {
+): Promise<LoginResponseData> {
   const res = await fetch(`${API_BASE}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -47,9 +43,12 @@ export async function loginUser(
     throw new Error(errorData.errors?.[0]?.message || "Login failed");
   }
 
-  const data: LoginResponse = await res.json();
+  const json: LoginResponse = await res.json();
 
-  setUser(data.accessToken, { name: data.name, email: data.email });
+  setUser(json.data.accessToken, {
+    name: json.data.name,
+    email: json.data.email,
+  });
 
-  return data;
+  return json.data;
 }

@@ -1,10 +1,9 @@
-interface User {
-  name: string;
-  email: string;
-}
+import type { LoginResponseData } from "../types/auth";
 
 const TOKEN_KEY = "token";
 const USER_KEY = "user";
+
+export type User = Omit<LoginResponseData, "accessToken">;
 
 export function setUser(token: string, user: User): void {
   localStorage.setItem(TOKEN_KEY, token);

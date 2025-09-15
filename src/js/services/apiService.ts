@@ -14,7 +14,7 @@ async function apiFetch<T>(
     ...(options.headers as Record<string, string>),
   };
 
-  const token = localStorage.getItem("accessToken");
+  const token = localStorage.getItem("token");
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -46,6 +46,13 @@ export async function get<T>(endpoint: string): Promise<T> {
 export async function post<T>(endpoint: string, body: object): Promise<T> {
   return apiFetch<T>(endpoint, {
     method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export async function put<T>(endpoint: string, body: object): Promise<T> {
+  return apiFetch<T>(endpoint, {
+    method: "PUT",
     body: JSON.stringify(body),
   });
 }
