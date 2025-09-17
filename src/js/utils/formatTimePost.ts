@@ -3,7 +3,12 @@ export function formatTimePost(dateString: string): string {
   const now = new Date();
   const diffMs = now.getTime() - createdDate.getTime();
 
-  const hours = Math.floor(diffMs / (1000 * 60 * 60));
+  const minutes = Math.floor(diffMs / (1000 * 60));
+  if (minutes < 60) {
+    return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+  }
+
+  const hours = Math.floor(minutes / 60);
   if (hours < 24) {
     return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
   }

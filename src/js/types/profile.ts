@@ -1,20 +1,24 @@
+export interface Media {
+  url: string;
+  alt?: string;
+}
+
 export interface Profile {
   name: string;
   email: string;
   bio?: string;
-  banner?: {
-    url: string;
-    alt?: string;
-  };
-  avatar?: {
-    url: string;
-    alt?: string;
-  };
-  _count: {
-    posts: number;
+  banner?: Media;
+  avatar?: Media;
+
+  _count?: {
     followers: number;
     following: number;
+    posts: number;
   };
+
+  followers?: Profile[];
+
+  following?: Profile[];
 }
 
 export interface ProfileResponse {

@@ -1,6 +1,7 @@
 import type { Profile } from "../types/profile";
+import { followButton } from "./followButton";
 
-export function profileCard(profile: Profile): string {
+export function profileCard(profile: Profile, isFollowing: boolean): string {
   return `
     <div class="profile-card" data-username="${profile.name}">
       <img src="${profile.avatar?.url || "/default-avatar.png"}" 
@@ -14,6 +15,7 @@ export function profileCard(profile: Profile): string {
           Followers: ${profile._count?.followers ?? 0} | 
           Following: ${profile._count?.following ?? 0}
         </p>
+        ${followButton(profile, isFollowing)}
       </div>
     </div>
   `;

@@ -50,7 +50,7 @@ export async function post<T>(endpoint: string, body: object): Promise<T> {
   });
 }
 
-export async function put<T>(endpoint: string, body: object): Promise<T> {
+export async function put<T>(endpoint: string, body?: object): Promise<T> {
   return apiFetch<T>(endpoint, {
     method: "PUT",
     body: JSON.stringify(body),

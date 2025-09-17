@@ -1,7 +1,10 @@
 import type { Post } from "../types/post";
-import { formatTimePost } from "../utils/formatTimePost";
 
-export function postCard(post: Post): string {
+export function postCard(post: Post, loggedInUserFollowing: string[]): string {
+  const isFollowing = post.author?.name
+    ? loggedInUserFollowing.includes(post.author.name)
+    : false;
+
   return `
     <div class="post">
       <h2>${post.title}</h2>
@@ -21,7 +24,11 @@ export function postCard(post: Post): string {
           ${post._count.comments} comments · ${post._count.reactions} reactions
         </p>
         <p>
-          Posted ${formatTimePost(post.created)}
+          <button class="follow-btn" data-username="${
+            post.author?.name
+          }" data-following="${isFollowing}">
+            ${isFollowing ? "Unfollow" : "Follow"}
+          </button>
         </p>
       </div>
     </div>
