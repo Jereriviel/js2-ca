@@ -77,3 +77,8 @@ Components:
 - Create post modal
 
 - Update/edit/delete post modal
+
+- JSDOC
+- Better error handling for images
+- Navigate utility
+- Check innerHTML's

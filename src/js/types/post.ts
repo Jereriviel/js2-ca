@@ -54,3 +54,16 @@ export interface SinglePostResponse {
   data: Post;
   meta: Record<string, never>;
 }
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: {
+    isFirstPage: boolean;
+    isLastPage: boolean;
+    currentPage: number;
+    previousPage: number | null;
+    nextPage: number | null;
+    pageCount: number;
+    totalCount: number;
+  };
+}
