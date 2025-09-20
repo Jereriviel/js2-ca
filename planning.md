@@ -24,7 +24,7 @@ Views:
   - Edit (update) post modal
   - Delete post (part of update?)
   - (React to post - maybe)
-  - (Comment on post - maybe)
+  - Comment on post (delete or edit?)
 
 - Profile: both user and different user (protected)
 
@@ -33,7 +33,7 @@ Views:
   - Bio
   - Avatar
   - Banner
-  - Posts
+  - Posts w/pagination
   - Post Edit and Delete buttons if user
   - (Followers - maybe)
   - (Following - maybe)
@@ -53,6 +53,7 @@ Views:
   - Search bar
   - Results posts
   - Results profiles
+  - Pagination
 
 Components:
 
@@ -82,3 +83,4 @@ Components:
 - Better error handling for images
 - Navigate utility
 - Check innerHTML's
+- Custom Error Handling

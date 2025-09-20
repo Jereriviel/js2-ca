@@ -120,6 +120,17 @@ export function searchView() {
           }
           profilesContainer.innerHTML = profilesHtml;
 
+          postsContainer
+            .querySelectorAll<HTMLElement>(".post-link")
+            .forEach((el) => {
+              const postId = el.dataset.id;
+              if (postId) {
+                el.addEventListener("click", () => {
+                  router.navigate(`/post/${postId}`);
+                });
+              }
+            });
+
           initFollowButtons();
 
           if (!postsRes.meta?.isLastPage) {

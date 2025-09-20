@@ -50,6 +50,18 @@ export class Router {
       }
     }
 
+    if (path.startsWith("/post")) {
+      const parts = path.split("/");
+      const id = Number(parts[2]);
+      view = this.routes["/post"];
+      if (view) {
+        const { html, init } = await view(id);
+        this.outlet.innerHTML = html;
+        if (init) await init();
+        return;
+      }
+    }
+
     view = this.routes[path] || this.routes["*"];
     if (!view) {
       this.outlet.innerHTML = `<p>Route not found</p>`;

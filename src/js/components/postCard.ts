@@ -5,13 +5,28 @@ export function postCard(post: Post, loggedInUserFollowing: string[]): string {
     ? loggedInUserFollowing.includes(post.author.name)
     : false;
 
+  const reactionsHtml =
+    post.reactions
+      ?.map(
+        (r) => `
+        <button class="reaction-btn" data-symbol="${r.symbol}" data-post-id="${post.id}">
+          ${r.symbol} ${r.count}
+        </button>
+      `
+      )
+      .join("") ?? "";
+
   return `
-    <div class="post">
-      <h2>${post.title}</h2>
-      <p>${post.body ?? ""}</p>
+    <div class="post" data-post-id="${post.id}">
+      <h2 class="post-link" data-id="${post.id}">${post.title}</h2>
+      <p class="post-link" data-id="${post.id}">${post.body ?? ""}</p>
       ${
         post.media
-          ? `<img src="${post.media.url}" alt="${post.media.alt ?? ""}"/>`
+          ? `<img 
+              class="post-link" 
+              data-id="${post.id}" 
+              src="${post.media.url}" 
+              alt="${post.media.alt ?? ""}"/>`
           : ""
       }
       <div class="post-meta">
@@ -21,12 +36,17 @@ export function postCard(post: Post, loggedInUserFollowing: string[]): string {
           </span>
         </p>
         <p>
-          ${post._count.comments} comments · ${post._count.reactions} reactions
-        </p>
+          <span class="post-link" data-id="${post.id}">
+            ${post._count.comments} comments
+          </span> · 
+          <span>
+            ${post._count.reactions} reactions
+          </span>
+      </p>
         <p>
-          <button class="follow-btn" data-username="${
-            post.author?.name
-          }" data-following="${isFollowing}">
+          <button class="follow-btn" 
+            data-username="${post.author?.name}" 
+            data-following="${isFollowing}">
             ${isFollowing ? "Unfollow" : "Follow"}
           </button>
         </p>

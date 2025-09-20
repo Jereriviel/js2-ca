@@ -1,9 +1,11 @@
-import { get } from "./apiService";
+import { get, post, put } from "./apiService";
 import type {
   PostsResponse,
   SinglePostResponse,
   Post,
   PaginatedResponse,
+  Comment,
+  Reaction,
 } from "../types/post";
 
 export async function getAllPosts(): Promise<PostsResponse> {
@@ -29,4 +31,22 @@ export async function getPaginatedProfilePosts(
   return get(
     `/social/profiles/${username}/posts?_author=true&page=${page}&limit=${limit}`
   );
+}
+
+export async function addComment(
+  postId: number,
+  body: string
+): Promise<Comment> {
+  const response = await post<{ data: Comment }>(
+    `/social/posts/${postId}/comment`,
+    { body }
+  );
+  return response.data;
+}
+
+export async function reactToPost(
+  postId: number,
+  symbol: string
+): Promise<{ postId: number; symbol: string; reactions: Reaction[] }> {
+  return put(`/social/posts/${postId}/react/${encodeURIComponent(symbol)}`);
 }

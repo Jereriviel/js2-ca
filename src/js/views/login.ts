@@ -1,6 +1,6 @@
 import { loginUser } from "../services/authService";
-import type { LoginResponseData } from "../types/auth";
 import { router } from "../app";
+import { renderLayout } from "../app";
 
 export function loginView() {
   return {
@@ -21,8 +21,8 @@ export function loginView() {
         const password = formData.get("password") as string;
 
         try {
-          const user: LoginResponseData = await loginUser(email, password);
-          console.log("Logged in as:", user.name);
+          await loginUser(email, password);
+          await renderLayout();
           router.navigate("/feed");
         } catch (err) {
           alert("Login failed. Please check your credentials.");
