@@ -1,4 +1,4 @@
-import { get, post, put } from "./apiService";
+import { get, post, put, del } from "./apiService";
 import type {
   PostsResponse,
   SinglePostResponse,
@@ -49,4 +49,24 @@ export async function reactToPost(
   symbol: string
 ): Promise<{ postId: number; symbol: string; reactions: Reaction[] }> {
   return put(`/social/posts/${postId}/react/${encodeURIComponent(symbol)}`);
+}
+
+export async function createPost(postData: Partial<Post>): Promise<Post> {
+  const response = await post<{ data: Post }>("/social/posts", postData);
+  return response.data;
+}
+
+export async function updatePost(
+  postId: number,
+  postData: Partial<Post>
+): Promise<Post> {
+  const response = await put<{ data: Post }>(
+    `/social/posts/${postId}`,
+    postData
+  );
+  return response.data;
+}
+
+export async function deletePost(postId: number): Promise<void> {
+  await del<void>(`/social/posts/${postId}`);
 }

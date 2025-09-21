@@ -3,7 +3,7 @@ import {
   getPaginatedSearchProfiles,
 } from "../services/searchService";
 import { protectedView } from "../utils/protectedView";
-import { postCard } from "../components/postCard";
+import { postCard, initEditPostButtons } from "../components/postCard";
 import { profileCard } from "../components/profileCard";
 import { router } from "../app";
 import { getUser } from "../store/userStore";
@@ -132,6 +132,7 @@ export function searchView() {
             });
 
           initFollowButtons();
+          initEditPostButtons(postsRes.data);
 
           if (!postsRes.meta?.isLastPage) {
             postsLoadMoreContainer.innerHTML = "";

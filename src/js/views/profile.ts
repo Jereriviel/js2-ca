@@ -4,8 +4,8 @@ import {
   getCurrentUserProfile,
 } from "../services/profileService";
 import { protectedView } from "../utils/protectedView";
-import { postCard } from "../components/postCard";
-import { profileCard } from "../components/profileCard";
+import { postCard, initEditPostButtons } from "../components/postCard";
+import { profileCard, initProfileCard } from "../components/profileCard";
 import { initFollowButtons } from "../components/followButton";
 import { router } from "../app";
 import { getUser } from "../store/userStore";
@@ -13,7 +13,6 @@ import type { Profile } from "../types/profile";
 import type { Post } from "../types/post";
 import { createLoadMoreButton } from "../components/loadMoreButton";
 import { getPaginatedProfilePosts } from "../services/postsService";
-import { initProfileCard } from "../components/profileCard";
 
 export function profileView(username?: string) {
   return protectedView({
@@ -85,6 +84,7 @@ export function profileView(username?: string) {
 
         initFollowButtons();
         initProfileCard();
+        initEditPostButtons(posts);
 
         const loadMoreBtn = createLoadMoreButton({
           container: postsContainer,

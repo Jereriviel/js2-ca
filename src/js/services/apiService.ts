@@ -25,15 +25,20 @@ async function apiFetch<T>(
       headers,
     });
 
-    const data: T = await response.json();
-
     if (!response.ok) {
-      const message =
-        (data as any)?.errors?.[0]?.message || `An unknown error occurred`;
-      throw new Error(message);
+      let errorMessage = `An unknown error occurred`;
+      try {
+        const data = await response.json();
+        errorMessage = (data as any)?.errors?.[0]?.message || errorMessage;
+      } catch {}
+      throw new Error(errorMessage);
     }
 
-    return data as T;
+    if (response.status === 204) {
+      return undefined as unknown as T;
+    }
+
+    return response.json() as Promise<T>;
   } catch (error) {
     throw error;
   }
@@ -54,5 +59,11 @@ export async function put<T>(endpoint: string, body?: object): Promise<T> {
   return apiFetch<T>(endpoint, {
     method: "PUT",
     body: JSON.stringify(body),
+  });
+}
+
+export async function del<T>(endpoint: string): Promise<T> {
+  return apiFetch<T>(endpoint, {
+    method: "DELETE",
   });
 }

@@ -2,6 +2,7 @@ import { getUser, clearUser } from "../store/userStore";
 import { router, renderLayout } from "../app";
 import { getCurrentUserProfile } from "../services/profileService";
 import { profileAvatar } from "../utils/profileAvatar";
+import { openCreatePostModal } from "./createPostModal";
 
 export async function navigation(): Promise<string> {
   const user = getUser();
@@ -50,7 +51,7 @@ export function initNavigation() {
 
   if (newPostBtn) {
     newPostBtn.addEventListener("click", () => {
-      alert("Open new post modal (to be implemented)");
+      openCreatePostModal();
     });
   }
 

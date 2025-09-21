@@ -35,6 +35,10 @@ export class Router {
     }
   }
 
+  public async refresh(): Promise<void> {
+    await this.resolveRoute(location.pathname);
+  }
+
   private async resolveRoute(path: string): Promise<void> {
     let view;
 

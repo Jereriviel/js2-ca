@@ -1,20 +1,13 @@
 import type { Post } from "../types/post";
+import { getUser } from "../store/userStore";
+import { openUpdatePostModal } from "./updatePostModal";
 
 export function postCard(post: Post, loggedInUserFollowing: string[]): string {
   const isFollowing = post.author?.name
     ? loggedInUserFollowing.includes(post.author.name)
     : false;
-
-  const reactionsHtml =
-    post.reactions
-      ?.map(
-        (r) => `
-        <button class="reaction-btn" data-symbol="${r.symbol}" data-post-id="${post.id}">
-          ${r.symbol} ${r.count}
-        </button>
-      `
-      )
-      .join("") ?? "";
+  const loggedInUser = getUser();
+  const isOwnPost = loggedInUser?.name === post.author?.name;
 
   return `
     <div class="post" data-post-id="${post.id}">
@@ -49,8 +42,37 @@ export function postCard(post: Post, loggedInUserFollowing: string[]): string {
             data-following="${isFollowing}">
             ${isFollowing ? "Unfollow" : "Follow"}
           </button>
+                    ${
+                      isOwnPost
+                        ? `<button class="edit-post-btn" data-id="${post.id}">Edit</button>`
+                        : ""
+                    }
         </p>
       </div>
     </div>
   `;
+}
+
+export function initEditPostButtons(posts: Post[]) {
+  posts.forEach((post) => {
+    const editBtn = document.querySelector<HTMLButtonElement>(
+      `.edit-post-btn[data-id="${post.id}"]`
+    );
+    if (editBtn) {
+      editBtn.addEventListener("click", () => {
+        openUpdatePostModal(post);
+      });
+    }
+  });
+}
+
+export function initEditPostButton(post: Post) {
+  const editBtn = document.querySelector<HTMLButtonElement>(
+    `.edit-post-btn[data-id="${post.id}"]`
+  );
+  if (editBtn) {
+    editBtn.addEventListener("click", () => {
+      openUpdatePostModal(post);
+    });
+  }
 }

@@ -1,6 +1,6 @@
-import { getPost, addComment, reactToPost } from "../services/postsService";
+import { getPost, addComment } from "../services/postsService";
 import { protectedView } from "../utils/protectedView";
-import { postCard } from "../components/postCard";
+import { postCard, initEditPostButton } from "../components/postCard";
 import { getUser } from "../store/userStore";
 import { getCurrentUserProfile } from "../services/profileService";
 import { initFollowButtons } from "../components/followButton";
@@ -93,6 +93,7 @@ export function postView() {
         });
 
         initFollowButtons();
+        initEditPostButton(post);
 
         container.addEventListener("click", (e) => {
           const target = (e.target as HTMLElement).closest(

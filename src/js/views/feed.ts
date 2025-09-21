@@ -1,6 +1,6 @@
 import { protectedView } from "../utils/protectedView";
 import { router } from "../app";
-import { postCard } from "../components/postCard";
+import { initEditPostButtons, postCard } from "../components/postCard";
 import { initFollowButtons } from "../components/followButton";
 import { getCurrentUserProfile } from "../services/profileService";
 import { getUser } from "../store/userStore";
@@ -59,6 +59,7 @@ export function feedView() {
         });
 
         initFollowButtons();
+        initEditPostButtons(posts);
 
         const loadMoreContainer = document.getElementById("loadMoreContainer")!;
         const loadMoreBtn = createLoadMoreButton({

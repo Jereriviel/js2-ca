@@ -84,3 +84,5 @@ Components:
 - Navigate utility
 - Check innerHTML's
 - Custom Error Handling
+- Remove console logs
+- Check caching for ex. profiles
