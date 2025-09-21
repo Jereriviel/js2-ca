@@ -70,3 +70,23 @@ export function initNavigation() {
     });
   }
 }
+
+export async function updateNavMiniProfile() {
+  const miniProfile = document.querySelector(".profile-avatar.mini");
+  const user = getUser();
+  if (!user || !miniProfile) return;
+
+  try {
+    const profile = await getCurrentUserProfile(user.name);
+    miniProfile.outerHTML = profileAvatar(profile, "mini");
+
+    const newMiniProfile = document.querySelector(".profile-avatar.mini");
+    if (newMiniProfile) {
+      newMiniProfile.addEventListener("click", () => {
+        router.navigate(`/profile/${profile.name}`);
+      });
+    }
+  } catch (err) {
+    console.error("Failed to update mini profile in nav", err);
+  }
+}

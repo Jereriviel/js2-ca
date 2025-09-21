@@ -29,9 +29,14 @@ export function profileCard(profile: Profile, isFollowing: boolean): string {
         <p>${profile.bio || "No bio available."}</p>
         <p>
           Posts: ${profile._count?.posts ?? 0} | 
-          Followers: ${profile._count?.followers ?? 0} | 
-          Following: ${profile._count?.following ?? 0}
+          <span class="followers-link" data-username="${profile.name}">
+            Followers: ${profile._count?.followers ?? 0}
+          </span> | 
+          <span class="following-link" data-username="${profile.name}">
+            Following: ${profile._count?.following ?? 0}
+          </span>
         </p>
+
         ${actionButton}
       </div>
     </div>

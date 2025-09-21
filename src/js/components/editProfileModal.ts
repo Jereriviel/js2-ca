@@ -1,7 +1,8 @@
 import { getUser } from "../store/userStore";
 import { getProfile, updateProfile } from "../services/profileService";
-import { profileCard } from "./profileCard";
+import { profileCard, initProfileCard } from "./profileCard";
 import type { Profile } from "../types/profile";
+import { updateNavMiniProfile } from "./navigation";
 
 export async function openEditProfileModal() {
   const currentUser = getUser();
@@ -95,6 +96,9 @@ export async function openEditProfileModal() {
 
       const header = document.getElementById("profileHeader");
       if (header) header.innerHTML = profileCard(updatedProfile, false);
+
+      initProfileCard();
+      await updateNavMiniProfile();
 
       modal.close();
       modal.remove();

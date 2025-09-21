@@ -45,6 +45,27 @@ export class Router {
     if (path.startsWith("/profile")) {
       const parts = path.split("/");
       const username = parts[2];
+
+      if (parts.length === 4 && parts[3] === "followers") {
+        view = this.routes["/profile/:username/followers"];
+        if (view) {
+          const { html, init } = await view(username);
+          this.outlet.innerHTML = html;
+          if (init) await init();
+          return;
+        }
+      }
+
+      if (parts.length === 4 && parts[3] === "following") {
+        view = this.routes["/profile/:username/following"];
+        if (view) {
+          const { html, init } = await view(username);
+          this.outlet.innerHTML = html;
+          if (init) await init();
+          return;
+        }
+      }
+
       view = this.routes["/profile"];
       if (view) {
         const { html, init } = await view(username);

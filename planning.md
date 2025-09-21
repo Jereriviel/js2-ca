@@ -86,3 +86,4 @@ Components:
 - Custom Error Handling
 - Remove console logs
 - Check caching for ex. profiles
+- Change alerts into modals

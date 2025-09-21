@@ -86,6 +86,18 @@ export function profileView(username?: string) {
         initProfileCard();
         initEditPostButtons(posts);
 
+        header.addEventListener("click", (e) => {
+          const target = e.target as HTMLElement;
+
+          if (target.classList.contains("followers-link")) {
+            router.navigate(`/profile/${username}/followers`);
+          }
+
+          if (target.classList.contains("following-link")) {
+            router.navigate(`/profile/${username}/following`);
+          }
+        });
+
         const loadMoreBtn = createLoadMoreButton({
           container: postsContainer,
           fetchItems: async (page: number) =>

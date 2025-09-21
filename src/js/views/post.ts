@@ -1,4 +1,4 @@
-import { getPost, addComment } from "../services/postsService";
+import { getPost, addComment, deleteComment } from "../services/postsService";
 import { protectedView } from "../utils/protectedView";
 import { postCard, initEditPostButton } from "../components/postCard";
 import { getUser } from "../store/userStore";
@@ -58,17 +58,27 @@ export function postView() {
         container.innerHTML = postHtml;
 
         if (post.comments && post.comments.length > 0) {
+          const currentUser = getUser();
+
           commentsContainer.innerHTML =
             `<h2>Comments</h2>` +
             post.comments
-              .map(
-                (c) => `
-                <div class="comment">
-                  <p>${c.author?.name ?? "Unknown"}: ${c.body}</p>
-                  ${new Date(c.created).toLocaleString()}
-                </div>
-              `
-              )
+              .map((c) => {
+                const isOwnComment = currentUser?.name === c.author?.name;
+                return `
+        <div class="comment" data-comment-id="${c.id}" data-post-id="${
+                  c.postId
+                }">
+          <p>${c.author?.name ?? "Unknown"}: ${c.body}</p>
+          ${new Date(c.created).toLocaleString()}
+          ${
+            isOwnComment
+              ? `<button class="delete-comment-btn" data-comment-id="${c.id}" data-post-id="${c.postId}">Delete</button>`
+              : ""
+          }
+        </div>
+      `;
+              })
               .join("");
         } else {
           commentsContainer.innerHTML = `<p>No comments yet.</p>`;
@@ -76,20 +86,64 @@ export function postView() {
 
         commentsContainer.insertAdjacentHTML("beforeend", commentForm(post.id));
 
+        commentsContainer
+          .querySelectorAll<HTMLButtonElement>(".delete-comment-btn")
+          .forEach((btn) => {
+            btn.addEventListener("click", async () => {
+              const commentId = Number(btn.dataset.commentId);
+              const postId = Number(btn.dataset.postId);
+              if (!commentId || !postId) return;
+
+              if (!confirm("Are you sure you want to delete this comment?"))
+                return;
+
+              try {
+                await deleteComment(postId, commentId);
+                const commentDiv = btn.closest(".comment");
+                if (commentDiv) commentDiv.remove();
+              } catch (err) {
+                console.error("Failed to delete comment:", err);
+                alert("Failed to delete comment. Please try again.");
+              }
+            });
+          });
+
         initCommentForms(async (postId, body) => {
           const newComment = await addComment(postId, body);
 
           commentsContainer.insertAdjacentHTML(
             "beforeend",
             `
-    <div class="comment">
-      <p>${newComment.author?.name ?? newComment.owner ?? "You"}:${
+<div class="comment" data-comment-id="${
+              newComment.id
+            }" data-post-id="${postId}">
+      <p>${newComment.author?.name ?? newComment.owner ?? "You"}: ${
               newComment.body
             }</p>
       ${new Date(newComment.created).toLocaleString()}
+      <button class="delete-comment-btn" data-comment-id="${
+        newComment.id
+      }" data-post-id="${postId}">Delete</button>
     </div>
   `
           );
+          const newBtn = commentsContainer.querySelector<HTMLButtonElement>(
+            `.delete-comment-btn[data-comment-id="${newComment.id}"]`
+          );
+          if (newBtn) {
+            newBtn.addEventListener("click", async () => {
+              if (!confirm("Are you sure you want to delete this comment?"))
+                return;
+              try {
+                await deleteComment(postId, newComment.id);
+                const div = newBtn.closest(".comment");
+                if (div) div.remove();
+              } catch (err) {
+                console.error("Failed to delete comment:", err);
+                alert("Failed to delete comment. Please try again.");
+              }
+            });
+          }
         });
 
         initFollowButtons();

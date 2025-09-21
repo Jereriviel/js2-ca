@@ -6,24 +6,27 @@ import { getCurrentUserProfile } from "../services/profileService";
 import { getUser } from "../store/userStore";
 import type { Profile } from "../types/profile";
 import { createLoadMoreButton } from "../components/loadMoreButton";
-import { getPaginatedPosts } from "../services/postsService";
+import { getPaginatedFollowingPosts } from "../services/postsService";
 
-export function feedView() {
+export function followingView() {
   return protectedView({
     html: `
-      <h1>Feed</h1>
-      <a href="#" id="followingLink">Following</a>
-      <div id="feedContainer"></div>
+      <header>
+        <button id="backBtn">← Back</button>
+        <h2>Following</h2>
+      </header>
+      <div id="followingContainer"></div>
       <div id="loadMoreContainer"></div>
     `,
     init: async () => {
-      const container = document.getElementById("feedContainer")!;
+      const container = document.getElementById("followingContainer")!;
+      const backBtn = document.getElementById("backBtn")!;
+
+      backBtn.addEventListener("click", () => router.navigate("/feed"));
+
       container.innerHTML = `<p>Loading posts...</p>`;
 
       try {
-        const response = await getPaginatedPosts(1, 10);
-        const posts = response.data;
-
         const currentUser = getUser();
         let currentUserFollowing: Profile[] = [];
 
@@ -35,6 +38,9 @@ export function feedView() {
         const currentUserFollowingNames = currentUserFollowing.map(
           (f) => f.name
         );
+
+        const response = await getPaginatedFollowingPosts(1, 10);
+        const posts = response.data;
 
         const postsHtml = posts.map((post) =>
           postCard(post, currentUserFollowingNames)
@@ -65,19 +71,14 @@ export function feedView() {
         const loadMoreContainer = document.getElementById("loadMoreContainer")!;
         const loadMoreBtn = createLoadMoreButton({
           container,
-          fetchItems: async (page: number) => await getPaginatedPosts(page, 10),
+          fetchItems: async (page: number) =>
+            await getPaginatedFollowingPosts(page, 10),
           renderItem: (post) => postCard(post, currentUserFollowingNames),
           onAfterRender: () => initFollowButtons(),
         });
         loadMoreContainer.appendChild(loadMoreBtn);
-
-        const followingLink = document.getElementById("followingLink");
-        followingLink?.addEventListener("click", (e) => {
-          e.preventDefault();
-          router.navigate("/feed/following");
-        });
       } catch (error) {
-        container.innerHTML = `<p>Error loading posts</p>`;
+        container.innerHTML = `<p>Error loading following posts</p>`;
         console.error(error);
       }
     },

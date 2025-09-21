@@ -37,11 +37,15 @@ export function postCard(post: Post, loggedInUserFollowing: string[]): string {
           </span>
       </p>
         <p>
-          <button class="follow-btn" 
-            data-username="${post.author?.name}" 
-            data-following="${isFollowing}">
-            ${isFollowing ? "Unfollow" : "Follow"}
-          </button>
+${
+  !isOwnPost
+    ? `<button class="follow-btn" 
+                   data-username="${post.author?.name}" 
+                   data-following="${isFollowing}">
+                   ${isFollowing ? "Unfollow" : "Follow"}
+                 </button>`
+    : ""
+}
                     ${
                       isOwnPost
                         ? `<button class="edit-post-btn" data-id="${post.id}">Edit</button>`

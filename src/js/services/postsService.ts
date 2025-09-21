@@ -16,6 +16,10 @@ export async function getPost(id: number): Promise<SinglePostResponse> {
   return get(`/social/posts/${id}?_author=true&_comments=true&_reactions=true`);
 }
 
+export async function getFollowingPosts(): Promise<PaginatedResponse<Post>> {
+  return get(`/social/posts/following?_author=true`);
+}
+
 export async function getPaginatedPosts(
   page: number = 1,
   limit: number = 10
@@ -33,6 +37,15 @@ export async function getPaginatedProfilePosts(
   );
 }
 
+export async function getPaginatedFollowingPosts(
+  page: number = 1,
+  limit: number = 10
+): Promise<PaginatedResponse<Post>> {
+  return get(
+    `/social/posts/following?_author=true&page=${page}&limit=${limit}`
+  );
+}
+
 export async function addComment(
   postId: number,
   body: string
@@ -42,6 +55,13 @@ export async function addComment(
     { body }
   );
   return response.data;
+}
+
+export async function deleteComment(
+  postId: number,
+  commentId: number
+): Promise<void> {
+  await del<void>(`/social/posts/${postId}/comment/${commentId}`);
 }
 
 export async function reactToPost(

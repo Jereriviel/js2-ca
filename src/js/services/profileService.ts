@@ -41,3 +41,17 @@ export async function followProfile(name: string): Promise<void> {
 export async function unfollowProfile(name: string): Promise<void> {
   await put(`/social/profiles/${name}/unfollow`);
 }
+
+export async function getProfileFollowers(username: string) {
+  const res: ProfileResponse = await get(
+    `/social/profiles/${username}?_followers=true`
+  );
+  return res.data.followers || [];
+}
+
+export async function getProfileFollowing(username: string) {
+  const res: ProfileResponse = await get(
+    `/social/profiles/${username}?_following=true`
+  );
+  return res.data.following || [];
+}
