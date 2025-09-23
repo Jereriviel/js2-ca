@@ -1,86 +1,50 @@
 import { protectedView } from "../utils/protectedView";
-import { router } from "../app";
-import { initEditPostButtons, postCard } from "../components/postCard";
-import { initFollowButtons } from "../components/followButton";
-import { getCurrentUserProfile } from "../services/profileService";
+import { postCard } from "../components/postCard";
+import { getCachedProfile } from "../utils/profileCache";
 import { getUser } from "../store/userStore";
-import type { Profile } from "../types/profile";
-import { createLoadMoreButton } from "../components/loadMoreButton";
 import { getPaginatedFollowingPosts } from "../services/postsService";
+import type { Profile } from "../types/profile";
+import { initPaginatedList } from "../utils/initPaginatedList";
+import { feedHeader, initFeedHeader } from "../components/feedHeader";
+import { goTo } from "../utils/navigate";
 
 export function followingView() {
   return protectedView({
     html: `
-      <header>
-        <button id="backBtn">← Back</button>
-        <h2>Following</h2>
-      </header>
+      ${feedHeader("following")}
       <div id="followingContainer"></div>
-      <div id="loadMoreContainer"></div>
+      <div id="loadMoreContainer" class="load-more-container"></div>
     `,
     init: async () => {
+      const headerContainer =
+        document.querySelector<HTMLElement>(".feed-header")!;
+      initFeedHeader(headerContainer);
+
       const container = document.getElementById("followingContainer")!;
-      const backBtn = document.getElementById("backBtn")!;
-
-      backBtn.addEventListener("click", () => router.navigate("/feed"));
-
       container.innerHTML = `<p>Loading posts...</p>`;
 
-      try {
-        const currentUser = getUser();
-        let currentUserFollowing: Profile[] = [];
+      const currentUser = getUser();
+      let currentUserFollowingNames: string[] = [];
 
-        if (currentUser) {
-          const profile = await getCurrentUserProfile(currentUser.name);
-          currentUserFollowing = profile.following ?? [];
-        }
-
-        const currentUserFollowingNames = currentUserFollowing.map(
-          (f) => f.name
-        );
-
-        const response = await getPaginatedFollowingPosts(1, 10);
-        const posts = response.data;
-
-        const postsHtml = posts.map((post) =>
-          postCard(post, currentUserFollowingNames)
-        );
-        container.innerHTML = postsHtml.join("");
-
-        container.addEventListener("click", (e) => {
-          const target = (e.target as HTMLElement).closest(
-            ".profile-link"
-          ) as HTMLElement | null;
-          if (target?.dataset.username) {
-            router.navigate(`/profile/${target.dataset.username}`);
-          }
-        });
-
-        container.querySelectorAll<HTMLElement>(".post-link").forEach((el) => {
-          const postId = el.dataset.id;
-          if (postId) {
-            el.addEventListener("click", () => {
-              router.navigate(`/post/${postId}`);
-            });
-          }
-        });
-
-        initFollowButtons();
-        initEditPostButtons(posts);
-
-        const loadMoreContainer = document.getElementById("loadMoreContainer")!;
-        const loadMoreBtn = createLoadMoreButton({
-          container,
-          fetchItems: async (page: number) =>
-            await getPaginatedFollowingPosts(page, 10),
-          renderItem: (post) => postCard(post, currentUserFollowingNames),
-          onAfterRender: () => initFollowButtons(),
-        });
-        loadMoreContainer.appendChild(loadMoreBtn);
-      } catch (error) {
-        container.innerHTML = `<p>Error loading following posts</p>`;
-        console.error(error);
+      if (currentUser) {
+        const profile = await getCachedProfile(currentUser.name);
+        currentUserFollowingNames =
+          profile.following?.map((f: Profile) => f.name) || [];
       }
+
+      await initPaginatedList({
+        container,
+        loadMoreContainer: document.getElementById("loadMoreContainer")!,
+        fetchItems: (page) => getPaginatedFollowingPosts(page, 10),
+        renderItem: (post) => postCard(post, currentUserFollowingNames),
+        isPostList: true,
+      });
+
+      const feedLink = document.getElementById("feedLink");
+      feedLink?.addEventListener("click", (e) => {
+        e.preventDefault();
+        goTo("/feed");
+      });
     },
   });
 }

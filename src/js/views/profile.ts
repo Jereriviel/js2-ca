@@ -1,18 +1,14 @@
-import {
-  getProfile,
-  getProfilePosts,
-  getCurrentUserProfile,
-} from "../services/profileService";
 import { protectedView } from "../utils/protectedView";
-import { postCard, initEditPostButtons } from "../components/postCard";
-import { profileCard, initProfileCard } from "../components/profileCard";
-import { initFollowButtons } from "../components/followButton";
-import { router } from "../app";
+import { profileCard } from "../components/profileCard";
+import { postCard } from "../components/postCard";
+import { getCurrentUserProfile } from "../services/profileService";
+import { getCachedProfile } from "../utils/profileCache";
 import { getUser } from "../store/userStore";
 import type { Profile } from "../types/profile";
 import type { Post } from "../types/post";
-import { createLoadMoreButton } from "../components/loadMoreButton";
 import { getPaginatedProfilePosts } from "../services/postsService";
+import { initPaginatedList } from "../utils/initPaginatedList";
+import { goTo } from "../utils/navigate";
 
 export function profileView(username?: string) {
   return protectedView({
@@ -20,7 +16,7 @@ export function profileView(username?: string) {
       <h1>Profile</h1>
       <div id="profileHeader"></div>
       <div id="profilePosts"></div>
-      <div id="loadMoreContainer"></div>
+      <div id="loadMoreContainer" class="load-more-container"></div>
     `,
     init: async () => {
       const header = document.getElementById("profileHeader")!;
@@ -37,11 +33,10 @@ export function profileView(username?: string) {
       }
 
       try {
-        const profile: Profile = await getProfile(username);
-        const posts: Post[] = await getProfilePosts(username);
-
-        let loggedInUserFollowing: string[] = [];
+        const profile: Profile = await getCachedProfile(username);
         const currentUser = getUser();
+        let loggedInUserFollowing: string[] = [];
+
         if (currentUser) {
           const currentUserProfile = await getCurrentUserProfile(
             currentUser.name
@@ -53,59 +48,26 @@ export function profileView(username?: string) {
         const isFollowingProfile = loggedInUserFollowing.includes(profile.name);
         header.innerHTML = profileCard(profile, isFollowingProfile);
 
-        if (posts.length === 0) {
-          postsContainer.innerHTML = `<p>No posts yet.</p>`;
-        } else {
-          const postsHtml = await Promise.all(
-            posts.map((post) => postCard(post, loggedInUserFollowing))
-          );
-          postsContainer.innerHTML = postsHtml.join("");
-        }
-
-        postsContainer.addEventListener("click", (e) => {
-          const target = (e.target as HTMLElement).closest(
-            ".profile-link"
-          ) as HTMLElement | null;
-          if (target?.dataset.username) {
-            router.navigate(`/profile/${target.dataset.username}`);
-          }
-        });
-
-        postsContainer
-          .querySelectorAll<HTMLElement>(".post-link")
-          .forEach((el) => {
-            const postId = el.dataset.id;
-            if (postId) {
-              el.addEventListener("click", () => {
-                router.navigate(`/post/${postId}`);
-              });
-            }
-          });
-
-        initFollowButtons();
-        initProfileCard();
-        initEditPostButtons(posts);
-
         header.addEventListener("click", (e) => {
           const target = e.target as HTMLElement;
+          const username = target.dataset.username;
+          if (!username) return;
 
           if (target.classList.contains("followers-link")) {
-            router.navigate(`/profile/${username}/followers`);
+            goTo(`/profile/${username}/followers`);
           }
-
           if (target.classList.contains("following-link")) {
-            router.navigate(`/profile/${username}/following`);
+            goTo(`/profile/${username}/following`);
           }
         });
 
-        const loadMoreBtn = createLoadMoreButton({
+        await initPaginatedList<Post>({
           container: postsContainer,
-          fetchItems: async (page: number) =>
-            await getPaginatedProfilePosts(username!, page, 5),
+          loadMoreContainer,
+          fetchItems: (page) => getPaginatedProfilePosts(username!, page, 5),
           renderItem: (post) => postCard(post, loggedInUserFollowing),
-          onAfterRender: () => initFollowButtons(),
+          isPostList: true,
         });
-        loadMoreContainer.appendChild(loadMoreBtn);
       } catch (error) {
         header.innerHTML = `<p>Error loading profile.</p>`;
         postsContainer.innerHTML = "";

@@ -5,8 +5,10 @@ import {
 } from "../services/profileService";
 import { profileListItem } from "../components/profileListItem";
 import { initFollowButtons } from "../components/followButton";
-import { router } from "../app";
 import { getUser } from "../store/userStore";
+import { getCachedProfile } from "../utils/profileCache";
+import { initProfileLinks } from "../utils/initProfileLinks";
+import { goTo } from "../utils/navigate";
 
 export function profileFollowersView(username?: string) {
   return protectedView({
@@ -21,9 +23,7 @@ export function profileFollowersView(username?: string) {
       const container = document.getElementById("followersContainer")!;
       const backBtn = document.getElementById("backBtn")!;
 
-      backBtn.addEventListener("click", () =>
-        router.navigate(`/profile/${username}`)
-      );
+      backBtn.addEventListener("click", () => goTo(`/profile/${username}`));
 
       if (!username) {
         const currentUser = getUser();
@@ -53,26 +53,20 @@ export function profileFollowersView(username?: string) {
         if (followers.length === 0) {
           container.innerHTML = `<p>No followers yet.</p>`;
         } else {
-          container.innerHTML = followers
-            .map((profile) =>
-              profileListItem(
-                profile,
-                currentUserFollowingNames.includes(profile.name)
-              )
-            )
-            .join("");
+          const profilesHtml = await Promise.all(
+            followers.map(async (profile) => {
+              const cachedProfile = await getCachedProfile(profile.name);
+              return profileListItem(
+                cachedProfile,
+                currentUserFollowingNames.includes(cachedProfile.name)
+              );
+            })
+          );
+          container.innerHTML = profilesHtml.join("");
         }
 
         initFollowButtons();
-
-        container.addEventListener("click", (e) => {
-          const target = (e.target as HTMLElement).closest(
-            ".profile-link"
-          ) as HTMLElement | null;
-          if (target?.dataset.username) {
-            router.navigate(`/profile/${target.dataset.username}`);
-          }
-        });
+        initProfileLinks(container);
       } catch (error) {
         container.innerHTML = `<p>Error loading followers.</p>`;
         console.error(error);

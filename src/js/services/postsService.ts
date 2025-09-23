@@ -71,6 +71,8 @@ export async function reactToPost(
   return put(`/social/posts/${postId}/react/${encodeURIComponent(symbol)}`);
 }
 
+//reactToPost not in use at the moment.
+
 export async function createPost(postData: Partial<Post>): Promise<Post> {
   const response = await post<{ data: Post }>("/social/posts", postData);
   return response.data;

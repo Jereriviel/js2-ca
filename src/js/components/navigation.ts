@@ -2,7 +2,7 @@ import { getUser, clearUser } from "../store/userStore";
 import { router, renderLayout } from "../app";
 import { getCurrentUserProfile } from "../services/profileService";
 import { profileAvatar } from "../utils/profileAvatar";
-import { openCreatePostModal } from "./createPostModal";
+import { openCreatePostModal } from "./modals/createPostModal";
 
 export async function navigation(): Promise<string> {
   const user = getUser();

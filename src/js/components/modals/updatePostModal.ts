@@ -1,6 +1,9 @@
-import { updatePost, deletePost } from "../services/postsService";
-import { router } from "../app";
-import type { Post } from "../types/post";
+import { updatePost, deletePost } from "../../services/postsService";
+import { router } from "../../app";
+import type { Post } from "../../types/post";
+import { showErrorModal } from "../modals/errorModal";
+import { showConfirmModal } from "../modals/confirmModal";
+import { goTo } from "../../utils/navigate";
 
 export function openUpdatePostModal(post: Post) {
   const modal = document.createElement("dialog");
@@ -92,7 +95,10 @@ export function openUpdatePostModal(post: Post) {
   });
 
   deleteBtn.addEventListener("click", async () => {
-    if (!confirm("Are you sure you want to delete this post?")) return;
+    const confirmed = await showConfirmModal(
+      "Are you sure you want to delete this post?"
+    );
+    if (!confirmed) return;
 
     try {
       await deletePost(post.id);
@@ -101,12 +107,13 @@ export function openUpdatePostModal(post: Post) {
       if (history.length > 1) {
         history.back();
       } else {
-        router.navigate("/feed");
+        goTo("/feed");
       }
     } catch (err: any) {
       console.error("Failed to delete post:", err);
-      errorEl.textContent =
-        err?.message || "Failed to delete post. Please try again.";
+      await showErrorModal(
+        err?.message || "Failed to delete post. Please try again."
+      );
     }
   });
 

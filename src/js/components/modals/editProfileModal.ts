@@ -1,8 +1,9 @@
-import { getUser } from "../store/userStore";
-import { getProfile, updateProfile } from "../services/profileService";
-import { profileCard, initProfileCard } from "./profileCard";
-import type { Profile } from "../types/profile";
-import { updateNavMiniProfile } from "./navigation";
+import { getUser } from "../../store/userStore";
+import { getProfile, updateProfile } from "../../services/profileService";
+import { profileCard, initProfileCard } from "../profileCard";
+import type { Profile } from "../../types/profile";
+import { updateNavMiniProfile } from "../navigation";
+import { showErrorModal } from "../modals/errorModal";
 
 export async function openEditProfileModal() {
   const currentUser = getUser();
@@ -104,8 +105,9 @@ export async function openEditProfileModal() {
       modal.remove();
     } catch (err: any) {
       console.error("Failed to update profile:", err);
-      errorEl.textContent =
-        err?.message || "Failed to update profile. Please check the URLs.";
+      await showErrorModal(
+        err?.message || "Failed to update profile. Please check the URLs."
+      );
     }
   });
 

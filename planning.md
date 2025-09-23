@@ -3,7 +3,7 @@ Views:
 - Feed (protected)
 
   - Posts
-  - Feed and Following (maybe)
+  - Feed and Following
   - Pagination: Max 10, then load more posts.
 
 - Login
@@ -24,7 +24,7 @@ Views:
   - Edit (update) post modal
   - Delete post (part of update?)
   - (React to post - maybe)
-  - Comment on post (delete or edit?)
+  - Comment on post w/delete function
 
 - Profile: both user and different user (protected)
 
@@ -35,8 +35,8 @@ Views:
   - Banner
   - Posts w/pagination
   - Post Edit and Delete buttons if user
-  - (Followers - maybe)
-  - (Following - maybe)
+  - Followers
+  - Following
   - Link to edit profile modal (component): user
   - Link to follow: different user
 
@@ -72,18 +72,14 @@ Components:
   - Profile
 
 - Edit Profile modal
-
   - Profile edit form
-
 - Create post modal
-
 - Update/edit/delete post modal
+- Error modal
+- Confirm modal
 
 - JSDOC
-- Better error handling for images
-- Navigate utility
+- Navigate utility - use?
+- Caching utility - use?
 - Check innerHTML's
 - Custom Error Handling
-- Remove console logs
-- Check caching for ex. profiles
-- Change alerts into modals

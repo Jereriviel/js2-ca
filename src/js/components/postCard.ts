@@ -1,6 +1,7 @@
 import type { Post } from "../types/post";
 import { getUser } from "../store/userStore";
-import { openUpdatePostModal } from "./updatePostModal";
+import { openUpdatePostModal } from "./modals/updatePostModal";
+import { formatTimePost } from "../utils/formatTimePost";
 
 export function postCard(post: Post, loggedInUserFollowing: string[]): string {
   const isFollowing = post.author?.name
@@ -8,6 +9,11 @@ export function postCard(post: Post, loggedInUserFollowing: string[]): string {
     : false;
   const loggedInUser = getUser();
   const isOwnPost = loggedInUser?.name === post.author?.name;
+  const createdTime = formatTimePost(post.created);
+  const updatedTime =
+    post.updated && post.updated !== post.created
+      ? ` (updated ${formatTimePost(post.updated)})`
+      : "";
 
   return `
     <div class="post" data-post-id="${post.id}">
@@ -27,6 +33,9 @@ export function postCard(post: Post, loggedInUserFollowing: string[]): string {
           By: <span class="profile-link" data-username="${post.author?.name}">
             ${post.author?.name ?? "Unknown"}
           </span>
+        </p>
+        <p class="post-time">
+          ${createdTime}${updatedTime}
         </p>
         <p>
           <span class="post-link" data-id="${post.id}">

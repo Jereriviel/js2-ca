@@ -1,42 +1,33 @@
+import { protectedView } from "../utils/protectedView";
+import { postCard } from "../components/postCard";
+import { profileCard } from "../components/profileCard";
 import {
   getPaginatedSearchPosts,
   getPaginatedSearchProfiles,
 } from "../services/searchService";
-import { protectedView } from "../utils/protectedView";
-import { postCard, initEditPostButtons } from "../components/postCard";
-import { profileCard } from "../components/profileCard";
-import { router } from "../app";
 import { getUser } from "../store/userStore";
 import { getCurrentUserProfile } from "../services/profileService";
-import { initFollowButtons } from "../components/followButton";
-import { createLoadMoreButton } from "../components/loadMoreButton";
-import type { Profile } from "../types/profile";
+import { getCachedProfile } from "../utils/profileCache";
+import { initPaginatedList } from "../utils/initPaginatedList";
 
 export function searchView() {
   return protectedView({
     html: `
       <h1>Search</h1>
       <form id="searchForm">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Search posts or profiles..."
-          required
-        />
+        <input type="text" id="searchInput" placeholder="Search posts or profiles..." required />
         <button type="submit">Search</button>
       </form>
-
       <div id="searchResults">
         <div id="searchPosts"></div>
-        <div id="postsLoadMoreContainer"></div>
+        <div id="postsLoadMoreContainer" class="load-more-container"></div>
         <div id="searchProfiles"></div>
-        <div id="profilesLoadMoreContainer"></div>
+        <div id="profilesLoadMoreContainer" class="load-more-container"></div>
       </div>
     `,
     init: async () => {
       const form = document.getElementById("searchForm") as HTMLFormElement;
       const input = document.getElementById("searchInput") as HTMLInputElement;
-      const resultsContainer = document.getElementById("searchResults")!;
       const postsContainer = document.getElementById("searchPosts")!;
       const postsLoadMoreContainer = document.getElementById(
         "postsLoadMoreContainer"
@@ -50,129 +41,61 @@ export function searchView() {
       let loggedInUserFollowingNames: string[] = [];
 
       if (currentUser) {
-        try {
-          const currentUserProfile = await getCurrentUserProfile(
-            currentUser.name
-          );
-          loggedInUserFollowingNames =
-            currentUserProfile.following?.map((f: Profile) => f.name) || [];
-        } catch (err) {
-          console.error("Failed to fetch current user profile:", err);
-        }
+        const profile = await getCurrentUserProfile(currentUser.name);
+        loggedInUserFollowingNames =
+          profile.following?.map((f) => f.name) || [];
       }
-
-      resultsContainer.addEventListener("click", (e) => {
-        const target = (e.target as HTMLElement).closest(
-          ".profile-link, .profile-card"
-        ) as HTMLElement | null;
-        if (target?.dataset.username) {
-          router.navigate(`/profile/${target.dataset.username}`);
-        }
-      });
-
-      let lastQuery = "";
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const q = input.value.trim();
         if (!q) return;
 
-        lastQuery = q;
+        postsContainer.innerHTML = "";
+        profilesContainer.innerHTML = "";
 
-        postsContainer.innerHTML = `<p>Searching posts...</p>`;
-        profilesContainer.innerHTML = `<p>Searching profiles...</p>`;
-        postsLoadMoreContainer.innerHTML = "";
-        profilesLoadMoreContainer.innerHTML = "";
-
-        try {
-          const [postsRes, profilesRes] = await Promise.all([
-            getPaginatedSearchPosts(q, 1, 10),
-            getPaginatedSearchProfiles(q, 1, 10),
-          ]);
-
-          let postsHtml = "";
-          if (postsRes.data.length > 0) {
-            const postsArr = await Promise.all(
-              postsRes.data.map((post) =>
-                postCard(post, loggedInUserFollowingNames)
-              )
-            );
-            postsHtml = `<h2>Posts</h2>` + postsArr.join("");
-          } else {
-            postsHtml = "<p>No posts found.</p>";
-          }
-          postsContainer.innerHTML = postsHtml;
-
-          let profilesHtml = "";
-          if (profilesRes.data.length > 0) {
-            profilesHtml =
-              `<h2>Profiles</h2>` +
-              profilesRes.data
-                .map((profile) =>
-                  profileCard(
-                    profile,
-                    loggedInUserFollowingNames.includes(profile.name)
-                  )
-                )
-                .join("");
-          } else {
-            profilesHtml = "<p>No profiles found.</p>";
-          }
-          profilesContainer.innerHTML = profilesHtml;
-
-          postsContainer
-            .querySelectorAll<HTMLElement>(".post-link")
-            .forEach((el) => {
-              const postId = el.dataset.id;
-              if (postId) {
-                el.addEventListener("click", () => {
-                  router.navigate(`/post/${postId}`);
-                });
-              }
-            });
-
-          initFollowButtons();
-          initEditPostButtons(postsRes.data);
-
-          if (!postsRes.meta?.isLastPage) {
-            postsLoadMoreContainer.innerHTML = "";
-            const postsLoadMoreBtn = createLoadMoreButton({
-              container: postsContainer,
-              fetchItems: async (page: number) =>
-                getPaginatedSearchPosts(q, page, 10),
-              renderItem: (post) =>
-                postCard(post as any, loggedInUserFollowingNames),
-              onAfterRender: () => initFollowButtons(),
-            });
-            postsLoadMoreContainer.appendChild(postsLoadMoreBtn);
-          } else {
-            postsLoadMoreContainer.innerHTML = "";
-          }
-
-          if (!profilesRes.meta?.isLastPage) {
-            profilesLoadMoreContainer.innerHTML = "";
-            const profilesLoadMoreBtn = createLoadMoreButton({
-              container: profilesContainer,
-              fetchItems: async (page: number) =>
-                getPaginatedSearchProfiles(q, page, 10),
-              renderItem: (profile) =>
-                Promise.resolve(
-                  profileCard(
-                    profile as any,
-                    loggedInUserFollowingNames.includes((profile as any).name)
-                  )
-                ),
-              onAfterRender: () => initFollowButtons(),
-            });
-            profilesLoadMoreContainer.appendChild(profilesLoadMoreBtn);
-          } else {
-            profilesLoadMoreContainer.innerHTML = "";
-          }
-        } catch (err) {
-          console.error("Search failed:", err);
-          postsContainer.innerHTML = `<p>Error searching posts.</p>`;
-          profilesContainer.innerHTML = `<p>Error searching profiles.</p>`;
+        const postsRes = await getPaginatedSearchPosts(q, 1, 10);
+        if (postsRes.data.length > 0) {
+          postsContainer.innerHTML = `
+  <h2>Posts</h2>
+  <div id="postsResults"></div>
+`;
+          const postsResultsContainer =
+            document.getElementById("postsResults")!;
+          await initPaginatedList({
+            container: postsResultsContainer,
+            loadMoreContainer: postsLoadMoreContainer,
+            fetchItems: (page) => getPaginatedSearchPosts(q, page, 10),
+            renderItem: (post) => postCard(post, loggedInUserFollowingNames),
+            isPostList: true,
+          });
+        } else {
+          postsContainer.innerHTML = `<h2>Posts</h2><p>No posts found.</p>`;
           postsLoadMoreContainer.innerHTML = "";
+        }
+
+        const profilesRes = await getPaginatedSearchProfiles(q, 1, 10);
+        if (profilesRes.data.length > 0) {
+          profilesContainer.innerHTML = `
+  <h2>Profiles</h2>
+  <div id="profilesResults"></div>
+`;
+          const profilesResultsContainer =
+            document.getElementById("profilesResults")!;
+          await initPaginatedList({
+            container: profilesResultsContainer,
+            loadMoreContainer: profilesLoadMoreContainer,
+            fetchItems: (page) => getPaginatedSearchProfiles(q, page, 10),
+            renderItem: async (profile) => {
+              const cachedProfile = await getCachedProfile(profile.name);
+              return profileCard(
+                cachedProfile,
+                loggedInUserFollowingNames.includes(cachedProfile.name)
+              );
+            },
+          });
+        } else {
+          profilesContainer.innerHTML = `<h2>Profiles</h2><p>No profiles found.</p>`;
           profilesLoadMoreContainer.innerHTML = "";
         }
       });

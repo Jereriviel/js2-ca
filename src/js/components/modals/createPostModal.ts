@@ -1,6 +1,7 @@
-import { createPost } from "../services/postsService";
-import { router } from "../app";
-import type { Post } from "../types/post";
+import { createPost } from "../../services/postsService";
+import { router } from "../../app";
+import type { Post } from "../../types/post";
+import { showErrorModal } from "../modals/errorModal";
 
 export function openCreatePostModal() {
   const modal = document.createElement("dialog");
@@ -78,8 +79,9 @@ export function openCreatePostModal() {
       await router.refresh();
     } catch (err: any) {
       console.error("Failed to create post:", err);
-      errorEl.textContent =
-        err?.message || "Failed to create post. Please try again.";
+      await showErrorModal(
+        err?.message || "Failed to create post. Please try again."
+      );
     }
   });
 

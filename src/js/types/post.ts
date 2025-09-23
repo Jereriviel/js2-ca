@@ -37,6 +37,8 @@ export interface Reaction {
   reactors: string[];
 }
 
+//Reaction not in use at the moment.
+
 export interface PostsResponse {
   data: Post[];
   meta: {

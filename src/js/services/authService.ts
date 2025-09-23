@@ -24,7 +24,6 @@ export async function registerUser(
   }
 
   const json: RegisterResponse = await res.json();
-  console.log("Is this the data:", json);
   return json.data;
 }
 

@@ -1,5 +1,6 @@
 import { registerUser, loginUser } from "../services/authService";
-import { router, renderLayout } from "../app";
+import { renderLayout } from "../app";
+import { goTo } from "../utils/navigate";
 
 export function registerView() {
   return {
@@ -36,7 +37,7 @@ export function registerView() {
           await registerUser(name, email, password);
           await loginUser(email, password);
           await renderLayout();
-          router.navigate("/feed");
+          goTo("/feed");
         } catch (error) {
           errorEl.textContent =
             error instanceof Error

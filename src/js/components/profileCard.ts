@@ -2,7 +2,7 @@ import type { Profile } from "../types/profile";
 import { followButton } from "./followButton";
 import { profileAvatar } from "../utils/profileAvatar";
 import { getUser } from "../store/userStore";
-import { openEditProfileModal } from "./editProfileModal";
+import { openEditProfileModal } from "./modals/editProfileModal";
 
 export function profileCard(profile: Profile, isFollowing: boolean): string {
   const loggedInUser = getUser();
