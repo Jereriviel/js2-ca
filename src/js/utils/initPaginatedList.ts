@@ -44,12 +44,12 @@ export async function initPaginatedList<T>(options: {
       container,
       fetchItems,
       renderItem,
-      onAfterRender: () => {
-        if (isPostList) initEditPostButtons(items as any);
+      onAfterRender: async (newItems) => {
+        if (isPostList) initEditPostButtons(newItems as any);
         initPostLinks(container);
         initProfileLinks(container);
         initFollowButtons();
-        if (onAfterRender) onAfterRender(items);
+        if (onAfterRender) onAfterRender(newItems);
       },
     });
 

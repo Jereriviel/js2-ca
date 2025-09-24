@@ -83,3 +83,5 @@ Components:
 - Caching utility - use?
 - Check innerHTML's
 - Custom Error Handling
+- Handle deleting new comments
+- Create and link fav-icon

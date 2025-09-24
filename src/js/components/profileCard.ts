@@ -1,6 +1,5 @@
 import type { Profile } from "../types/profile";
 import { followButton } from "./followButton";
-import { profileAvatar } from "../utils/profileAvatar";
 import { getUser } from "../store/userStore";
 import { openEditProfileModal } from "./modals/editProfileModal";
 
@@ -23,7 +22,10 @@ export function profileCard(profile: Profile, isFollowing: boolean): string {
   return `
     <div class="profile-card" data-username="${profile.name}">
       ${bannerHtml}
-      ${profileAvatar(profile, "regular")}
+      <img class="rounded-full" src="${
+        profile.avatar?.url || "/default-avatar.png"
+      }"
+           alt="${profile.avatar?.alt || profile.name}"/>
       <div>
         <h3>${profile.name}</h3>
         <p>${profile.bio || "No bio available."}</p>

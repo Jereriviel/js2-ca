@@ -2,7 +2,7 @@ export function createLoadMoreButton<T>(options: {
   container: HTMLElement;
   fetchItems: (page: number) => Promise<{ data: T[]; meta: any }>;
   renderItem: (item: T) => string | Promise<string>;
-  onAfterRender?: () => void;
+  onAfterRender?: (newItems: T[]) => void;
 }): HTMLButtonElement {
   const { container, fetchItems, renderItem, onAfterRender } = options;
 
@@ -31,7 +31,7 @@ export function createLoadMoreButton<T>(options: {
 
       container.insertAdjacentHTML("beforeend", htmlArr.join(""));
 
-      if (onAfterRender) onAfterRender();
+      if (onAfterRender) onAfterRender(items);
 
       if (meta?.isLastPage) {
         button.style.display = "none";

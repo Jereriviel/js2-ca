@@ -1,6 +1,5 @@
 import { protectedView } from "../utils/protectedView";
 import { postCard } from "../components/postCard";
-import { profileCard } from "../components/profileCard";
 import {
   getPaginatedSearchPosts,
   getPaginatedSearchProfiles,
@@ -9,6 +8,7 @@ import { getUser } from "../store/userStore";
 import { getCurrentUserProfile } from "../services/profileService";
 import { getCachedProfile } from "../utils/profileCache";
 import { initPaginatedList } from "../utils/initPaginatedList";
+import { profileListItem } from "../components/profileListItem";
 
 export function searchView() {
   return protectedView({
@@ -88,7 +88,7 @@ export function searchView() {
             fetchItems: (page) => getPaginatedSearchProfiles(q, page, 10),
             renderItem: async (profile) => {
               const cachedProfile = await getCachedProfile(profile.name);
-              return profileCard(
+              return profileListItem(
                 cachedProfile,
                 loggedInUserFollowingNames.includes(cachedProfile.name)
               );

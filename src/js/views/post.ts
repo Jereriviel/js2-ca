@@ -54,7 +54,7 @@ export function postView() {
         const response = await getPost(id);
         const post = response.data;
 
-        container.innerHTML = postCard(post, loggedInUserFollowingNames);
+        container.innerHTML = await postCard(post, loggedInUserFollowingNames);
 
         commentsContainer.innerHTML = renderComments(post.comments || []);
         commentsContainer.insertAdjacentHTML("beforeend", commentForm(post.id));

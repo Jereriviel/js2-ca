@@ -1,1 +1,38 @@
 @import "tailwindcss";
+
+@theme {
+  /* Fonts */
+  --font-primary: "inter", "sans-serif";
+
+  /* Colors */
+  --color-primary: oklch(0.6745 0.1443 52.85);
+  --color-primary-hover: oklch(0.6129 0.1421 53.93);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-primary);
+  }
+
+  button,
+  .profile-link,
+  .followers-link,
+  .following-link,
+  .post-link {
+    cursor: pointer;
+  }
+
+  .aside-navbar {
+    width: 18.75rem;
+  }
+
+  .main-app {
+    width: 37.5rem;
+  }
+}
+
+@layer components {
+}
+
+@layer utilities {
+}
