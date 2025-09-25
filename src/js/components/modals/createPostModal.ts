@@ -35,7 +35,7 @@ export function openCreatePostModal() {
         <button type="submit">Publish</button>
         <button type="button" id="cancelBtn">Cancel</button>
       </div>
-      <p class="error-message" style="color:red;"></p>
+      <p class="error-message"></p>
     </form>
   `;
 

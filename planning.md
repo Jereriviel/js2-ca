@@ -79,9 +79,7 @@ Components:
 - Confirm modal
 
 - JSDOC
-- Navigate utility - use?
-- Caching utility - use?
 - Check innerHTML's
 - Custom Error Handling
 - Handle deleting new comments
-- Create and link fav-icon
+- Change title and descriptions dynamically based on view

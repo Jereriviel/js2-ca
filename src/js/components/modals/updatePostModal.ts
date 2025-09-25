@@ -44,7 +44,7 @@ export function openUpdatePostModal(post: Post) {
         <button type="button" id="deleteBtn" class="danger">Delete</button>
         <button type="button" id="cancelBtn">Cancel</button>
       </div>
-      <p class="error-message" style="color:red;"></p>
+      <p class="error-message"></p>
     </form>
   `;
 

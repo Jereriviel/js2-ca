@@ -9,13 +9,21 @@ import { getCurrentUserProfile } from "../services/profileService";
 import { getCachedProfile } from "../utils/profileCache";
 import { initPaginatedList } from "../utils/initPaginatedList";
 import { profileListItem } from "../components/profileListItem";
+import { input } from "../components/input";
 
 export function searchView() {
   return protectedView({
     html: `
       <h1>Search</h1>
       <form id="searchForm">
-        <input type="text" id="searchInput" placeholder="Search posts or profiles..." required />
+                ${input({
+                  type: "text",
+                  name: "search",
+                  placeholder: "Search posts or profiles...",
+                  required: true,
+                  label: "Search",
+                  id: "searchInput",
+                })}
         <button type="submit">Search</button>
       </form>
       <div id="searchResults">
@@ -102,3 +110,5 @@ export function searchView() {
     },
   });
 }
+
+// <input type="text" id="searchInput" placeholder="Search posts or profiles..." required />

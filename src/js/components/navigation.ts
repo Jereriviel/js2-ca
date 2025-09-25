@@ -1,7 +1,8 @@
 import { getUser, clearUser } from "../store/userStore";
-import { router, renderLayout } from "../app";
+import { renderLayout } from "../app";
 import { getCurrentUserProfile } from "../services/profileService";
 import { openCreatePostModal } from "./modals/createPostModal";
+import { goTo } from "../utils/navigate";
 
 export async function navigation(): Promise<string> {
   const user = getUser();
@@ -62,7 +63,7 @@ export function initNavigation() {
     logoutBtn.addEventListener("click", () => {
       clearUser();
       renderLayout();
-      router.navigate("/");
+      goTo("/");
     });
   }
 
@@ -76,14 +77,14 @@ export function initNavigation() {
     link.addEventListener("click", (e) => {
       e.preventDefault();
       const route = link.dataset.route;
-      if (route) router.navigate(route);
+      if (route) goTo(route);
     });
   });
 
   if (miniProfile) {
     miniProfile.addEventListener("click", () => {
       const username = miniProfile.getAttribute("data-username");
-      if (username) router.navigate(`/profile/${username}`);
+      if (username) goTo(`/profile/${username}`);
     });
   }
 }
@@ -112,7 +113,7 @@ export async function updateNavMiniProfile() {
     );
     if (newMiniProfile) {
       newMiniProfile.addEventListener("click", () => {
-        router.navigate(`/profile/${profile.name}`);
+        goTo(`/profile/${profile.name}`);
       });
     }
   } catch (err) {

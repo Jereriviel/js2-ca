@@ -14,11 +14,12 @@ export async function renderLayout() {
   const user = getUser();
 
   if (user) {
+    navbarContainer.classList.remove("hidden");
     navbarContainer.innerHTML = await navigation();
 
     initNavigation();
   } else {
-    navbarContainer.innerHTML = "";
+    navbarContainer.classList.add("hidden");
   }
 }
 

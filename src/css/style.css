@@ -3,10 +3,16 @@
 @theme {
   /* Fonts */
   --font-primary: "inter", "sans-serif";
+  --font-display: "righteous", "sans-serif";
 
   /* Colors */
   --color-primary: oklch(0.6745 0.1443 52.85);
   --color-primary-hover: oklch(0.6129 0.1421 53.93);
+  --color-secondary: oklch(0.6256 0.1128 123.75);
+  --color-secondary-hover: oklch(0.5322 0.1102 124.88);
+  --color-gray-dark: oklch(0.4926 0 0);
+  --color-gray-medium: oklch(0.8297 0 0);
+  --color-gray-light: oklch(0.9791 0 0);
 }
 
 @layer base {
@@ -32,6 +38,10 @@
 }
 
 @layer components {
+  .input-field {
+    background-color: var(--color-gray-light);
+    color: var(--color-gray-light);
+  }
 }
 
 @layer utilities {
