@@ -1,5 +1,5 @@
 import { protectedView } from "../utils/protectedView";
-import { profileCard } from "../components/profileCard";
+import { profileCard, initProfileCard } from "../components/profileCard";
 import { postCard } from "../components/postCard";
 import { getCurrentUserProfile } from "../services/profileService";
 import { getCachedProfile } from "../utils/profileCache";
@@ -47,6 +47,8 @@ export function profileView(username?: string) {
 
         const isFollowingProfile = loggedInUserFollowing.includes(profile.name);
         header.innerHTML = profileCard(profile, isFollowingProfile);
+
+        initProfileCard();
 
         header.addEventListener("click", (e) => {
           const target = e.target as HTMLElement;

@@ -1,16 +1,23 @@
 import { deleteComment } from "../services/postsService";
 import { showErrorModal } from "./modals/errorModal";
 import { showConfirmModal } from "./modals/confirmModal";
+import { textArea } from "./inputs";
 
 export function commentForm(postId: number): string {
   return `
-    <form class="comment-form" data-post-id="${postId}">
-      <textarea
-        name="comment"
-        placeholder="Write a comment..."
-        required
-      ></textarea>
-      <button type="submit">Post Comment</button>
+    <form class="comment-form flex flex-col gap-4 py-4" data-post-id="${postId}">
+    <hr class="h-[1px] bg-gray-medium border-none">
+          ${textArea({
+            type: "text",
+            name: "comment",
+            placeholder: "Write your comment here...",
+            required: true,
+            label: "Post a comment",
+            id: "comment",
+          })}
+      <div class="flex justify-end">
+      <button type="submit" class="bg-primary hover:bg-primary-hover text-white text- w-fit py-4 px-5 rounded-full">Post Comment</button>
+      </div>
     </form>
   `;
 }

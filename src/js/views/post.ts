@@ -56,12 +56,18 @@ export function postView() {
 
         container.innerHTML = await postCard(post, loggedInUserFollowingNames);
 
-        commentsContainer.innerHTML = renderComments(post.comments || []);
-        commentsContainer.insertAdjacentHTML("beforeend", commentForm(post.id));
+        commentsContainer.innerHTML = commentForm(post.id);
+        commentsContainer.insertAdjacentHTML(
+          "beforeend",
+          renderComments(post.comments || [])
+        );
 
         initCommentForms(async (postId, body) => {
           const newComment = await addComment(postId, body);
-          commentsContainer.insertAdjacentHTML(
+          const commentsList = commentsContainer.querySelector(
+            ".comments-container"
+          )!;
+          commentsList.insertAdjacentHTML(
             "beforeend",
             renderComments([newComment])
           );

@@ -4,6 +4,8 @@ import { profileCard, initProfileCard } from "../profileCard";
 import type { Profile } from "../../types/profile";
 import { updateNavMiniProfile } from "../navigation";
 import { showErrorModal } from "../modals/errorModal";
+import { createModal } from "../../utils/createModal";
+import { inputModal, textArea } from "../inputs";
 
 export async function openEditProfileModal() {
   const currentUser = getUser();
@@ -16,49 +18,64 @@ export async function openEditProfileModal() {
   );
   if (existingModal) existingModal.remove();
 
-  const modal = document.createElement("dialog");
-  modal.classList.add("edit-profile-modal");
+  const modal = createModal(`
+    <form
+    method="dialog"
+    class="edit-profile-form min-w-[600px] flex flex-col gap-4">
+      <h2 class="font-semibold text-xl">Edit Profile</h2>
+      <div class="flex flex-col gap-4">
+      ${textArea({
+        type: "text",
+        name: "bio",
+        placeholder: "Your bio",
+        label: "Bio",
+        id: "bio",
+        required: false,
+      }).replace("></textarea>", `>${profile.bio ?? ""}</textarea>`)}  
 
-  modal.innerHTML = `
-    <form method="dialog" class="edit-profile-form">
-      <h2>Edit Profile</h2>
-      <label>
-        Bio:
-        <textarea name="bio" placeholder="Your bio">${
-          profile.bio ?? ""
-        }</textarea>
-      </label>
-      <label>
-        Avatar URL:
-        <input type="url" name="avatarUrl" placeholder="https://..." value="${
-          profile.avatar?.url ?? ""
-        }" />
-      </label>
-      <label>
-        Avatar alt text:
-        <input type="text" name="avatarAlt" placeholder="Avatar alt text" value="${
-          profile.avatar?.alt ?? ""
-        }" />
-      </label>
-      <label>
-        Banner URL:
-        <input type="url" name="bannerUrl" placeholder="https://..." value="${
-          profile.banner?.url ?? ""
-        }" />
-      </label>
-      <label>
-        Banner alt text:
-        <input type="text" name="bannerAlt" placeholder="Banner alt text" value="${
-          profile.banner?.alt ?? ""
-        }" />
-      </label>
-      <div class="modal-actions">
-        <button type="submit">Save</button>
-        <button type="button" id="cancelBtn">Cancel</button>
+      ${inputModal({
+        type: "url",
+        name: "avatarUrl",
+        placeholder: "https://...",
+        label: "Profile image URL",
+        id: "avatarUrl",
+        required: false,
+      }).replace('value=""', `value="${profile.avatar?.url ?? ""}"`)}
+
+      ${inputModal({
+        type: "text",
+        name: "avatarAlt",
+        placeholder: "Profile image alt text",
+        label: "Avatar Alt",
+        id: "avatarAlt",
+        required: false,
+      }).replace('value=""', `value="${profile.avatar?.alt ?? ""}"`)}
+
+      ${inputModal({
+        type: "url",
+        name: "bannerUrl",
+        placeholder: "https://...",
+        label: "Profile banner URL",
+        id: "bannerUrl",
+        required: false,
+      }).replace('value=""', `value="${profile.banner?.url ?? ""}"`)}
+
+      ${inputModal({
+        type: "text",
+        name: "bannerAlt",
+        placeholder: "Profile banner alt text",
+        label: "Banner Alt",
+        id: "bannerAlt",
+        required: false,
+      }).replace('value=""', `value="${profile.banner?.alt ?? ""}"`)}
+      </div>
+      <div class="modal-actions flex justify-between">
+        <button type="button" id="cancelBtn" class="font-medium hover:bg-gray-medium w-fit py-4 px-5 rounded-full mt-4">Cancel</button>
+        <button type="submit" class="bg-primary hover:bg-primary-hover text-white text- w-fit py-4 px-5 rounded-full mt-4">Save</button>
       </div>
       <p class="error-message"></p>
     </form>
-  `;
+  `);
 
   document.body.appendChild(modal);
   modal.showModal();
@@ -66,6 +83,16 @@ export async function openEditProfileModal() {
   const form = modal.querySelector<HTMLFormElement>("form.edit-profile-form")!;
   const cancelBtn = form.querySelector<HTMLButtonElement>("#cancelBtn")!;
   const errorEl = form.querySelector<HTMLParagraphElement>(".error-message")!;
+
+  form.querySelector<HTMLTextAreaElement>("#bio")!.value = profile.bio || "";
+  form.querySelector<HTMLInputElement>("#avatarUrl")!.value =
+    profile.avatar?.url || "";
+  form.querySelector<HTMLInputElement>("#avatarAlt")!.value =
+    profile.avatar?.alt || "";
+  form.querySelector<HTMLInputElement>("#bannerUrl")!.value =
+    profile.banner?.url || "";
+  form.querySelector<HTMLInputElement>("#bannerAlt")!.value =
+    profile.banner?.alt || "";
 
   cancelBtn.addEventListener("click", () => modal.close());
 

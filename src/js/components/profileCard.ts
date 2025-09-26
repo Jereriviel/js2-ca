@@ -30,10 +30,10 @@ export function profileCard(profile: Profile, isFollowing: boolean): string {
         <h3>${profile.name}</h3>
         <p>${profile.bio || "No bio available."}</p>
         <p>
-          Posts: ${profile._count?.posts ?? 0} | 
+          Posts: ${profile._count?.posts ?? 0} |
           <span class="followers-link" data-username="${profile.name}">
             Followers: ${profile._count?.followers ?? 0}
-          </span> | 
+          </span> |
           <span class="following-link" data-username="${profile.name}">
             Following: ${profile._count?.following ?? 0}
           </span>

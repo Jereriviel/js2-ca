@@ -1,7 +1,7 @@
 import { loginUser } from "../services/authService";
 import { renderLayout } from "../app";
 import { goTo } from "../utils/navigate";
-import { input } from "../components/input";
+import { input } from "../components/inputs";
 
 export function loginView() {
   return {

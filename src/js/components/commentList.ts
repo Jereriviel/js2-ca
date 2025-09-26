@@ -9,8 +9,8 @@ export function renderComments(comments: Comment[]): string {
   const currentUser = getUser();
 
   return `
-    <div class="comments-container">
-      <h2>Comments</h2>
+    <div class="comments-container flex flex-col gap-4">
+      <h2 class="font-semibold text-xl">Comments</h2>
       ${comments
         .map((c) => {
           const isOwnComment = currentUser?.name === c.author?.name;
@@ -20,16 +20,20 @@ export function renderComments(comments: Comment[]): string {
             : new Date().toLocaleString();
 
           return `
-            <div class="comment" data-comment-id="${c.id}" data-post-id="${
-            c.postId
-          }">
-              <p>${authorName}: ${c.body}</p>
-              ${createdDate}
+           <hr class="h-[1px] bg-gray-medium border-none">
+            <div class="comment flex flex-col gap-4" data-comment-id="${
+              c.id
+            }" data-post-id="${c.postId}">
+              <p class="font-medium text-lg">${authorName}</p>
+              <p>${c.body}</p>
+              <div class="flex justify-between">
+              <div class="text-xs text-gray-dark">${createdDate}</div>
               ${
                 isOwnComment
-                  ? `<button class="delete-comment-btn" data-comment-id="${c.id}" data-post-id="${c.postId}">Delete</button>`
+                  ? `<button class="delete-comment-btn hover:bg-red-500 hover:text-white text-sm font-medium w-fit py-3 px-4 rounded-full" data-comment-id="${c.id}" data-post-id="${c.postId}">Delete</button>`
                   : ""
               }
+              </div>
             </div>
           `;
         })

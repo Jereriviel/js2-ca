@@ -4,49 +4,63 @@ import type { Post } from "../../types/post";
 import { showErrorModal } from "../modals/errorModal";
 import { showConfirmModal } from "../modals/confirmModal";
 import { goTo } from "../../utils/navigate";
+import { inputModal, textArea } from "../inputs";
+import { createModal } from "../../utils/createModal";
 
 export function openUpdatePostModal(post: Post) {
-  const modal = document.createElement("dialog");
-  modal.classList.add("update-post-modal");
+  const modal = createModal(`
 
-  modal.innerHTML = `
-    <form method="dialog" class="update-post-form">
-      <h2>Edit Post</h2>
-
-      <label>
-        Title (required):
-        <input type="text" name="title" required value="${post.title}" />
-      </label>
-
-      <label>
-        Body:
-        <textarea name="body" placeholder="Write your post...">${
-          post.body || ""
-        }</textarea>
-      </label>
-
-      <label>
-        Media URL:
-        <input type="url" name="mediaUrl" placeholder="https://..." value="${
-          post.media?.url || ""
-        }" />
-      </label>
-
-      <label>
-        Media alt text:
-        <input type="text" name="mediaAlt" placeholder="Image description" value="${
-          post.media?.alt || ""
-        }" />
-      </label>
-
-      <div class="modal-actions">
-        <button type="submit">Save Changes</button>
-        <button type="button" id="deleteBtn" class="danger">Delete</button>
-        <button type="button" id="cancelBtn">Cancel</button>
+<form
+      method="dialog"
+      class="update-post-form flex flex-col gap-4 min-w-[600px]">
+      <div class="flex justify-between items-center">
+      <h2 class="font-semibold text-xl">Edit Post</h2>
+      <button type="button" id="cancelBtn" class="font-medium hover:bg-gray-medium w-fit py-4 px-5 rounded-full">Cancel</button>
       </div>
+      <div class="flex flex-col gap-4">
+      ${inputModal({
+        type: "text",
+        name: "title",
+        placeholder: "Write a title for your post...",
+        required: true,
+        label: "Title",
+        id: "title",
+      })}
+
+      ${textArea({
+        type: "text",
+        name: "body",
+        placeholder: "Write your post...",
+        required: true,
+        label: "Post",
+        id: "body",
+      })}
+
+      ${inputModal({
+        type: "url",
+        name: "imageUrl",
+        placeholder: "https://...",
+        required: false,
+        label: "Image URL",
+        id: "imageUrl",
+      })}
+
+      ${inputModal({
+        type: "text",
+        name: "imageAlt",
+        placeholder: "Image description...",
+        required: false,
+        label: "Image alt text",
+        id: "imageAlt",
+      })}
+      </div>
+      <div class="modal-actions flex justify-between">
+        <button type="button" id="deleteBtn" class="bg-red-500 hover:bg-red-700 text-white text- w-fit py-4 px-5 rounded-full mt-4">Delete</button>
+        <button type="submit" class="bg-primary hover:bg-primary-hover text-white text- w-fit py-4 px-5 rounded-full mt-4">Save Changes</button>
+        </div>
       <p class="error-message"></p>
     </form>
-  `;
+  `);
 
   document.body.appendChild(modal);
   modal.showModal();
@@ -55,6 +69,13 @@ export function openUpdatePostModal(post: Post) {
   const cancelBtn = form.querySelector<HTMLButtonElement>("#cancelBtn")!;
   const deleteBtn = form.querySelector<HTMLButtonElement>("#deleteBtn")!;
   const errorEl = form.querySelector<HTMLParagraphElement>(".error-message")!;
+
+  form.querySelector<HTMLInputElement>("#title")!.value = post.title || "";
+  form.querySelector<HTMLTextAreaElement>("#body")!.value = post.body || "";
+  form.querySelector<HTMLInputElement>("#imageUrl")!.value =
+    post.media?.url || "";
+  form.querySelector<HTMLInputElement>("#imageAlt")!.value =
+    post.media?.alt || "";
 
   cancelBtn.addEventListener("click", () => modal.close());
 
@@ -65,8 +86,8 @@ export function openUpdatePostModal(post: Post) {
     const formData = new FormData(form);
     const title = formData.get("title") as string;
     const body = formData.get("body") as string;
-    const mediaUrl = formData.get("mediaUrl") as string;
-    const mediaAlt = formData.get("mediaAlt") as string;
+    const mediaUrl = formData.get("imageUrl") as string;
+    const mediaAlt = formData.get("imageAlt") as string;
 
     if (!title) {
       errorEl.textContent = "Title is required.";

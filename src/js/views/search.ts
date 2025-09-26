@@ -9,7 +9,7 @@ import { getCurrentUserProfile } from "../services/profileService";
 import { getCachedProfile } from "../utils/profileCache";
 import { initPaginatedList } from "../utils/initPaginatedList";
 import { profileListItem } from "../components/profileListItem";
-import { input } from "../components/input";
+import { input } from "../components/inputs";
 
 export function searchView() {
   return protectedView({
