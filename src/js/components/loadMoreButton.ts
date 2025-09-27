@@ -9,6 +9,14 @@ export function createLoadMoreButton<T>(options: {
   const button = document.createElement("button");
   button.id = "load-more-btn";
   button.textContent = "Load More";
+  button.classList.add(
+    "font-medium",
+    "hover:bg-gray-medium",
+    "w-fit",
+    "py-4",
+    "px-5",
+    "rounded-full"
+  );
 
   let currentPage = 1;
   let isFetching = false;

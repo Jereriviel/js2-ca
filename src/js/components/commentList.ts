@@ -21,7 +21,7 @@ export function renderComments(comments: Comment[]): string {
 
           return `
            <hr class="h-[1px] bg-gray-medium border-none">
-            <div class="comment flex flex-col gap-4" data-comment-id="${
+            <div class="comment flex flex-col gap-2" data-comment-id="${
               c.id
             }" data-post-id="${c.postId}">
               <p class="font-medium text-lg">${authorName}</p>

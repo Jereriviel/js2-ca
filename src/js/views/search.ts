@@ -28,9 +28,9 @@ export function searchView() {
       </form>
       <div id="searchResults">
         <div id="searchPosts"></div>
-        <div id="postsLoadMoreContainer" class="load-more-container"></div>
+        <div id="postsLoadMoreContainer" class="load-more-container flex justify-center pt-12"></div>
         <div id="searchProfiles"></div>
-        <div id="profilesLoadMoreContainer" class="load-more-container"></div>
+        <div id="profilesLoadMoreContainer" class="load-more-container flex justify-center pt-12"></div>
       </div>
     `,
     init: async () => {

@@ -6,7 +6,6 @@ import { textArea } from "./inputs";
 export function commentForm(postId: number): string {
   return `
     <form class="comment-form flex flex-col gap-4 py-4" data-post-id="${postId}">
-    <hr class="h-[1px] bg-gray-medium border-none">
           ${textArea({
             type: "text",
             name: "comment",

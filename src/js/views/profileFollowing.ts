@@ -13,10 +13,10 @@ import { goTo } from "../utils/navigate";
 export function profileFollowingView(username?: string) {
   return protectedView({
     html: `
-      <header>
-        <button id="backBtn">← Back</button>
-        <h2>Following</h2>
-      </header>
+    <header class="flex items-center gap-2 pt-8">
+      <span class="material-symbols-outlined">arrow_left_alt</span>
+      <button id="backBtn" class="font-semibold text-xl">Following</button>
+    </header>
       <div id="followingContainer"></div>
     `,
     init: async () => {

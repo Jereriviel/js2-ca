@@ -16,10 +16,10 @@ import { initProfileLinks } from "../utils/initProfileLinks";
 export function postView() {
   return protectedView({
     html: `
-      <header>
-        <button id="backBtn">← Back</button>
-        <h1>Post</h1>
-      </header>
+    <header class="flex items-center gap-2 pt-8">
+    <span class="material-symbols-outlined">arrow_left_alt</span>
+      <button id="backBtn" class="font-semibold text-xl">Post</button>
+    </header>
       <div id="postContainer"></div>
       <div id="commentsContainer"></div>
     `,

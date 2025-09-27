@@ -13,7 +13,7 @@ export function feedView() {
     html: `
       ${feedHeader("feed")}
       <div id="feedContainer"></div>
-      <div id="loadMoreContainer" class="load-more-container"></div>
+      <div id="loadMoreContainer" class="load-more-container flex justify-center pt-12"></div>
     `,
     init: async () => {
       const headerContainer =

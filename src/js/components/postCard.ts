@@ -4,6 +4,7 @@ import { openUpdatePostModal } from "./modals/updatePostModal";
 import { formatTimePost } from "../utils/formatTimePost";
 import { getCurrentUserProfile } from "../services/profileService";
 import type { Profile } from "../types/profile";
+import { followButton } from "./followButton";
 
 export async function postCard(
   post: Post,
@@ -31,58 +32,66 @@ export async function postCard(
 
   const authorHtml = authorProfile
     ? `
-      <div class="profile-link" data-username="${authorProfile.name}">
+    <div class="profile-link flex items-start gap-2 p-t-4" data-username="${
+      authorProfile.name
+    }">
+      <figure class="w-12 h-12">
         <img
-          class="rounded-full"
+          class="rounded-full w-full h-full object-cover"
           src="${authorProfile.avatar?.url || "/default-avatar.png"}"
           alt="${authorProfile.avatar?.alt || authorProfile.name}"
         />
-        <h4>${authorProfile.name}</h4>
+      </figure>
+      <div class="flex flex-col gap-1">
+        <h4 class="font-medium">${authorProfile.name}</h4>
+        <span class="post-time text-sm text-gray-dark">${createdTime}${updatedTime}</span>
       </div>
-    `
+    </div>
+  `
     : `<span>Unknown</span>`;
 
   return `
-    <div class="post" data-post-id="${post.id}">
-      <h2 class="post-link" data-id="${post.id}">${post.title}</h2>
-      <p class="post-link" data-id="${post.id}">${post.body ?? ""}</p>
-      ${
-        post.media
-          ? `<img 
-              class="post-link" 
-              data-id="${post.id}" 
-              src="${post.media.url}" 
-              alt="${post.media.alt ?? ""}"/>`
-          : ""
-      }
-      <div class="post-meta">
-        <p>${authorHtml}</p>
-        <p class="post-time">${createdTime}${updatedTime}</p>
-        <p>
-          <span class="post-link" data-id="${post.id}">${
-    post._count.comments
-  } comments</span> · 
-          <span>${post._count.reactions} reactions</span>
-        </p>
-        <p>
-          ${
-            !isOwnPost
-              ? `<button class="follow-btn" data-username="${
-                  post.author?.name
-                }" data-following="${isFollowing}">
-                   ${isFollowing ? "Unfollow" : "Follow"}
-                 </button>`
-              : ""
-          }
-          ${
-            isOwnPost
-              ? `<button class="edit-post-btn" data-id="${post.id}">Edit</button>`
-              : ""
-          }
-        </p>
+  <div class="post flex flex-col gap-4 pt-4" data-post-id="${post.id}">
+    <div class="post-header flex justify-between items-start">
+      ${authorHtml}
+      <div class="post-actions flex gap-2">
+        ${
+          !isOwnPost && post.author
+            ? followButton(post.author, isFollowing)
+            : ""
+        }
+        ${
+          isOwnPost
+            ? `<button class="edit-post-btn bg-secondary hover:bg-secondary-hover text-white text-sm py-4 px-4 rounded-full" data-id="${post.id}">Edit post</button>`
+            : ""
+        }
       </div>
     </div>
-  `;
+    <div class="flex flex-col gap-2">
+    <h2 class="post-link text-l font-semibold" data-id="${post.id}">${
+    post.title
+  }</h2>
+    <p class="post-link" data-id="${post.id}">${post.body ?? ""}</p>
+   </div>
+   <figure>
+    ${
+      post.media
+        ? `<img 
+            class="post-link rounded-lg" 
+            data-id="${post.id}" 
+            src="${post.media.url}" 
+            alt="${post.media.alt ?? ""}"/>`
+        : ""
+    }
+  </figure>
+    <div class="post-footer text-sm text-gray-dark">
+      <span class="post-link" data-id="${post.id}">
+        ${post._count.comments} comments
+      </span>
+    </div>
+    <hr class="h-[1px] bg-gray-medium border-none">
+  </div>
+`;
 }
 
 export function initEditPostButtons(posts: Post[]) {

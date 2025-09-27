@@ -16,7 +16,7 @@ export function profileView(username?: string) {
       <h1>Profile</h1>
       <div id="profileHeader"></div>
       <div id="profilePosts"></div>
-      <div id="loadMoreContainer" class="load-more-container"></div>
+      <div id="loadMoreContainer" class="load-more-container flex justify-center pt-12"></div>
     `,
     init: async () => {
       const header = document.getElementById("profileHeader")!;

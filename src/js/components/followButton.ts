@@ -4,7 +4,7 @@ import type { Profile } from "../types/profile";
 export function followButton(profile: Profile, isFollowing: boolean): string {
   return `
     <button 
-      class="follow-btn" 
+      class="follow-btn bg-secondary hover:bg-secondary-hover text-white text-sm py-4 px-4 rounded-full" 
       data-username="${profile.name}" 
       data-following="${isFollowing}"
     >
