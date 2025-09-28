@@ -52,7 +52,7 @@ npm run preview
 
 ## Deployment
 
-This site is deployed using GitHub pages: https://jereriviel.github.io/js2-ca/
+This site is deployed using Netlify: https://jereriviel-js2-ca.netlify.app/
 
 ## Contact
 
