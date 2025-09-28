@@ -8,7 +8,7 @@ export function notFoundView() {
       <figure class="max-w-[200px]">
         <img
           class="rounded-full w-full h-full object-cover"
-          src="./public/img/404.jpg"
+          src="/js2-ca/img/404.jpg"
           alt="Not found illustration."
         />
       </figure>

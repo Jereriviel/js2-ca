@@ -16,7 +16,7 @@ export function startView() {
       <div class="flex flex-col items-center gap-2">
         <figure class="w-[100px]">
           <img
-            src="/public/img/hearth_logo_144x144.png"
+            src="/js2-ca/img/hearth_logo_144x144.png"
             alt="Hearth logo depicting a fireplace with a flame inside."
           />
         </figure>
