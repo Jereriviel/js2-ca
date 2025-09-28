@@ -13,7 +13,7 @@ The front-end will allow users to perform CRUD operations on their own profile a
 - Tailwind CSS
 - Modular TypeScript (Vanilla)
 - Vite
-- GitHub Pages
+- Netlify
 - Noroff API
 
 ## Getting Started
