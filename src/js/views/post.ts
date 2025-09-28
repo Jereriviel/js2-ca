@@ -12,7 +12,6 @@ import {
 } from "../components/commentForm";
 import { renderComments, renderComment } from "../components/commentList";
 import { initProfileLinks } from "../utils/initProfileLinks";
-import { APP_BASE_PATH } from "../constants";
 
 export function postView() {
   return protectedView({
@@ -34,9 +33,7 @@ export function postView() {
       container.innerHTML = `<p>Loading post...</p>`;
 
       try {
-        const id = Number(
-          location.pathname.replace(APP_BASE_PATH, "/").split("/")[2]
-        );
+        const id = Number(location.pathname.split("/")[2]);
         if (isNaN(id)) {
           container.innerHTML = `<p>Invalid post ID</p>`;
           return;

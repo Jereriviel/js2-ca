@@ -1,4 +1,3 @@
-import { APP_BASE_PATH } from "../constants";
 import { setNavigate } from "../utils/navigate";
 
 type ViewResult = {
@@ -31,7 +30,6 @@ export class Router {
 
   navigate(path: string, data?: any): void {
     if (location.pathname !== path) {
-      path = APP_BASE_PATH + path.slice(1);
       history.pushState(data || {}, "", path);
       this.resolveRoute(path);
     }
@@ -43,8 +41,6 @@ export class Router {
 
   private async resolveRoute(path: string): Promise<void> {
     let view;
-
-    path = path.replace(APP_BASE_PATH, "/");
 
     if (path.startsWith("/profile")) {
       const parts = path.split("/");
