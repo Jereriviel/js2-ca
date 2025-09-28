@@ -23,7 +23,6 @@ export function createLoadMoreButton<T>(options: {
 
   async function fetchAndRender(page: number) {
     isFetching = true;
-    const priorText = button.textContent;
     button.textContent = "Loading...";
     button.disabled = true;
 
