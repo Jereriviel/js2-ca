@@ -6,6 +6,27 @@ import { getCurrentUserProfile } from "../services/profileService";
 import type { Profile } from "../types/profile";
 import { followButton } from "./followButton";
 
+/**
+ * Generates the HTML for a single blog post.
+ *
+ * Fetches the author's full profile if available, and renders:
+ * - Author information (avatar, name, post time)
+ * - Post title and body
+ * - Optional media (image)
+ * - Post actions (Follow/Unfollow button if not own post, Edit button if own post)
+ * - Comment count
+ *
+ * @async
+ * @function postCard
+ * @param {Post} post - The post object to render.
+ * @param {string[]} loggedInUserFollowing - Array of usernames that the logged-in user follows, used to determine follow button state.
+ * @returns {Promise<string>} HTML string representing the post card.
+ *
+ * @example
+ * const html = await postCard(postData, loggedInUserFollowing);
+ * document.getElementById('postContainer')!.innerHTML = html;
+ */
+
 export async function postCard(
   post: Post,
   loggedInUserFollowing: string[]
@@ -51,7 +72,7 @@ export async function postCard(
     : `<span>Unknown</span>`;
 
   return `
-  <div class="post flex flex-col gap-4 pt-4" data-post-id="${post.id}">
+  <article class="post flex flex-col gap-4 pt-4" data-post-id="${post.id}">
     <div class="post-header flex justify-between items-start">
       ${authorHtml}
       <div class="post-actions flex gap-2">
@@ -90,7 +111,7 @@ export async function postCard(
       </span>
     </div>
     <hr class="h-[1px] bg-gray-medium border-none">
-  </div>
+  </article>
 `;
 }
 

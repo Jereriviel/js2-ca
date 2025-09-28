@@ -21,7 +21,7 @@ export async function openEditProfileModal() {
   const modal = createModal(`
     <form
     method="dialog"
-    class="edit-profile-form min-w-[600px] flex flex-col gap-4">
+    class="edit-profile-form min-w-[375px] flex flex-col gap-4">
       <h2 class="font-semibold text-xl">Edit Profile</h2>
       <div class="flex flex-col gap-4">
       ${textArea({

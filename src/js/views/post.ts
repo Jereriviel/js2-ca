@@ -10,18 +10,19 @@ import {
   initCommentForms,
   initDeleteCommentButtons,
 } from "../components/commentForm";
-import { renderComments } from "../components/commentList";
+import { renderComments, renderComment } from "../components/commentList";
 import { initProfileLinks } from "../utils/initProfileLinks";
 
 export function postView() {
   return protectedView({
     html: `
-    <header class="flex items-center gap-2 pt-8">
-    <span class="material-symbols-outlined">arrow_left_alt</span>
-      <button id="backBtn" class="font-semibold text-xl">Post</button>
+    <header class="flex items-center gap-2 pt-8 pb-2">
+      <button id="backBtn" class="font-semibold text-xl flex items-center gap-2">
+      <span class="material-symbols-outlined">arrow_left_alt</span>
+      Post</button>
     </header>
-      <div id="postContainer"></div>
-      <div id="commentsContainer"></div>
+      <section id="postContainer"></section>
+      <section id="commentsContainer"></section>
     `,
     init: async () => {
       const container = document.getElementById("postContainer")!;
@@ -59,7 +60,7 @@ export function postView() {
         commentsContainer.innerHTML = commentForm(post.id);
         commentsContainer.insertAdjacentHTML(
           "beforeend",
-          renderComments(post.comments || [])
+          renderComments((post.comments || []).slice().reverse())
         );
 
         initCommentForms(async (postId, body) => {
@@ -67,10 +68,13 @@ export function postView() {
           const commentsList = commentsContainer.querySelector(
             ".comments-container"
           )!;
-          commentsList.insertAdjacentHTML(
-            "beforeend",
-            renderComments([newComment])
-          );
+
+          const heading = commentsList.querySelector("h2");
+          if (heading) {
+            heading.insertAdjacentHTML("afterend", renderComment(newComment));
+          } else {
+            commentsList.outerHTML = renderComments([newComment]);
+          }
           initDeleteCommentButtons(commentsContainer);
         });
 

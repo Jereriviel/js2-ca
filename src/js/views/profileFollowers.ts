@@ -13,11 +13,12 @@ import { goTo } from "../utils/navigate";
 export function profileFollowersView(username?: string) {
   return protectedView({
     html: `
-    <header class="flex items-center gap-2 pt-8">
+    <header class="flex items-center gap-2 pt-8 pb-2">
+      <button id="backBtn" class="font-semibold text-xl flex items-center gap-2">
       <span class="material-symbols-outlined">arrow_left_alt</span>
-      <button id="backBtn" class="font-semibold text-xl">Followers</button>
+      Followers</button>
     </header>
-      <div id="followersContainer"></div>
+      <section id="followersContainer"></section>
     `,
     init: async () => {
       const container = document.getElementById("followersContainer")!;

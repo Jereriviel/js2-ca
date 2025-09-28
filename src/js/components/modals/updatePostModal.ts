@@ -12,7 +12,7 @@ export function openUpdatePostModal(post: Post) {
 
 <form
       method="dialog"
-      class="update-post-form flex flex-col gap-4 min-w-[600px]">
+      class="update-post-form flex flex-col gap-4 min-w-[375px]">
       <div class="flex justify-between items-center">
       <h2 class="font-semibold text-xl">Edit Post</h2>
       <button type="button" id="cancelBtn" class="font-medium hover:bg-gray-medium w-fit py-4 px-5 rounded-full">Cancel</button>

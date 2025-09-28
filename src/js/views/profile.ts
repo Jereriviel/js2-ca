@@ -13,9 +13,8 @@ import { goTo } from "../utils/navigate";
 export function profileView(username?: string) {
   return protectedView({
     html: `
-      <h1>Profile</h1>
-      <div id="profileHeader"></div>
-      <div id="profilePosts"></div>
+      <header id="profileHeader"></header>
+      <section id="profilePosts"></section>
       <div id="loadMoreContainer" class="load-more-container flex justify-center pt-12"></div>
     `,
     init: async () => {

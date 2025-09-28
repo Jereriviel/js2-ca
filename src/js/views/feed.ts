@@ -12,8 +12,8 @@ export function feedView() {
   return protectedView({
     html: `
       ${feedHeader("feed")}
-      <div id="feedContainer"></div>
-      <div id="loadMoreContainer" class="load-more-container flex justify-center pt-12"></div>
+      <section id="feedContainer"></section>
+      <section id="loadMoreContainer" class="load-more-container flex justify-center pt-12"></section>
     `,
     init: async () => {
       const headerContainer =

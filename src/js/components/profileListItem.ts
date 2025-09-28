@@ -10,20 +10,22 @@ export function profileListItem(
   const isOwnProfile = loggedInUser?.name === profile.name;
 
   return `
-    <div class="profile-list-item">
-      <div class="profile-link" data-username="${profile.name}">
-        <img 
-          class="rounded-full" 
-          src="${profile.avatar?.url || "/default-avatar.png"}" 
-          alt="${profile.avatar?.alt || profile.name}" 
-        />
-        <h4>${profile.name}</h4>
+    <div class="profile-list-item flex justify-between items-start py-4">
+      <div class="flex flex-col gap-2">
+        <div class="profile-link flex gap-2" data-username="${profile.name}">
+          <figure class="w-12 h-12">
+            <img class="rounded-full w-full h-full object-cover"
+            src="${profile.avatar?.url || "/default-avatar.png"}"
+            alt="${profile.avatar?.alt || profile.name}" />
+          </figure>
+          <h4 class="font-semibold">${profile.name}</h4>
+        </div>
+        <div>
+          <p>${profile.bio || ""}</p>
+        </div>
       </div>
-
-      <div>
-        <p>${profile.bio || ""}</p>
-        ${isOwnProfile ? "" : followButton(profile, isFollowing)}
-      </div>
+      ${isOwnProfile ? "" : followButton(profile, isFollowing)}
     </div>
+    <hr class="h-[1px] bg-gray-medium border-none">
   `;
 }

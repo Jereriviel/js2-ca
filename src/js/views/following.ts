@@ -12,8 +12,8 @@ export function followingView() {
   return protectedView({
     html: `
       ${feedHeader("following")}
-      <div id="followingContainer"></div>
-      <div id="loadMoreContainer" class="load-more-container flex justify-center pt-12"></div>
+      <section id="followingContainer"></section>
+      <section id="loadMoreContainer" class="load-more-container flex justify-center pt-12"></section>
     `,
     init: async () => {
       const headerContainer =

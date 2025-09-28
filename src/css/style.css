@@ -27,14 +27,6 @@
   .post-link {
     cursor: pointer;
   }
-
-  .aside-navbar {
-    width: 18.75rem;
-  }
-
-  .main-app {
-    width: 37.5rem;
-  }
 }
 
 @layer components {

@@ -24,12 +24,15 @@
     <script defer type="module" src="/src/js/app.ts"></script>
   </head>
   <body>
-    <div id="layout" class="flex justify-center">
-      <aside id="navbar" class="aside-navbar p-8"></aside>
-      <main>
-        <div id="app" class="main-app"></div>
+    <div
+      id="layout"
+      class="max-w-4xl mx-auto flex flex-col sm:flex-row-reverse justify-center"
+    >
+      <main class="w-full">
+        <div id="app" class="main-app px-4 pb-14 sm:pb-0"></div>
         <footer class="h-12"></footer>
       </main>
+      <aside id="navbar" class="aside-navbar"></aside>
     </div>
   </body>
 </html>

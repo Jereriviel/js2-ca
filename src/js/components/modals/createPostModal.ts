@@ -9,7 +9,7 @@ export function openCreatePostModal() {
   const modal = createModal(`
     <form
       method="dialog"
-      class="create-post-form flex flex-col gap-4 min-w-[600px]"
+      class="create-post-form flex flex-col gap-4 max-w-xl"
     >
       <h2 class="font-semibold text-xl">Create New Post</h2>
       <div class="flex flex-col gap-4">

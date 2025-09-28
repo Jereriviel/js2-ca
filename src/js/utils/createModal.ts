@@ -19,11 +19,12 @@ export function createModal(
     "left-1/2",
     "-translate-x-1/2",
     "-translate-y-1/2",
-    "w-fit",
     "rounded-2xl",
     "shadow-lg",
     "py-8",
-    "px-8"
+    "px-8",
+    "w-full",
+    "max-w-xl"
   );
 
   modal.innerHTML = content;
