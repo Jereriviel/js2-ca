@@ -1,9 +1,9 @@
 export function createModal(
   content: string,
-  className = "app-modal"
+  className = "app-modal",
 ): HTMLDialogElement {
   const existing = document.querySelector<HTMLDialogElement>(
-    `dialog.${className}`
+    `dialog.${className}`,
   );
   if (existing) {
     existing.close();
@@ -24,7 +24,7 @@ export function createModal(
     "py-8",
     "px-8",
     "w-full",
-    "max-w-xl"
+    "max-w-xl",
   );
 
   modal.innerHTML = content;

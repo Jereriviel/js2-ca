@@ -4,32 +4,32 @@ import type { Post, PostsResponse } from "../types/post";
 
 export async function getProfile(name: string): Promise<Profile> {
   const response = await get<ProfileResponse>(
-    `/social/profiles/${name}?_followers=true&_following=true`
+    `/social/profiles/${name}?_followers=true&_following=true`,
   );
   return response.data;
 }
 
 export async function getProfilePosts(name: string): Promise<Post[]> {
   const response = await get<PostsResponse>(
-    `/social/profiles/${name}/posts?_author=true&_comments=true&_reactions=true&?_followers=true`
+    `/social/profiles/${name}/posts?_author=true&_comments=true&_reactions=true&?_followers=true`,
   );
   return response.data;
 }
 
 export async function getCurrentUserProfile(name: string) {
   const response = await get<ProfileResponse>(
-    `/social/profiles/${name}?_following=true`
+    `/social/profiles/${name}?_following=true`,
   );
   return response.data;
 }
 
 export async function updateProfile(
   name: string,
-  updates: Partial<Profile>
+  updates: Partial<Profile>,
 ): Promise<Profile> {
   const response = await put<ProfileResponse>(
     `/social/profiles/${name}`,
-    updates
+    updates,
   );
   return response.data;
 }
@@ -44,14 +44,14 @@ export async function unfollowProfile(name: string): Promise<void> {
 
 export async function getProfileFollowers(username: string) {
   const res: ProfileResponse = await get(
-    `/social/profiles/${username}?_followers=true`
+    `/social/profiles/${username}?_followers=true`,
   );
   return res.data.followers || [];
 }
 
 export async function getProfileFollowing(username: string) {
   const res: ProfileResponse = await get(
-    `/social/profiles/${username}?_following=true`
+    `/social/profiles/${username}?_following=true`,
   );
   return res.data.following || [];
 }

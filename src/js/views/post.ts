@@ -60,13 +60,13 @@ export function postView() {
         commentsContainer.innerHTML = commentForm(post.id);
         commentsContainer.insertAdjacentHTML(
           "beforeend",
-          renderComments((post.comments || []).slice().reverse())
+          renderComments((post.comments || []).slice().reverse()),
         );
 
         initCommentForms(async (postId, body) => {
           const newComment = await addComment(postId, body);
           const commentsList = commentsContainer.querySelector(
-            ".comments-container"
+            ".comments-container",
           )!;
 
           const heading = commentsList.querySelector("h2");

@@ -131,7 +131,7 @@ export async function updateNavMiniProfile() {
     `;
 
     const newMiniProfile = document.querySelector(
-      ".profile-link[data-username]"
+      ".profile-link[data-username]",
     );
     if (newMiniProfile) {
       newMiniProfile.addEventListener("click", () => {

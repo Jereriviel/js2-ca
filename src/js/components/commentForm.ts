@@ -22,7 +22,7 @@ export function commentForm(postId: number): string {
 }
 
 export function initCommentForms(
-  onSubmit: (postId: number, body: string) => Promise<void>
+  onSubmit: (postId: number, body: string) => Promise<void>,
 ) {
   document
     .querySelectorAll<HTMLFormElement>(".comment-form")
@@ -62,7 +62,7 @@ export function initDeleteCommentButtons(container: HTMLElement) {
         if (!commentId || !postId) return;
 
         const confirmed = await showConfirmModal(
-          "Are you sure you want to delete this comment?"
+          "Are you sure you want to delete this comment?",
         );
         if (!confirmed) return;
 

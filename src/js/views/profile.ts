@@ -38,7 +38,7 @@ export function profileView(username?: string) {
 
         if (currentUser) {
           const currentUserProfile = await getCurrentUserProfile(
-            currentUser.name
+            currentUser.name,
           );
           loggedInUserFollowing =
             currentUserProfile.following?.map((f) => f.name) || [];

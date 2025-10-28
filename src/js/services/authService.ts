@@ -10,7 +10,7 @@ import type {
 export async function registerUser(
   name: string,
   email: string,
-  password: string
+  password: string,
 ): Promise<RegisterResponseData> {
   const res = await fetch(`${API_BASE}/auth/register`, {
     method: "POST",
@@ -29,7 +29,7 @@ export async function registerUser(
 
 export async function loginUser(
   email: string,
-  password: string
+  password: string,
 ): Promise<LoginResponseData> {
   const res = await fetch(`${API_BASE}/auth/login`, {
     method: "POST",

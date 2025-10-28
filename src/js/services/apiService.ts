@@ -4,7 +4,7 @@ const apiKey = "d671ac05-4c3a-46df-860f-f1c8e63b8be5";
 
 async function apiFetch<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<T> {
   const url = API_BASE + endpoint;
 

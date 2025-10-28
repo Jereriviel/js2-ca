@@ -26,7 +26,7 @@ export async function initPaginatedList<T>(options: {
     const items = response.data;
 
     const htmlArr = await Promise.all(
-      items.map((item) => Promise.resolve(renderItem(item)))
+      items.map((item) => Promise.resolve(renderItem(item))),
     );
     container.innerHTML = htmlArr.join("");
 

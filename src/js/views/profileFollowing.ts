@@ -45,7 +45,7 @@ export function profileFollowingView(username?: string) {
 
         if (currentUser) {
           const currentUserProfile = await getCurrentUserProfile(
-            currentUser.name
+            currentUser.name,
           );
           currentUserFollowingNames =
             currentUserProfile.following?.map((f) => f.name) || [];
@@ -59,9 +59,9 @@ export function profileFollowingView(username?: string) {
               const cachedProfile = await getCachedProfile(profile.name);
               return profileListItem(
                 cachedProfile,
-                currentUserFollowingNames.includes(cachedProfile.name)
+                currentUserFollowingNames.includes(cachedProfile.name),
               );
-            })
+            }),
           );
           container.innerHTML = profilesHtml.join("");
         }

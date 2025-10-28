@@ -98,7 +98,7 @@ export function openCreatePostModal() {
     } catch (err: any) {
       console.error("Failed to create post:", err);
       await showErrorModal(
-        err?.message || "Failed to create post. Please try again."
+        err?.message || "Failed to create post. Please try again.",
       );
     }
   });

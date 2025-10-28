@@ -15,7 +15,7 @@ export function createLoadMoreButton<T>(options: {
     "w-fit",
     "py-4",
     "px-5",
-    "rounded-full"
+    "rounded-full",
   );
 
   let currentPage = 1;
@@ -32,7 +32,7 @@ export function createLoadMoreButton<T>(options: {
       const meta = response.meta;
 
       const htmlPromises = items.map((item) =>
-        Promise.resolve(renderItem(item))
+        Promise.resolve(renderItem(item)),
       );
       const htmlArr = await Promise.all(htmlPromises);
 

@@ -19,38 +19,38 @@ interface SearchProfilesResponse {
 
 export async function searchPosts(query: string): Promise<SearchPostsResponse> {
   return get<SearchPostsResponse>(
-    `/social/posts/search?q=${encodeURIComponent(query)}&_author=true`
+    `/social/posts/search?q=${encodeURIComponent(query)}&_author=true`,
   );
 }
 
 export async function searchProfiles(
-  query: string
+  query: string,
 ): Promise<SearchProfilesResponse> {
   return get<SearchProfilesResponse>(
-    `/social/profiles/search?q=${encodeURIComponent(query)}`
+    `/social/profiles/search?q=${encodeURIComponent(query)}`,
   );
 }
 
 export async function getPaginatedSearchPosts(
   query: string,
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
 ): Promise<PaginatedResponse<any>> {
   return get(
     `/social/posts/search?q=${encodeURIComponent(
-      query
-    )}&_author=true&page=${page}&limit=${limit}`
+      query,
+    )}&_author=true&page=${page}&limit=${limit}`,
   );
 }
 
 export async function getPaginatedSearchProfiles(
   query: string,
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
 ): Promise<PaginatedResponse<Profile>> {
   return get(
     `/social/profiles/search?q=${encodeURIComponent(
-      query
-    )}&page=${page}&limit=${limit}`
+      query,
+    )}&page=${page}&limit=${limit}`,
   );
 }

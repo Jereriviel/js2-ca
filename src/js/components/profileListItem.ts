@@ -4,7 +4,7 @@ import { getUser } from "../store/userStore";
 
 export function profileListItem(
   profile: Profile,
-  isFollowing: boolean
+  isFollowing: boolean,
 ): string {
   const loggedInUser = getUser();
   const isOwnProfile = loggedInUser?.name === profile.name;

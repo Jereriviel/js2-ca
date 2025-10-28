@@ -34,7 +34,7 @@ export function renderComments(comments: Comment[]): string {
   }
 
   const sortedComments = [...comments].sort(
-    (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
+    (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime(),
   );
 
   return `

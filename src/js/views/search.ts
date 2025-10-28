@@ -41,11 +41,11 @@ export function searchView() {
       const input = document.getElementById("searchInput") as HTMLInputElement;
       const postsContainer = document.getElementById("searchPosts")!;
       const postsLoadMoreContainer = document.getElementById(
-        "postsLoadMoreContainer"
+        "postsLoadMoreContainer",
       )!;
       const profilesContainer = document.getElementById("searchProfiles")!;
       const profilesLoadMoreContainer = document.getElementById(
-        "profilesLoadMoreContainer"
+        "profilesLoadMoreContainer",
       )!;
 
       const currentUser = getUser();
@@ -101,7 +101,7 @@ export function searchView() {
               const cachedProfile = await getCachedProfile(profile.name);
               return profileListItem(
                 cachedProfile,
-                loggedInUserFollowingNames.includes(cachedProfile.name)
+                loggedInUserFollowingNames.includes(cachedProfile.name),
               );
             },
           });

@@ -22,7 +22,7 @@ export async function getFollowingPosts(): Promise<PaginatedResponse<Post>> {
 
 export async function getPaginatedPosts(
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
 ): Promise<PaginatedResponse<Post>> {
   return get(`/social/posts?_author=true&page=${page}&limit=${limit}`);
 }
@@ -30,43 +30,43 @@ export async function getPaginatedPosts(
 export async function getPaginatedProfilePosts(
   username: string,
   page: number = 1,
-  limit: number = 5
+  limit: number = 5,
 ): Promise<PaginatedResponse<Post>> {
   return get(
-    `/social/profiles/${username}/posts?_author=true&page=${page}&limit=${limit}`
+    `/social/profiles/${username}/posts?_author=true&page=${page}&limit=${limit}`,
   );
 }
 
 export async function getPaginatedFollowingPosts(
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
 ): Promise<PaginatedResponse<Post>> {
   return get(
-    `/social/posts/following?_author=true&page=${page}&limit=${limit}`
+    `/social/posts/following?_author=true&page=${page}&limit=${limit}`,
   );
 }
 
 export async function addComment(
   postId: number,
-  body: string
+  body: string,
 ): Promise<Comment> {
   const response = await post<{ data: Comment }>(
     `/social/posts/${postId}/comment`,
-    { body }
+    { body },
   );
   return response.data;
 }
 
 export async function deleteComment(
   postId: number,
-  commentId: number
+  commentId: number,
 ): Promise<void> {
   await del<void>(`/social/posts/${postId}/comment/${commentId}`);
 }
 
 export async function reactToPost(
   postId: number,
-  symbol: string
+  symbol: string,
 ): Promise<{ postId: number; symbol: string; reactions: Reaction[] }> {
   return put(`/social/posts/${postId}/react/${encodeURIComponent(symbol)}`);
 }
@@ -80,11 +80,11 @@ export async function createPost(postData: Partial<Post>): Promise<Post> {
 
 export async function updatePost(
   postId: number,
-  postData: Partial<Post>
+  postData: Partial<Post>,
 ): Promise<Post> {
   const response = await put<{ data: Post }>(
     `/social/posts/${postId}`,
-    postData
+    postData,
   );
   return response.data;
 }

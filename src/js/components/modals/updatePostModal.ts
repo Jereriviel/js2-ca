@@ -117,7 +117,7 @@ export function openUpdatePostModal(post: Post) {
 
   deleteBtn.addEventListener("click", async () => {
     const confirmed = await showConfirmModal(
-      "Are you sure you want to delete this post?"
+      "Are you sure you want to delete this post?",
     );
     if (!confirmed) return;
 
@@ -133,7 +133,7 @@ export function openUpdatePostModal(post: Post) {
     } catch (err: any) {
       console.error("Failed to delete post:", err);
       await showErrorModal(
-        err?.message || "Failed to delete post. Please try again."
+        err?.message || "Failed to delete post. Please try again.",
       );
     }
   });
