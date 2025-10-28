@@ -44,11 +44,17 @@ export function profileFollowingView(username?: string) {
         let currentUserFollowingNames: string[] = [];
 
         if (currentUser) {
-          const currentUserProfile = await getCurrentUserProfile(
-            currentUser.name,
-          );
-          currentUserFollowingNames =
-            currentUserProfile.following?.map((f) => f.name) || [];
+          try {
+            const currentUserProfile = await getCurrentUserProfile(
+              currentUser.name,
+            );
+            currentUserFollowingNames =
+              currentUserProfile.following?.map((f) => f.name) || [];
+          } catch (error) {
+            let message = "Failed to fetch current user profile";
+            if (error instanceof Error) message += `: ${error.message}`;
+            console.error(message, error);
+          }
         }
 
         if (following.length === 0) {
@@ -69,8 +75,10 @@ export function profileFollowingView(username?: string) {
         initFollowButtons();
         initProfileLinks(container);
       } catch (error) {
-        container.innerHTML = `<p>Error loading following.</p>`;
-        console.error(error);
+        let message = "Error loading following";
+        if (error instanceof Error) message += `: ${error.message}`;
+        container.innerHTML = `<p>${message}</p>`;
+        console.error("profileFollowingView init error:", error);
       }
     },
   });

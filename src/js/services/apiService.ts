@@ -1,4 +1,5 @@
 import { API_BASE } from "../constants";
+import { ApiError } from "../errors/ApiError";
 
 const apiKey = "d671ac05-4c3a-46df-860f-f1c8e63b8be5";
 
@@ -23,19 +24,23 @@ async function apiFetch<T>(
     const response = await fetch(url, { ...options, headers });
 
     if (!response.ok) {
-      console.error(`HTTP Error: ${response.status} ${response.statusText}`);
-      return null;
+      throw await ApiError.fromResponse(response);
     }
 
     if (response.status === 204) {
-      return null;
+      return null as T;
     }
 
     const data: T = await response.json();
     return data;
   } catch (error) {
-    console.error("API fetch error:", error);
-    return null;
+    if (error instanceof ApiError) throw error;
+
+    if (error instanceof Error) {
+      throw new ApiError(`Network error: ${error.message}`, 0);
+    }
+
+    throw new ApiError("Unknown error occurred", 0);
   }
 }
 export async function get<T>(endpoint: string): Promise<T | null> {

@@ -48,7 +48,9 @@ export function postView() {
             loggedInUserFollowingNames =
               profile.following?.map((f: Profile) => f.name) || [];
           } catch (error) {
-            console.error("Failed to fetch current user profile:", error);
+            let message = "Failed to fetch current user profile";
+            if (error instanceof Error) message += `: ${error.message}`;
+            console.error(message, error);
           }
         }
 
@@ -84,8 +86,10 @@ export function postView() {
         initProfileLinks(container);
         initProfileLinks(commentsContainer);
       } catch (error) {
-        container.innerHTML = `<p>Error loading post</p>`;
-        console.error(error);
+        let message = "Error loading post";
+        if (error instanceof Error) message += `: ${error.message}`;
+        container.innerHTML = `<p>${message}</p>`;
+        console.error("postView init error:", error);
       }
     },
   });

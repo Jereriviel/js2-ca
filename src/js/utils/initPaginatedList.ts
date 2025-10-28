@@ -57,7 +57,11 @@ export async function initPaginatedList<T>(options: {
 
     btnContainer.appendChild(loadMoreBtn);
   } catch (error) {
-    container.innerHTML = `<p>Error loading items.</p>`;
-    console.error(error);
+    let message = "Error loading items.";
+    if (error instanceof Error) {
+      message = error.message;
+    }
+    container.innerHTML = `<p>${message}</p>`;
+    console.error("initPaginatedList error:", error);
   }
 }
