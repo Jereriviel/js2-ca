@@ -46,8 +46,8 @@ export async function postCard(
   if (post.author?.name) {
     try {
       authorProfile = await getCurrentUserProfile(post.author.name);
-    } catch (err) {
-      console.warn("Failed to fetch author profile", err);
+    } catch (error) {
+      console.warn("Failed to fetch author profile", error);
     }
   }
 

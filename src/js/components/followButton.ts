@@ -29,8 +29,8 @@ export function initFollowButtons() {
           btn.textContent = "Unfollow";
           btn.dataset.following = "true";
         }
-      } catch (err) {
-        console.error("Follow/Unfollow failed:", err);
+      } catch (error) {
+        console.error("Follow/Unfollow failed:", error);
       }
     });
   });

@@ -108,10 +108,12 @@ export function openUpdatePostModal(post: Post) {
       modal.close();
       modal.remove();
       await router.refresh();
-    } catch (err: any) {
-      console.error("Failed to update post:", err);
+    } catch (error) {
+      console.error("Failed to update post:", error);
       errorEl.textContent =
-        err?.message || "Failed to update post. Please try again.";
+        error instanceof Error
+          ? error.message
+          : "Failed to update post. Please try again.";
     }
   });
 
@@ -130,10 +132,12 @@ export function openUpdatePostModal(post: Post) {
       } else {
         goTo("/feed");
       }
-    } catch (err: any) {
-      console.error("Failed to delete post:", err);
+    } catch (error) {
+      console.error("Failed to delete post:", error);
       await showErrorModal(
-        err?.message || "Failed to delete post. Please try again.",
+        error instanceof Error
+          ? error.message
+          : "Failed to delete post. Please try again.",
       );
     }
   });

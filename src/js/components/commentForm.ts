@@ -44,8 +44,8 @@ export function initCommentForms(
           if (commentsContainer) {
             initDeleteCommentButtons(commentsContainer);
           }
-        } catch (err) {
-          console.error("Failed to post comment:", err);
+        } catch (error) {
+          console.error("Failed to post comment:", error);
           await showErrorModal("Failed to post comment. Please try again.");
         }
       });
@@ -70,8 +70,8 @@ export function initDeleteCommentButtons(container: HTMLElement) {
           await deleteComment(postId, commentId);
           const commentDiv = btn.closest(".comment");
           if (commentDiv) commentDiv.remove();
-        } catch (err) {
-          console.error("Failed to delete comment:", err);
+        } catch (error) {
+          console.error("Failed to delete comment:", error);
           await showErrorModal("Failed to delete comment. Please try again.");
         }
       });

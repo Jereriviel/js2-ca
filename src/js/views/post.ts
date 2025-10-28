@@ -47,8 +47,8 @@ export function postView() {
             const profile = await getCurrentUserProfile(currentUser.name);
             loggedInUserFollowingNames =
               profile.following?.map((f: Profile) => f.name) || [];
-          } catch (err) {
-            console.error("Failed to fetch current user profile:", err);
+          } catch (error) {
+            console.error("Failed to fetch current user profile:", error);
           }
         }
 

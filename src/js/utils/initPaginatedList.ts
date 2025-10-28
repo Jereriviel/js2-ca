@@ -3,10 +3,12 @@ import { initFollowButtons } from "../components/followButton";
 import { initPostLinks } from "./initPostLinks";
 import { initProfileLinks } from "./initProfileLinks";
 import { initEditPostButtons } from "../components/postCard";
+import type { PaginatedResponse } from "../types/post";
+import type { Post } from "../types/post";
 
 export async function initPaginatedList<T>(options: {
   container: HTMLElement;
-  fetchItems: (page: number) => Promise<{ data: T[]; meta: any }>;
+  fetchItems: (page: number) => Promise<PaginatedResponse<T>>;
   renderItem: (item: T) => string | Promise<string>;
   onAfterRender?: (items: T[]) => void;
   isPostList?: boolean;
@@ -32,7 +34,7 @@ export async function initPaginatedList<T>(options: {
 
     if (isPostList) {
       initPostLinks(container);
-      initEditPostButtons(items as any);
+      initEditPostButtons(items as Post[]);
     }
     initProfileLinks(container);
     initFollowButtons();
@@ -45,7 +47,7 @@ export async function initPaginatedList<T>(options: {
       fetchItems,
       renderItem,
       onAfterRender: async (newItems) => {
-        if (isPostList) initEditPostButtons(newItems as any);
+        if (isPostList) initEditPostButtons(newItems as Post[]);
         initPostLinks(container);
         initProfileLinks(container);
         initFollowButtons();
@@ -54,8 +56,8 @@ export async function initPaginatedList<T>(options: {
     });
 
     btnContainer.appendChild(loadMoreBtn);
-  } catch (err) {
+  } catch (error) {
     container.innerHTML = `<p>Error loading items.</p>`;
-    console.error(err);
+    console.error(error);
   }
 }

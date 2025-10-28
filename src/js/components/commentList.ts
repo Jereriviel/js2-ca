@@ -4,7 +4,7 @@ import type { Comment } from "../types/post";
 export function renderComment(c: Comment): string {
   const currentUser = getUser();
   const isOwnComment = currentUser?.name === c.author?.name;
-  const authorName = c.author?.name ?? (c as any).owner ?? "Unknown";
+  const authorName = c.author?.name ?? c.owner ?? "Unknown";
   const createdDate = c.created
     ? new Date(c.created).toLocaleString()
     : new Date().toLocaleString();

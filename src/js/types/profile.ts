@@ -23,5 +23,5 @@ export interface Profile {
 
 export interface ProfileResponse {
   data: Profile;
-  meta: Record<string, any>;
+  meta: Record<string, never>;
 }

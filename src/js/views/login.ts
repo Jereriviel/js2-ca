@@ -71,7 +71,8 @@ export function loginView() {
           await loginUser(email, password);
           await renderLayout();
           goTo("/feed");
-        } catch (err) {
+        } catch (error) {
+          console.error("Login error:", error);
           errorEl.textContent = "Login failed. Please check your credentials.";
           errorEl.style.display = "block";
         }

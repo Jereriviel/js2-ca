@@ -18,7 +18,6 @@ export interface Post {
 
   author?: Profile;
   comments?: Comment[];
-  reactions?: Reaction[];
 }
 
 export interface Comment {
@@ -26,18 +25,10 @@ export interface Comment {
   body: string;
   replyToId: number | null;
   postId: number;
-  owner: string;
+  owner?: string;
   created: string;
-  author: Profile;
+  author?: Profile;
 }
-
-export interface Reaction {
-  symbol: string;
-  count: number;
-  reactors: string[];
-}
-
-//Reaction not in use at the moment.
 
 export interface PostsResponse {
   data: Post[];

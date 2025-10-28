@@ -5,7 +5,9 @@ type ViewResult = {
   init?: () => void | Promise<void>;
 };
 
-type View = (data?: any) => ViewResult | Promise<ViewResult>;
+type ViewData = string | number;
+
+type View = (data?: ViewData) => ViewResult | Promise<ViewResult>;
 
 interface Routes {
   [path: string]: View;
@@ -28,7 +30,7 @@ export class Router {
     this.resolveRoute(location.pathname);
   }
 
-  navigate(path: string, data?: any): void {
+  navigate(path: string, data?: ViewData): void {
     if (location.pathname !== path) {
       history.pushState(data || {}, "", path);
       this.resolveRoute(path);

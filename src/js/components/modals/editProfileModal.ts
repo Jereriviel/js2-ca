@@ -130,10 +130,12 @@ export async function openEditProfileModal() {
 
       modal.close();
       modal.remove();
-    } catch (err: any) {
-      console.error("Failed to update profile:", err);
+    } catch (error) {
+      console.error("Failed to update profile:", error);
       await showErrorModal(
-        err?.message || "Failed to update profile. Please check the URLs.",
+        error instanceof Error
+          ? error.message
+          : "Failed to update profile. Please check the URLs.",
       );
     }
   });

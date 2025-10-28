@@ -1,6 +1,8 @@
+import type { PaginatedResponse } from "../types/post";
+
 export function createLoadMoreButton<T>(options: {
   container: HTMLElement;
-  fetchItems: (page: number) => Promise<{ data: T[]; meta: any }>;
+  fetchItems: (page: number) => Promise<PaginatedResponse<T>>;
   renderItem: (item: T) => string | Promise<string>;
   onAfterRender?: (newItems: T[]) => void;
 }): HTMLButtonElement {
@@ -46,8 +48,8 @@ export function createLoadMoreButton<T>(options: {
         button.textContent = "Load More";
         button.disabled = false;
       }
-    } catch (err) {
-      console.error("Failed to load items:", err);
+    } catch (error) {
+      console.error("Failed to load items:", error);
       button.textContent = "Failed to load. Try again?";
       button.disabled = false;
     } finally {

@@ -5,7 +5,7 @@ const apiKey = "d671ac05-4c3a-46df-860f-f1c8e63b8be5";
 async function apiFetch<T>(
   endpoint: string,
   options: RequestInit = {},
-): Promise<T> {
+): Promise<T | null> {
   const url = API_BASE + endpoint;
 
   const headers: Record<string, string> = {
@@ -20,49 +20,49 @@ async function apiFetch<T>(
   }
 
   try {
-    const response = await fetch(url, {
-      ...options,
-      headers,
-    });
+    const response = await fetch(url, { ...options, headers });
 
     if (!response.ok) {
-      let errorMessage = `An unknown error occurred`;
-      try {
-        const data = await response.json();
-        errorMessage = (data as any)?.errors?.[0]?.message || errorMessage;
-      } catch {}
-      throw new Error(errorMessage);
+      console.error(`HTTP Error: ${response.status} ${response.statusText}`);
+      return null;
     }
 
     if (response.status === 204) {
-      return undefined as unknown as T;
+      return null;
     }
 
-    return response.json() as Promise<T>;
+    const data: T = await response.json();
+    return data;
   } catch (error) {
-    throw error;
+    console.error("API fetch error:", error);
+    return null;
   }
 }
-
-export async function get<T>(endpoint: string): Promise<T> {
+export async function get<T>(endpoint: string): Promise<T | null> {
   return apiFetch<T>(endpoint);
 }
 
-export async function post<T>(endpoint: string, body: object): Promise<T> {
+export async function post<T>(
+  endpoint: string,
+  body: object,
+): Promise<T | null> {
   return apiFetch<T>(endpoint, {
     method: "POST",
     body: JSON.stringify(body),
   });
 }
 
-export async function put<T>(endpoint: string, body?: object): Promise<T> {
+export async function put<T>(
+  endpoint: string,
+  body?: object,
+): Promise<T | null> {
   return apiFetch<T>(endpoint, {
     method: "PUT",
-    body: JSON.stringify(body),
+    body: body ? JSON.stringify(body) : undefined,
   });
 }
 
-export async function del<T>(endpoint: string): Promise<T> {
+export async function del<T>(endpoint: string): Promise<T | null> {
   return apiFetch<T>(endpoint, {
     method: "DELETE",
   });

@@ -1,7 +1,6 @@
 import { get } from "./apiService";
-import type { Post } from "../types/post";
 import type { Profile } from "../types/profile";
-import type { PaginatedResponse } from "../types/post";
+import type { PaginatedResponse, Post } from "../types/post";
 
 interface SearchPostsResponse {
   data: Post[];
@@ -35,8 +34,8 @@ export async function getPaginatedSearchPosts(
   query: string,
   page: number = 1,
   limit: number = 10,
-): Promise<PaginatedResponse<any>> {
-  return get(
+): Promise<PaginatedResponse<Post>> {
+  return get<PaginatedResponse<Post>>(
     `/social/posts/search?q=${encodeURIComponent(
       query,
     )}&_author=true&page=${page}&limit=${limit}`,
