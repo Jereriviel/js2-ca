@@ -10,7 +10,7 @@ import { getPaginatedProfilePosts } from "../services/postsService";
 import { initPaginatedList } from "../utils/initPaginatedList";
 import { goTo } from "../utils/navigate";
 
-export function profileView(username?: string) {
+export function profileView(username?: string | number) {
   return protectedView({
     html: `
       <header id="profileHeader"></header>

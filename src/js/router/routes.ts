@@ -15,7 +15,7 @@ export const routes = {
   "/feed/following": followingView,
   "/login": loginView,
   "/post": postView,
-  "/profile": (username?: string) => profileView(username),
+  "/profile": (username?: string | number) => profileView(username),
   "/profile/:username/followers": (username: string) =>
     profileFollowersView(username),
   "/profile/:username/following": (username: string) =>

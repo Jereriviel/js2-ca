@@ -3,7 +3,7 @@ import { handleError } from "../errors/handleError";
 import type { Profile, ProfileResponse } from "../types/profile";
 import type { Post, PostsResponse } from "../types/post";
 
-export async function getProfile(name: string): Promise<Profile> {
+export async function getProfile(name: string | number): Promise<Profile> {
   try {
     const response = await get<ProfileResponse>(
       `/social/profiles/${name}?_followers=true&_following=true`,
