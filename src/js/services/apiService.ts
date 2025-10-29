@@ -1,5 +1,6 @@
 import { API_BASE } from "../constants";
 import { ApiError } from "../errors/ApiError";
+import { handleError } from "../errors/handleError";
 
 const apiKey = "d671ac05-4c3a-46df-860f-f1c8e63b8be5";
 
@@ -28,21 +29,18 @@ async function apiFetch<T>(
     }
 
     if (response.status === 204) {
-      return null as T;
+      return null;
     }
 
     const data: T = await response.json();
     return data;
   } catch (error) {
-    if (error instanceof ApiError) throw error;
+    handleError(error);
 
-    if (error instanceof Error) {
-      throw new ApiError(`Network error: ${error.message}`, 0);
-    }
-
-    throw new ApiError("Unknown error occurred", 0);
+    return null;
   }
 }
+
 export async function get<T>(endpoint: string): Promise<T | null> {
   return apiFetch<T>(endpoint);
 }
