@@ -3,8 +3,7 @@ import { initFollowButtons } from "../components/followButton";
 import { initPostLinks } from "./initPostLinks";
 import { initProfileLinks } from "./initProfileLinks";
 import { initEditPostButtons } from "../components/postCard";
-import type { PaginatedResponse } from "../types/post";
-import type { Post } from "../types/post";
+import type { PaginatedResponse, Post } from "../types/post";
 import { initLazyLoadImages } from "./lazyLoadImages";
 
 export async function initPaginatedList<T>(options: {

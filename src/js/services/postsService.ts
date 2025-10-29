@@ -42,46 +42,51 @@ export async function getFollowingPosts(): Promise<PaginatedResponse<Post> | nul
 export async function getPaginatedPosts(
   page: number = 1,
   limit: number = 10,
-): Promise<PaginatedResponse<Post> | null> {
+): Promise<PaginatedResponse<Post>> {
   try {
-    return await get<PaginatedResponse<Post>>(
+    const response = await get<PaginatedResponse<Post>>(
       `/social/posts?_author=true&page=${page}&limit=${limit}`,
     );
+    if (!response) throw new Error("Failed to fetch posts");
+    return response;
   } catch (error) {
     handleError(error);
-    return null;
+    throw error;
   }
 }
 
 export async function getPaginatedProfilePosts(
-  username: string,
+  username: string | number,
   page: number = 1,
   limit: number = 5,
-): Promise<PaginatedResponse<Post> | null> {
+): Promise<PaginatedResponse<Post>> {
   try {
-    return await get<PaginatedResponse<Post>>(
+    const response = await get<PaginatedResponse<Post>>(
       `/social/profiles/${username}/posts?_author=true&page=${page}&limit=${limit}`,
     );
+    if (!response) throw new Error("Failed to fetch profile posts");
+    return response;
   } catch (error) {
     handleError(error);
-    return null;
+    throw error;
   }
 }
 
 export async function getPaginatedFollowingPosts(
   page: number = 1,
   limit: number = 10,
-): Promise<PaginatedResponse<Post> | null> {
+): Promise<PaginatedResponse<Post>> {
   try {
-    return await get<PaginatedResponse<Post>>(
+    const response = await get<PaginatedResponse<Post>>(
       `/social/posts/following?_author=true&page=${page}&limit=${limit}`,
     );
+    if (!response) throw new Error("Failed to fetch following posts");
+    return response;
   } catch (error) {
     handleError(error);
-    return null;
+    throw error;
   }
 }
-
 export async function addComment(
   postId: number,
   body: string,
