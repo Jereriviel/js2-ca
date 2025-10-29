@@ -5,6 +5,7 @@ import { initProfileLinks } from "./initProfileLinks";
 import { initEditPostButtons } from "../components/postCard";
 import type { PaginatedResponse } from "../types/post";
 import type { Post } from "../types/post";
+import { initLazyLoadImages } from "./lazyLoadImages";
 
 export async function initPaginatedList<T>(options: {
   container: HTMLElement;
@@ -39,6 +40,7 @@ export async function initPaginatedList<T>(options: {
     initProfileLinks(container);
     initFollowButtons();
     if (onAfterRender) onAfterRender(items);
+    initLazyLoadImages();
 
     const btnContainer =
       loadMoreContainer ?? container.parentElement ?? container;
@@ -51,6 +53,7 @@ export async function initPaginatedList<T>(options: {
         initPostLinks(container);
         initProfileLinks(container);
         initFollowButtons();
+        initLazyLoadImages();
         if (onAfterRender) onAfterRender(newItems);
       },
     });

@@ -98,9 +98,10 @@ export async function postCard(
     ${
       post.media
         ? `<img 
-            class="post-link rounded-lg" 
+            class="post-link rounded-lg lazy-load" 
             data-id="${post.id}" 
-            src="${post.media.url}" 
+            data-src="${post.media.url}"
+            src="../public/img/placeholder.png"
             alt="${post.media.alt ?? ""}"/>`
         : ""
     }
