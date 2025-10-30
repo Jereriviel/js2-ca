@@ -1,7 +1,5 @@
 export function initLazyLoadImages() {
-  console.log("initLazyLoadImages called");
   const lazyImages = document.querySelectorAll<HTMLImageElement>(".lazy-load");
-  console.log(`Found ${lazyImages.length} lazy images`);
 
   if (lazyImages.length === 0) return;
 
