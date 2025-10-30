@@ -2,6 +2,7 @@ import { registerUser, loginUser } from "../services/authService";
 import { renderLayout } from "../app";
 import { goTo } from "../utils/navigate";
 import { input } from "../components/inputs";
+import { validateForm } from "../utils/validation";
 
 export function registerView() {
   return {
@@ -84,8 +85,18 @@ export function registerView() {
         const password = formData.get("password") as string;
         const confirmPassword = formData.get("confirmPassword") as string;
 
-        if (password !== confirmPassword) {
-          errorEl.textContent = "Passwords do not match.";
+        const { isValid, errors } = validateForm(
+          email,
+          password,
+          confirmPassword,
+        );
+
+        if (!isValid) {
+          errorEl.textContent =
+            errors.email ||
+            errors.password ||
+            errors.confirmPassword ||
+            "Invalid input";
           return;
         }
 

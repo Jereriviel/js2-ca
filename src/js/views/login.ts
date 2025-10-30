@@ -2,6 +2,7 @@ import { loginUser } from "../services/authService";
 import { renderLayout } from "../app";
 import { goTo } from "../utils/navigate";
 import { input } from "../components/inputs";
+import { validateForm } from "../utils/validation";
 
 export function loginView() {
   return {
@@ -66,6 +67,17 @@ export function loginView() {
         const formData = new FormData(form);
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
+
+        const { isValid, errors } = validateForm(email, password);
+
+        if (!isValid) {
+          errorEl.textContent =
+            errors.email || errors.password || "Invalid input";
+          errorEl.style.display = "block";
+          return;
+        } else {
+          errorEl.style.display = "none";
+        }
 
         try {
           await loginUser(email, password);
