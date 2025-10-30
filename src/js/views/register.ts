@@ -37,7 +37,6 @@ export function registerView() {
            placeholder: "Choose your password",
            required: true,
            label: "Password",
-           minlength: 8,
            id: "password",
          })}
          ${input({
@@ -46,7 +45,6 @@ export function registerView() {
            placeholder: "Re-enter your password",
            required: true,
            label: "Confirm password",
-           minlength: 8,
            id: "confirmPassword",
          })}
       </div>
