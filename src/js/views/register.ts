@@ -3,6 +3,7 @@ import { renderLayout } from "../app";
 import { goTo } from "../utils/navigate";
 import { input } from "../components/inputs";
 import { validateForm } from "../utils/validation";
+import { handleError } from "../errors/handleError";
 
 export function registerView() {
   return {
@@ -84,7 +85,6 @@ export function registerView() {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
         const confirmPassword = formData.get("confirmPassword") as string;
-
         const { isValid, errors } = validateForm(
           email,
           password,
@@ -98,6 +98,8 @@ export function registerView() {
             errors.confirmPassword ||
             "Invalid input";
           return;
+        } else {
+          errorEl.style.display = "none";
         }
 
         try {
@@ -106,10 +108,9 @@ export function registerView() {
           await renderLayout();
           goTo("/feed");
         } catch (error) {
-          errorEl.textContent =
-            error instanceof Error
-              ? error.message
-              : "An unknown error occurred.";
+          const message = handleError(error);
+          errorEl.textContent = message;
+          errorEl.style.display = "block";
         }
       });
     },

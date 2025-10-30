@@ -1,43 +1,31 @@
 import { ApiError } from "./ApiError";
-import { showUserMessage } from "../components/toasts/userMessage";
 
-export function handleError(error: unknown): void {
+export function handleError(error: unknown): string {
   if (error instanceof ApiError) {
     console.error(`[API Error] ${error.statusCode}: ${error.message}`);
 
     switch (error.statusCode) {
       case 400:
-        showUserMessage("Bad request. Please try again.");
-        break;
-
+        return "Bad request. Please try again.";
       case 401:
-        showUserMessage("Your session has expired. Please log in again.");
-        break;
-
+        return "Invalid credentials. Please try again.";
       case 403:
-        showUserMessage("You don't have permission to do that.");
-        break;
-
+        return "You don't have permission to do that.";
       case 404:
-        showUserMessage("The requested resource was not found.");
-        break;
-
+        return "The requested resource was not found.";
       case 500:
       case 502:
       case 503:
       case 504:
-        showUserMessage("Server error. Please try again later.");
-        break;
-
+        return "Server error. Please try again later.";
       default:
-        showUserMessage("An unexpected error occurred.");
-        break;
+        return "An unexpected error occurred.";
     }
   } else if (error instanceof Error) {
     console.error(`[General Error] ${error.message}`);
-    showUserMessage(error.message);
+    return error.message;
   } else {
     console.error("[Unknown Error]", error);
-    showUserMessage("Something went wrong. Please try again.");
+    return "Something went wrong. Please try again.";
   }
 }

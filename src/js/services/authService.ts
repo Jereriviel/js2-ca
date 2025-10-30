@@ -29,7 +29,7 @@ export async function registerUser(
     return json.data;
   } catch (error) {
     handleError(error);
-    return null;
+    throw error;
   }
 }
 
@@ -58,6 +58,6 @@ export async function loginUser(
     return json.data;
   } catch (error) {
     handleError(error);
-    return null;
+    throw error;
   }
 }
