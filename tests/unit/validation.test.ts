@@ -4,7 +4,7 @@ import {
   validatePassword,
   validateConfirmPassword,
   validateForm,
-} from "../../utils/validation.ts";
+} from "../../src/js/utils/validation";
 
 describe("validateEmail", () => {
   it("returns true for valid student Noroff email", () => {
