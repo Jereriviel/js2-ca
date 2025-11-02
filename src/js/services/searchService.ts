@@ -25,8 +25,7 @@ export async function searchPosts(query: string): Promise<SearchPostsResponse> {
     if (!response) throw new Error("No response received from searchPosts.");
     return response;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -40,8 +39,7 @@ export async function searchProfiles(
     if (!response) throw new Error("No response received from searchProfiles.");
     return response;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -60,8 +58,7 @@ export async function getPaginatedSearchPosts(
       throw new Error("No response received from getPaginatedSearchPosts.");
     return response;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -80,7 +77,6 @@ export async function getPaginatedSearchProfiles(
       throw new Error("No response received from getPaginatedSearchProfiles.");
     return response;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }

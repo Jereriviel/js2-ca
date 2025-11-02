@@ -28,8 +28,7 @@ export async function registerUser(
     const json: RegisterResponse = await res.json();
     return json.data;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -57,7 +56,6 @@ export async function loginUser(
 
     return json.data;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }

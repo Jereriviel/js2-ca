@@ -11,8 +11,7 @@ export async function getProfile(name: string | number): Promise<Profile> {
     if (!response) throw new Error("No response received from server.");
     return response.data;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -24,8 +23,7 @@ export async function getProfilePosts(name: string): Promise<Post[]> {
     if (!response) throw new Error("No response received from server.");
     return response.data;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -37,8 +35,7 @@ export async function getCurrentUserProfile(name: string): Promise<Profile> {
     if (!response) throw new Error("No response received from server.");
     return response.data;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -54,8 +51,7 @@ export async function updateProfile(
     if (!response) throw new Error("Failed to update profile.");
     return response.data;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -63,8 +59,7 @@ export async function followProfile(name: string): Promise<void> {
   try {
     await put(`/social/profiles/${name}/follow`);
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -72,8 +67,7 @@ export async function unfollowProfile(name: string): Promise<void> {
   try {
     await put(`/social/profiles/${name}/unfollow`);
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -87,8 +81,7 @@ export async function getProfileFollowers(
     if (!response) throw new Error("No response received from server.");
     return response.data.followers || [];
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -102,7 +95,6 @@ export async function getProfileFollowing(
     if (!response) throw new Error("No response received from server.");
     return response.data.following || [];
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }

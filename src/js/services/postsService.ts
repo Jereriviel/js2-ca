@@ -12,8 +12,7 @@ export async function getAllPosts(): Promise<PostsResponse | null> {
   try {
     return await get<PostsResponse>(`/social/posts?_author=true`);
   } catch (error) {
-    handleError(error);
-    return null;
+    throw new Error(handleError(error));
   }
 }
 
@@ -23,8 +22,7 @@ export async function getPost(id: number): Promise<SinglePostResponse | null> {
       `/social/posts/${id}?_author=true&_comments=true&_reactions=true`,
     );
   } catch (error) {
-    handleError(error);
-    return null;
+    throw new Error(handleError(error));
   }
 }
 
@@ -34,8 +32,7 @@ export async function getFollowingPosts(): Promise<PaginatedResponse<Post> | nul
       `/social/posts/following?_author=true`,
     );
   } catch (error) {
-    handleError(error);
-    return null;
+    throw new Error(handleError(error));
   }
 }
 
@@ -50,8 +47,7 @@ export async function getPaginatedPosts(
     if (!response) throw new Error("Failed to fetch posts");
     return response;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -67,8 +63,7 @@ export async function getPaginatedProfilePosts(
     if (!response) throw new Error("Failed to fetch profile posts");
     return response;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 
@@ -83,8 +78,7 @@ export async function getPaginatedFollowingPosts(
     if (!response) throw new Error("Failed to fetch following posts");
     return response;
   } catch (error) {
-    handleError(error);
-    throw error;
+    throw new Error(handleError(error));
   }
 }
 export async function addComment(
@@ -98,8 +92,7 @@ export async function addComment(
     );
     return response?.data ?? null;
   } catch (error) {
-    handleError(error);
-    return null;
+    throw new Error(handleError(error));
   }
 }
 
@@ -110,7 +103,7 @@ export async function deleteComment(
   try {
     await del<void>(`/social/posts/${postId}/comment/${commentId}`);
   } catch (error) {
-    handleError(error);
+    throw new Error(handleError(error));
   }
 }
 
@@ -121,8 +114,7 @@ export async function createPost(
     const response = await post<{ data: Post }>(`/social/posts`, postData);
     return response?.data ?? null;
   } catch (error) {
-    handleError(error);
-    return null;
+    throw new Error(handleError(error));
   }
 }
 
@@ -137,8 +129,7 @@ export async function updatePost(
     );
     return response?.data ?? null;
   } catch (error) {
-    handleError(error);
-    return null;
+    throw new Error(handleError(error));
   }
 }
 
@@ -146,6 +137,6 @@ export async function deletePost(postId: number): Promise<void> {
   try {
     await del<void>(`/social/posts/${postId}`);
   } catch (error) {
-    handleError(error);
+    throw new Error(handleError(error));
   }
 }

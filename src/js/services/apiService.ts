@@ -35,9 +35,7 @@ async function apiFetch<T>(
     const data: T = await response.json();
     return data;
   } catch (error) {
-    handleError(error);
-
-    return null;
+    throw new Error(handleError(error));
   }
 }
 

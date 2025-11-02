@@ -102,18 +102,22 @@ export function openUpdatePostModal(post: Post) {
         alt: mediaAlt || "Post image",
       };
     }
-
+    console.log("before try");
     try {
+      console.log("inside try");
       await updatePost(post.id, postData);
       modal.close();
       modal.remove();
       await router.refresh();
     } catch (error) {
+      console.log("error is catched");
       console.error("Failed to update post:", error);
-      errorEl.textContent =
+      await showErrorModal(
         error instanceof Error
           ? error.message
-          : "Failed to update post. Please try again.";
+          : "Failed to update post. Please try again.",
+      );
+      console.log("error modal has been shown");
     }
   });
 
