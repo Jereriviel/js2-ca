@@ -1,6 +1,5 @@
 import { setNavigate } from "../utils/navigate";
 import { updateMetadata } from "../utils/metadata";
-import { routes as routeConfigs } from "./routes";
 
 type ViewResult = {
   html: string;
@@ -8,8 +7,6 @@ type ViewResult = {
 };
 
 type ViewData = string | number;
-
-type View = (data?: ViewData) => ViewResult | Promise<ViewResult>;
 
 export interface Route {
   view: (param?: string | number) => ViewResult | Promise<ViewResult>;
@@ -27,15 +24,15 @@ export interface DynamicRoute {
   };
 }
 
-interface Routes {
-  [path: string]: View;
-}
-
 export class Router {
-  private routes: Routes;
+  private routes: Record<string, Route | DynamicRoute>;
+
   private outlet: HTMLElement;
 
-  constructor(routes: Routes, outlet: HTMLElement) {
+  constructor(
+    routes: Record<string, Route | DynamicRoute>,
+    outlet: HTMLElement,
+  ) {
     this.routes = routes;
     this.outlet = outlet;
 
@@ -83,7 +80,7 @@ export class Router {
       param = Number(parts[2]);
     }
 
-    const route = routeConfigs[routeKey] || routeConfigs["*"];
+    const route = this.routes[routeKey] || this.routes["*"];
     if (!route) {
       this.outlet.innerHTML = `<p>Route not found</p>`;
       return;
@@ -98,13 +95,13 @@ export class Router {
       updateMetadata("Hearth", "A social platform for sharing stories.");
     }
 
-    const routeConfig = routeConfigs[routeKey] || routeConfigs["*"];
-    if (!routeConfig) {
+    const activeRoute = this.routes[routeKey] || this.routes["*"];
+    if (!activeRoute) {
       this.outlet.innerHTML = `<p>Route not found</p>`;
       return;
     }
 
-    const view = routeConfig.view;
+    const view = activeRoute.view;
     const result = await view();
     const { html, init } = result;
     this.outlet.innerHTML = html;

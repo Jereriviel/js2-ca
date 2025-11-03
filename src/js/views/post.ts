@@ -55,6 +55,10 @@ export function postView() {
         }
 
         const response = await getPost(id);
+        if (!response) {
+          container.innerHTML = `<p>Post not found</p>`;
+          return;
+        }
         const post = response.data;
 
         container.innerHTML = await postCard(post, loggedInUserFollowingNames);
@@ -67,6 +71,7 @@ export function postView() {
 
         initCommentForms(async (postId, body) => {
           const newComment = await addComment(postId, body);
+          if (!newComment) return;
           const commentsList = commentsContainer.querySelector(
             ".comments-container",
           )!;
