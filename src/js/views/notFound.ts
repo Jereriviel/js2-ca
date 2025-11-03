@@ -3,7 +3,7 @@ import { goTo } from "../utils/navigate";
 export function notFoundView() {
   return {
     html: `
-    <section class="flex flex-col gap-4 items-center mt-12">
+    <section class="flex flex-col gap-4 items-center mt-12 h-screen">
     <div class="flex flex-col items-center">
       <figure class="max-w-[200px]">
         <img

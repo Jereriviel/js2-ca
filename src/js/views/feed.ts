@@ -12,8 +12,10 @@ export function feedView() {
   return protectedView({
     html: `
       ${feedHeader("feed")}
+      <div class="h-screen">
       <section id="feedContainer"></section>
       <section id="loadMoreContainer" class="load-more-container flex justify-center py-8"></section>
+      </div>
     `,
     init: async () => {
       const headerContainer =

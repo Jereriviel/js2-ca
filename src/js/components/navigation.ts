@@ -100,6 +100,12 @@ export function initNavigation() {
       e.preventDefault();
       const route = link.dataset.route;
       if (route) goTo(route);
+
+      const currentActive = document.querySelector(".nav-link.active");
+      if (currentActive) {
+        currentActive.classList.remove("active");
+      }
+      link.classList.add("active");
     });
   });
 

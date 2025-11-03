@@ -18,7 +18,7 @@ export function profileFollowingView(username?: string) {
       <span class="material-symbols-outlined">arrow_left_alt</span>
       Following</button>
     </header>
-      <section id="followingContainer"></section>
+      <section id="followingContainer" class="h-screen"></section>
     `,
     init: async () => {
       const container = document.getElementById("followingContainer")!;

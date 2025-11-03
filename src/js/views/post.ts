@@ -21,8 +21,10 @@ export function postView() {
       <span class="material-symbols-outlined">arrow_left_alt</span>
       Post</button>
     </header>
+    <div class="h-screen">
       <section id="postContainer"></section>
       <section id="commentsContainer"></section>
+    </div>
     `,
     init: async () => {
       const container = document.getElementById("postContainer")!;
