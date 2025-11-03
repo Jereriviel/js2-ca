@@ -14,7 +14,7 @@ export function profileView(username?: string | number) {
   return protectedView({
     html: `
       <header id="profileHeader"></header>
-      <section id="profilePosts"></section>
+      <section id="profilePosts" class="h-screen"></section>
       <div id="loadMoreContainer" class="load-more-container flex justify-center py-8"></div>
     `,
     init: async () => {

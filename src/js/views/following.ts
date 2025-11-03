@@ -12,8 +12,10 @@ export function followingView() {
   return protectedView({
     html: `
       ${feedHeader("following")}
+      <div class="h-screen">
       <section id="followingContainer"></section>
       <section id="loadMoreContainer" class="load-more-container flex justify-center py-8"></section>
+      </div>
     `,
     init: async () => {
       const headerContainer =

@@ -18,7 +18,7 @@ export function profileFollowersView(username?: string) {
       <span class="material-symbols-outlined">arrow_left_alt</span>
       Followers</button>
     </header>
-      <section id="followersContainer"></section>
+      <section id="followersContainer" class="h-screen"></section>
     `,
     init: async () => {
       const container = document.getElementById("followersContainer")!;

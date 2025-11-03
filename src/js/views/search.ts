@@ -13,7 +13,7 @@ import { profileListItem } from "../components/profileListItem";
 export function searchView() {
   return protectedView({
     html: `
-    <section>
+    <section class="h-screen">
     <form id="searchForm">
         <div class="flex mt-8 mb-4 bg-gray-light pl-4 border border-gray-medium rounded-full gap-2">
           <button type="submit">
