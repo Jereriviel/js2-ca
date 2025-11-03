@@ -10,7 +10,7 @@ import { getPaginatedProfilePosts } from "../services/postsService";
 import { initPaginatedList } from "../utils/initPaginatedList";
 import { goTo } from "../utils/navigate";
 
-export function profileView(username?: string) {
+export function profileView(username?: string | number) {
   return protectedView({
     html: `
       <header id="profileHeader"></header>
@@ -37,11 +37,17 @@ export function profileView(username?: string) {
         let loggedInUserFollowing: string[] = [];
 
         if (currentUser) {
-          const currentUserProfile = await getCurrentUserProfile(
-            currentUser.name
-          );
-          loggedInUserFollowing =
-            currentUserProfile.following?.map((f) => f.name) || [];
+          try {
+            const currentUserProfile = await getCurrentUserProfile(
+              currentUser.name,
+            );
+            loggedInUserFollowing =
+              currentUserProfile.following?.map((f) => f.name) || [];
+          } catch (error) {
+            let message = "Failed to fetch current user profile";
+            if (error instanceof Error) message += `: ${error.message}`;
+            console.error(message, error);
+          }
         }
 
         const isFollowingProfile = loggedInUserFollowing.includes(profile.name);
@@ -70,9 +76,11 @@ export function profileView(username?: string) {
           isPostList: true,
         });
       } catch (error) {
-        header.innerHTML = `<p>Error loading profile.</p>`;
+        let message = "Error loading profile";
+        if (error instanceof Error) message += `: ${error.message}`;
+        header.innerHTML = `<p>${message}</p>`;
         postsContainer.innerHTML = "";
-        console.error(error);
+        console.error("profileView init error:", error);
       }
     },
   });

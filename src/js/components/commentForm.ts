@@ -22,7 +22,7 @@ export function commentForm(postId: number): string {
 }
 
 export function initCommentForms(
-  onSubmit: (postId: number, body: string) => Promise<void>
+  onSubmit: (postId: number, body: string) => Promise<void>,
 ) {
   document
     .querySelectorAll<HTMLFormElement>(".comment-form")
@@ -44,8 +44,8 @@ export function initCommentForms(
           if (commentsContainer) {
             initDeleteCommentButtons(commentsContainer);
           }
-        } catch (err) {
-          console.error("Failed to post comment:", err);
+        } catch (error) {
+          console.error("Failed to post comment:", error);
           await showErrorModal("Failed to post comment. Please try again.");
         }
       });
@@ -62,7 +62,7 @@ export function initDeleteCommentButtons(container: HTMLElement) {
         if (!commentId || !postId) return;
 
         const confirmed = await showConfirmModal(
-          "Are you sure you want to delete this comment?"
+          "Are you sure you want to delete this comment?",
         );
         if (!confirmed) return;
 
@@ -70,8 +70,8 @@ export function initDeleteCommentButtons(container: HTMLElement) {
           await deleteComment(postId, commentId);
           const commentDiv = btn.closest(".comment");
           if (commentDiv) commentDiv.remove();
-        } catch (err) {
-          console.error("Failed to delete comment:", err);
+        } catch (error) {
+          console.error("Failed to delete comment:", error);
           await showErrorModal("Failed to delete comment. Please try again.");
         }
       });

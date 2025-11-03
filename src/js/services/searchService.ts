@@ -1,7 +1,7 @@
 import { get } from "./apiService";
-import type { Post } from "../types/post";
+import { handleError } from "../errors/handleError";
 import type { Profile } from "../types/profile";
-import type { PaginatedResponse } from "../types/post";
+import type { PaginatedResponse, Post } from "../types/post";
 
 interface SearchPostsResponse {
   data: Post[];
@@ -18,39 +18,65 @@ interface SearchProfilesResponse {
 }
 
 export async function searchPosts(query: string): Promise<SearchPostsResponse> {
-  return get<SearchPostsResponse>(
-    `/social/posts/search?q=${encodeURIComponent(query)}&_author=true`
-  );
+  try {
+    const response = await get<SearchPostsResponse>(
+      `/social/posts/search?q=${encodeURIComponent(query)}&_author=true`,
+    );
+    if (!response) throw new Error("No response received from searchPosts.");
+    return response;
+  } catch (error) {
+    throw new Error(handleError(error));
+  }
 }
 
 export async function searchProfiles(
-  query: string
+  query: string,
 ): Promise<SearchProfilesResponse> {
-  return get<SearchProfilesResponse>(
-    `/social/profiles/search?q=${encodeURIComponent(query)}`
-  );
+  try {
+    const response = await get<SearchProfilesResponse>(
+      `/social/profiles/search?q=${encodeURIComponent(query)}`,
+    );
+    if (!response) throw new Error("No response received from searchProfiles.");
+    return response;
+  } catch (error) {
+    throw new Error(handleError(error));
+  }
 }
 
 export async function getPaginatedSearchPosts(
   query: string,
   page: number = 1,
-  limit: number = 10
-): Promise<PaginatedResponse<any>> {
-  return get(
-    `/social/posts/search?q=${encodeURIComponent(
-      query
-    )}&_author=true&page=${page}&limit=${limit}`
-  );
+  limit: number = 10,
+): Promise<PaginatedResponse<Post>> {
+  try {
+    const response = await get<PaginatedResponse<Post>>(
+      `/social/posts/search?q=${encodeURIComponent(
+        query,
+      )}&_author=true&page=${page}&limit=${limit}`,
+    );
+    if (!response)
+      throw new Error("No response received from getPaginatedSearchPosts.");
+    return response;
+  } catch (error) {
+    throw new Error(handleError(error));
+  }
 }
 
 export async function getPaginatedSearchProfiles(
   query: string,
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
 ): Promise<PaginatedResponse<Profile>> {
-  return get(
-    `/social/profiles/search?q=${encodeURIComponent(
-      query
-    )}&page=${page}&limit=${limit}`
-  );
+  try {
+    const response = await get<PaginatedResponse<Profile>>(
+      `/social/profiles/search?q=${encodeURIComponent(
+        query,
+      )}&page=${page}&limit=${limit}`,
+    );
+    if (!response)
+      throw new Error("No response received from getPaginatedSearchProfiles.");
+    return response;
+  } catch (error) {
+    throw new Error(handleError(error));
+  }
 }

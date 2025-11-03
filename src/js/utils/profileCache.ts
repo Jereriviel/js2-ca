@@ -3,7 +3,9 @@ import { getProfile } from "../services/profileService";
 
 const cache: Record<string, Profile> = {};
 
-export async function getCachedProfile(username: string): Promise<Profile> {
+export async function getCachedProfile(
+  username: string | number,
+): Promise<Profile> {
   if (cache[username]) {
     return cache[username];
   }

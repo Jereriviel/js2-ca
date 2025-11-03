@@ -69,8 +69,8 @@ export async function navigation(): Promise<string> {
     </button>
   </nav>
 `;
-  } catch (err) {
-    console.error("Failed to fetch profile for navbar", err);
+  } catch (error) {
+    console.error("Failed to fetch profile for navbar", error);
     return "";
   }
 }
@@ -131,14 +131,14 @@ export async function updateNavMiniProfile() {
     `;
 
     const newMiniProfile = document.querySelector(
-      ".profile-link[data-username]"
+      ".profile-link[data-username]",
     );
     if (newMiniProfile) {
       newMiniProfile.addEventListener("click", () => {
         goTo(`/profile/${profile.name}`);
       });
     }
-  } catch (err) {
-    console.error("Failed to update mini profile in nav", err);
+  } catch (error) {
+    console.error("Failed to update mini profile in nav", error);
   }
 }

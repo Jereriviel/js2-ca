@@ -95,10 +95,12 @@ export function openCreatePostModal() {
       modal.close();
       modal.remove();
       await router.refresh();
-    } catch (err: any) {
-      console.error("Failed to create post:", err);
+    } catch (error) {
+      console.error("Failed to create post:", error);
       await showErrorModal(
-        err?.message || "Failed to create post. Please try again."
+        error instanceof Error
+          ? error.message
+          : "Failed to create post. Please try again.",
       );
     }
   });

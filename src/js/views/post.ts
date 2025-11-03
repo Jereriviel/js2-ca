@@ -47,12 +47,18 @@ export function postView() {
             const profile = await getCurrentUserProfile(currentUser.name);
             loggedInUserFollowingNames =
               profile.following?.map((f: Profile) => f.name) || [];
-          } catch (err) {
-            console.error("Failed to fetch current user profile:", err);
+          } catch (error) {
+            let message = "Failed to fetch current user profile";
+            if (error instanceof Error) message += `: ${error.message}`;
+            console.error(message, error);
           }
         }
 
         const response = await getPost(id);
+        if (!response) {
+          container.innerHTML = `<p>Post not found</p>`;
+          return;
+        }
         const post = response.data;
 
         container.innerHTML = await postCard(post, loggedInUserFollowingNames);
@@ -60,13 +66,14 @@ export function postView() {
         commentsContainer.innerHTML = commentForm(post.id);
         commentsContainer.insertAdjacentHTML(
           "beforeend",
-          renderComments((post.comments || []).slice().reverse())
+          renderComments((post.comments || []).slice().reverse()),
         );
 
         initCommentForms(async (postId, body) => {
           const newComment = await addComment(postId, body);
+          if (!newComment) return;
           const commentsList = commentsContainer.querySelector(
-            ".comments-container"
+            ".comments-container",
           )!;
 
           const heading = commentsList.querySelector("h2");
@@ -84,8 +91,10 @@ export function postView() {
         initProfileLinks(container);
         initProfileLinks(commentsContainer);
       } catch (error) {
-        container.innerHTML = `<p>Error loading post</p>`;
-        console.error(error);
+        let message = "Error loading post";
+        if (error instanceof Error) message += `: ${error.message}`;
+        container.innerHTML = `<p>${message}</p>`;
+        console.error("postView init error:", error);
       }
     },
   });

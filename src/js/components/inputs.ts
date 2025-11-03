@@ -2,8 +2,8 @@ export function input(props: InputProps): string {
   return `
      <div class="flex flex-col gap-2">
           <label for="${props.id}" class="font-medium">${
-    props.label || ""
-  }</label>
+            props.label || ""
+          }</label>
           <input
             id="${props.id}"
             type="${props.type || "text"}"
@@ -20,8 +20,8 @@ export function inputModal(props: InputProps): string {
   return `
      <div class="flex flex-col gap-2">
           <label for="${props.id}" class="font-medium">${
-    props.label || ""
-  }</label>
+            props.label || ""
+          }</label>
           <input
             id="${props.id}"
             type="${props.type || "text"}"
@@ -38,8 +38,8 @@ export function textArea(props: InputProps): string {
   return `
      <div class="flex flex-col gap-2">
           <label for="${props.id}" class="font-medium">${
-    props.label || ""
-  }</label>
+            props.label || ""
+          }</label>
           <textarea
             id="${props.id}"
             type="${props.type || "text"}"

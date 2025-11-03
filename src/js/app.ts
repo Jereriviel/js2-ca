@@ -3,6 +3,9 @@ import { routes } from "./router/routes";
 import { setNavigate } from "./utils/navigate";
 import { navigation, initNavigation } from "./components/navigation";
 import { getUser } from "./store/userStore";
+import { initGlobalErrorHandling } from "./errors/GlobalError";
+
+initGlobalErrorHandling();
 
 const outlet = document.getElementById("app") as HTMLElement;
 export const router = new Router(routes, outlet);

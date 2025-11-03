@@ -14,7 +14,7 @@ export async function openEditProfileModal() {
   const profile: Profile = await getProfile(currentUser.name);
 
   const existingModal = document.querySelector<HTMLDialogElement>(
-    ".edit-profile-modal"
+    ".edit-profile-modal",
   );
   if (existingModal) existingModal.remove();
 
@@ -130,10 +130,12 @@ export async function openEditProfileModal() {
 
       modal.close();
       modal.remove();
-    } catch (err: any) {
-      console.error("Failed to update profile:", err);
+    } catch (error) {
+      console.error("Failed to update profile:", error);
       await showErrorModal(
-        err?.message || "Failed to update profile. Please check the URLs."
+        error instanceof Error
+          ? error.message
+          : "Failed to update profile. Please check the URLs.",
       );
     }
   });

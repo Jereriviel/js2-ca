@@ -2,6 +2,8 @@ import { registerUser, loginUser } from "../services/authService";
 import { renderLayout } from "../app";
 import { goTo } from "../utils/navigate";
 import { input } from "../components/inputs";
+import { validateForm } from "../utils/validation";
+import { handleError } from "../errors/handleError";
 
 export function registerView() {
   return {
@@ -35,7 +37,6 @@ export function registerView() {
            placeholder: "Choose your password",
            required: true,
            label: "Password",
-           minlength: 8,
            id: "password",
          })}
          ${input({
@@ -44,7 +45,6 @@ export function registerView() {
            placeholder: "Re-enter your password",
            required: true,
            label: "Confirm password",
-           minlength: 8,
            id: "confirmPassword",
          })}
       </div>
@@ -83,10 +83,21 @@ export function registerView() {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
         const confirmPassword = formData.get("confirmPassword") as string;
+        const { isValid, errors } = validateForm(
+          email,
+          password,
+          confirmPassword,
+        );
 
-        if (password !== confirmPassword) {
-          errorEl.textContent = "Passwords do not match.";
+        if (!isValid) {
+          errorEl.textContent =
+            errors.email ||
+            errors.password ||
+            errors.confirmPassword ||
+            "Invalid input";
           return;
+        } else {
+          errorEl.style.display = "none";
         }
 
         try {
@@ -95,10 +106,9 @@ export function registerView() {
           await renderLayout();
           goTo("/feed");
         } catch (error) {
-          errorEl.textContent =
-            error instanceof Error
-              ? error.message
-              : "An unknown error occurred.";
+          const message = handleError(error);
+          errorEl.textContent = message;
+          errorEl.style.display = "block";
         }
       });
     },

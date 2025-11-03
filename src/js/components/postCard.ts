@@ -29,7 +29,7 @@ import { followButton } from "./followButton";
 
 export async function postCard(
   post: Post,
-  loggedInUserFollowing: string[]
+  loggedInUserFollowing: string[],
 ): Promise<string> {
   const isFollowing = post.author?.name
     ? loggedInUserFollowing.includes(post.author.name)
@@ -46,8 +46,8 @@ export async function postCard(
   if (post.author?.name) {
     try {
       authorProfile = await getCurrentUserProfile(post.author.name);
-    } catch (err) {
-      console.warn("Failed to fetch author profile", err);
+    } catch (error) {
+      console.warn("Failed to fetch author profile", error);
     }
   }
 
@@ -90,17 +90,18 @@ export async function postCard(
     </div>
     <div class="flex flex-col gap-2">
     <h2 class="post-link text-l font-semibold" data-id="${post.id}">${
-    post.title
-  }</h2>
+      post.title
+    }</h2>
     <p class="post-link" data-id="${post.id}">${post.body ?? ""}</p>
    </div>
    <figure>
     ${
       post.media
         ? `<img 
-            class="post-link rounded-lg" 
+            class="post-link rounded-lg lazy-load" 
             data-id="${post.id}" 
-            src="${post.media.url}" 
+            data-src="${post.media.url}"
+            src="../public/img/placeholder.png"
             alt="${post.media.alt ?? ""}"/>`
         : ""
     }
@@ -118,7 +119,7 @@ export async function postCard(
 export function initEditPostButtons(posts: Post[]) {
   posts.forEach((post) => {
     const editBtn = document.querySelector<HTMLButtonElement>(
-      `.edit-post-btn[data-id="${post.id}"]`
+      `.edit-post-btn[data-id="${post.id}"]`,
     );
     if (editBtn) {
       editBtn.addEventListener("click", () => {
@@ -130,7 +131,7 @@ export function initEditPostButtons(posts: Post[]) {
 
 export function initEditPostButton(post: Post) {
   const editBtn = document.querySelector<HTMLButtonElement>(
-    `.edit-post-btn[data-id="${post.id}"]`
+    `.edit-post-btn[data-id="${post.id}"]`,
   );
   if (editBtn) {
     editBtn.addEventListener("click", () => {

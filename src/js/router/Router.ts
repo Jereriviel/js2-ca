@@ -1,21 +1,38 @@
 import { setNavigate } from "../utils/navigate";
+import { updateMetadata } from "../utils/metadata";
 
 type ViewResult = {
   html: string;
   init?: () => void | Promise<void>;
 };
 
-type View = (data?: any) => ViewResult | Promise<ViewResult>;
+type ViewData = string | number;
 
-interface Routes {
-  [path: string]: View;
+export interface Route {
+  view: (param?: string | number) => ViewResult | Promise<ViewResult>;
+  metadata: {
+    title: string;
+    description: string;
+  };
+}
+
+export interface DynamicRoute {
+  view: (param?: string) => ViewResult | Promise<ViewResult>;
+  getMetadata: (param: string) => {
+    title: string;
+    description: string;
+  };
 }
 
 export class Router {
-  private routes: Routes;
+  private routes: Record<string, Route | DynamicRoute>;
+
   private outlet: HTMLElement;
 
-  constructor(routes: Routes, outlet: HTMLElement) {
+  constructor(
+    routes: Record<string, Route | DynamicRoute>,
+    outlet: HTMLElement,
+  ) {
     this.routes = routes;
     this.outlet = outlet;
 
@@ -28,7 +45,7 @@ export class Router {
     this.resolveRoute(location.pathname);
   }
 
-  navigate(path: string, data?: any): void {
+  navigate(path: string, data?: ViewData): void {
     if (location.pathname !== path) {
       history.pushState(data || {}, "", path);
       this.resolveRoute(path);
@@ -40,60 +57,53 @@ export class Router {
   }
 
   private async resolveRoute(path: string): Promise<void> {
-    let view;
+    let routeKey = path;
+    let param: string | number | undefined;
 
     if (path.startsWith("/profile")) {
       const parts = path.split("/");
       const username = parts[2];
 
       if (parts.length === 4 && parts[3] === "followers") {
-        view = this.routes["/profile/:username/followers"];
-        if (view) {
-          const { html, init } = await view(username);
-          this.outlet.innerHTML = html;
-          if (init) await init();
-          return;
-        }
+        routeKey = "/profile/:username/followers";
+        param = username;
+      } else if (parts.length === 4 && parts[3] === "following") {
+        routeKey = "/profile/:username/following";
+        param = username;
+      } else {
+        routeKey = "/profile";
+        param = username;
       }
-
-      if (parts.length === 4 && parts[3] === "following") {
-        view = this.routes["/profile/:username/following"];
-        if (view) {
-          const { html, init } = await view(username);
-          this.outlet.innerHTML = html;
-          if (init) await init();
-          return;
-        }
-      }
-
-      view = this.routes["/profile"];
-      if (view) {
-        const { html, init } = await view(username);
-        this.outlet.innerHTML = html;
-        if (init) await init();
-        return;
-      }
-    }
-
-    if (path.startsWith("/post")) {
+    } else if (path.startsWith("/post")) {
       const parts = path.split("/");
-      const id = Number(parts[2]);
-      view = this.routes["/post"];
-      if (view) {
-        const { html, init } = await view(id);
-        this.outlet.innerHTML = html;
-        if (init) await init();
-        return;
-      }
+      routeKey = "/post";
+      param = Number(parts[2]);
     }
 
-    view = this.routes[path] || this.routes["*"];
-    if (!view) {
+    const route = this.routes[routeKey] || this.routes["*"];
+    if (!route) {
       this.outlet.innerHTML = `<p>Route not found</p>`;
       return;
     }
 
-    const { html, init } = await view();
+    if ("metadata" in route) {
+      updateMetadata(route.metadata.title, route.metadata.description);
+    } else if ("getMetadata" in route && param) {
+      const { title, description } = route.getMetadata(String(param));
+      updateMetadata(title, description);
+    } else {
+      updateMetadata("Hearth", "A social platform for sharing stories.");
+    }
+
+    const activeRoute = this.routes[routeKey] || this.routes["*"];
+    if (!activeRoute) {
+      this.outlet.innerHTML = `<p>Route not found</p>`;
+      return;
+    }
+
+    const view = activeRoute.view;
+    const result = await view();
+    const { html, init } = result;
     this.outlet.innerHTML = html;
     if (init) await init();
   }

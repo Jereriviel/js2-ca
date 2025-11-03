@@ -44,11 +44,17 @@ export function profileFollowersView(username?: string) {
         let currentUserFollowingNames: string[] = [];
 
         if (currentUser) {
-          const currentUserProfile = await getCurrentUserProfile(
-            currentUser.name
-          );
-          currentUserFollowingNames =
-            currentUserProfile.following?.map((f) => f.name) || [];
+          try {
+            const currentUserProfile = await getCurrentUserProfile(
+              currentUser.name,
+            );
+            currentUserFollowingNames =
+              currentUserProfile.following?.map((f) => f.name) || [];
+          } catch (error) {
+            let message = "Failed to fetch current user profile";
+            if (error instanceof Error) message += `: ${error.message}`;
+            console.error(message, error);
+          }
         }
 
         if (followers.length === 0) {
@@ -59,9 +65,9 @@ export function profileFollowersView(username?: string) {
               const cachedProfile = await getCachedProfile(profile.name);
               return profileListItem(
                 cachedProfile,
-                currentUserFollowingNames.includes(cachedProfile.name)
+                currentUserFollowingNames.includes(cachedProfile.name),
               );
-            })
+            }),
           );
           container.innerHTML = profilesHtml.join("");
         }
@@ -69,8 +75,10 @@ export function profileFollowersView(username?: string) {
         initFollowButtons();
         initProfileLinks(container);
       } catch (error) {
-        container.innerHTML = `<p>Error loading followers.</p>`;
-        console.error(error);
+        let message = "Error loading followers";
+        if (error instanceof Error) message += `: ${error.message}`;
+        container.innerHTML = `<p>${message}</p>`;
+        console.error("profileFollowersView init error:", error);
       }
     },
   });

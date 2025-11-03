@@ -102,22 +102,28 @@ export function openUpdatePostModal(post: Post) {
         alt: mediaAlt || "Post image",
       };
     }
-
+    console.log("before try");
     try {
+      console.log("inside try");
       await updatePost(post.id, postData);
       modal.close();
       modal.remove();
       await router.refresh();
-    } catch (err: any) {
-      console.error("Failed to update post:", err);
-      errorEl.textContent =
-        err?.message || "Failed to update post. Please try again.";
+    } catch (error) {
+      console.log("error is catched");
+      console.error("Failed to update post:", error);
+      await showErrorModal(
+        error instanceof Error
+          ? error.message
+          : "Failed to update post. Please try again.",
+      );
+      console.log("error modal has been shown");
     }
   });
 
   deleteBtn.addEventListener("click", async () => {
     const confirmed = await showConfirmModal(
-      "Are you sure you want to delete this post?"
+      "Are you sure you want to delete this post?",
     );
     if (!confirmed) return;
 
@@ -130,10 +136,12 @@ export function openUpdatePostModal(post: Post) {
       } else {
         goTo("/feed");
       }
-    } catch (err: any) {
-      console.error("Failed to delete post:", err);
+    } catch (error) {
+      console.error("Failed to delete post:", error);
       await showErrorModal(
-        err?.message || "Failed to delete post. Please try again."
+        error instanceof Error
+          ? error.message
+          : "Failed to delete post. Please try again.",
       );
     }
   });

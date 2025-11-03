@@ -2,6 +2,8 @@ import { loginUser } from "../services/authService";
 import { renderLayout } from "../app";
 import { goTo } from "../utils/navigate";
 import { input } from "../components/inputs";
+import { validateForm } from "../utils/validation";
+import { handleError } from "../errors/handleError";
 
 export function loginView() {
   return {
@@ -19,7 +21,7 @@ export function loginView() {
           placeholder: "Email",
           required: true,
           label: "Email address",
-          id: "email,",
+          id: "email",
         })}
         ${input({
           type: "password",
@@ -66,13 +68,24 @@ export function loginView() {
         const formData = new FormData(form);
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
+        const { isValid, errors } = validateForm(email, password);
+
+        if (!isValid) {
+          errorEl.textContent =
+            errors.email || errors.password || "Invalid input";
+          errorEl.style.display = "block";
+          return;
+        } else {
+          errorEl.style.display = "none";
+        }
 
         try {
           await loginUser(email, password);
           await renderLayout();
           goTo("/feed");
-        } catch (err) {
-          errorEl.textContent = "Login failed. Please check your credentials.";
+        } catch (error) {
+          const message = handleError(error);
+          errorEl.textContent = message;
           errorEl.style.display = "block";
         }
       });
