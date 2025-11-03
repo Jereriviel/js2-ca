@@ -13,7 +13,7 @@ export function followingView() {
     html: `
       ${feedHeader("following")}
       <section id="followingContainer"></section>
-      <section id="loadMoreContainer" class="load-more-container flex justify-center pt-12"></section>
+      <section id="loadMoreContainer" class="load-more-container flex justify-center py-8"></section>
     `,
     init: async () => {
       const headerContainer =
