@@ -30,9 +30,9 @@ export function searchView() {
     </form>
       <div id="searchResults">
         <div id="searchPosts" class="py-4"></div>
-        <div id="postsLoadMoreContainer" class="load-more-container flex justify-center"></div>
+        <div id="postsLoadMoreContainer" class="load-more-container flex justify-center py-8"></div>
         <div id="searchProfiles" class="py-4"></div>
-        <div id="profilesLoadMoreContainer" class="load-more-container flex justify-center pt-12"></div>
+        <div id="profilesLoadMoreContainer" class="load-more-container flex justify-center py-8"></div>
       </div>
       </section>
     `,

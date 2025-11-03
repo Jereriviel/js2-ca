@@ -15,7 +15,7 @@ export function profileView(username?: string | number) {
     html: `
       <header id="profileHeader"></header>
       <section id="profilePosts"></section>
-      <div id="loadMoreContainer" class="load-more-container flex justify-center pt-12"></div>
+      <div id="loadMoreContainer" class="load-more-container flex justify-center py-8"></div>
     `,
     init: async () => {
       const header = document.getElementById("profileHeader")!;
