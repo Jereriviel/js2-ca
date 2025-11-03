@@ -60,21 +60,22 @@ export class Router {
     let routeKey = path;
     let param: string | number | undefined;
 
-    if (path.startsWith("/profile")) {
-      const parts = path.split("/");
-      const username = parts[2];
+    if (path === "/profile") {
+      routeKey = "/profile";
+    } else if (path.startsWith("/profile/")) {
+      const parts = path.split("/").filter(Boolean);
+      const username = parts[1];
+      const subpage = parts[2];
 
-      if (parts.length === 4 && parts[3] === "followers") {
+      if (subpage === "followers") {
         routeKey = "/profile/:username/followers";
-        param = username;
-      } else if (parts.length === 4 && parts[3] === "following") {
+      } else if (subpage === "following") {
         routeKey = "/profile/:username/following";
-        param = username;
       } else {
-        routeKey = "/profile";
-        param = username;
+        routeKey = "/profile/:username";
       }
-    } else if (path.startsWith("/post")) {
+      param = username;
+    } else if (path.startsWith("/post/")) {
       const parts = path.split("/");
       routeKey = "/post";
       param = Number(parts[2]);
@@ -95,14 +96,14 @@ export class Router {
       updateMetadata("Hearth", "A social platform for sharing stories.");
     }
 
-    const activeRoute = this.routes[routeKey] || this.routes["*"];
-    if (!activeRoute) {
-      this.outlet.innerHTML = `<p>Route not found</p>`;
-      return;
+    let result: ViewResult;
+
+    if ("getMetadata" in route) {
+      result = await route.view(param ? String(param) : undefined);
+    } else {
+      result = await route.view(param);
     }
 
-    const view = activeRoute.view;
-    const result = await view();
     const { html, init } = result;
     this.outlet.innerHTML = html;
     if (init) await init();

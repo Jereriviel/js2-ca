@@ -55,6 +55,14 @@ export const routes: Record<string, Route | DynamicRoute> = {
     }),
   },
 
+  "/profile/:username": {
+    view: profileView,
+    getMetadata: (username: string) => ({
+      title: `Hearth | @${username}'s Profile`,
+      description: `View the profile and activity of @${username}.`,
+    }),
+  },
+
   "/profile/:username/followers": {
     view: profileFollowersView,
     getMetadata: (username: string) => ({
