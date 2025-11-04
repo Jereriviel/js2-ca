@@ -16,17 +16,9 @@ import { footer } from "../components/footer";
 import { backHeader } from "../components/headers/backHeader";
 
 export function postView() {
-  const headerElement = document.querySelector("header");
-  if (headerElement) {
-    headerElement.innerHTML = backHeader();
-  }
-
-  const footerElement = document.querySelector("footer");
-  if (footerElement) {
-    footerElement.innerHTML = footer();
-  }
-
   return protectedView({
+    header: backHeader(),
+    footer: footer(),
     html: `
       <section id="postContainer"></section>
       <section id="commentsContainer"></section>

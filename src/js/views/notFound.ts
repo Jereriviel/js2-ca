@@ -1,13 +1,10 @@
 import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
+import { protectedView } from "../utils/protectedView";
 
 export function notFoundView() {
-  const footerElement = document.querySelector("footer");
-  if (footerElement) {
-    footerElement.innerHTML = footer();
-  }
-
-  return {
+  return protectedView({
+    footer: footer(),
     html: `
     <section class="flex flex-col gap-4 items-center mt-12">
     <div class="flex flex-col items-center">
@@ -42,5 +39,5 @@ export function notFoundView() {
         goTo("/");
       });
     },
-  };
+  });
 }

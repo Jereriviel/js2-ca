@@ -13,17 +13,9 @@ import { footer } from "../components/footer";
 import { profileHeader } from "../components/headers/profileHeader";
 
 export function profileView(username?: string | number) {
-  const headerElement = document.querySelector("header");
-  if (headerElement) {
-    headerElement.innerHTML = profileHeader();
-  }
-
-  const footerElement = document.querySelector("footer");
-  if (footerElement) {
-    footerElement.innerHTML = footer();
-  }
-
   return protectedView({
+    header: profileHeader(),
+    footer: footer(),
     html: `
       <section id="profilePosts"></section>
       <div id="loadMoreContainer" class="load-more-container flex justify-center py-8"></div>

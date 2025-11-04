@@ -13,17 +13,9 @@ import { footer } from "../components/footer";
 import { backHeader } from "../components/headers/backHeader";
 
 export function profileFollowingView(username?: string) {
-  const headerElement = document.querySelector("header");
-  if (headerElement) {
-    headerElement.innerHTML = backHeader();
-  }
-
-  const footerElement = document.querySelector("footer");
-  if (footerElement) {
-    footerElement.innerHTML = footer();
-  }
-
   return protectedView({
+    header: backHeader(),
+    footer: footer(),
     html: `
       <section id="followingContainer"></section>
     `,

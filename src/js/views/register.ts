@@ -4,9 +4,10 @@ import { goTo } from "../utils/navigate";
 import { input } from "../components/inputs";
 import { validateForm } from "../utils/validation";
 import { handleError } from "../errors/handleError";
+import { renderView } from "../utils/protectedView";
 
 export function registerView() {
-  return {
+  renderView({
     html: `
     <section class="flex flex-col h-lvh justify-center items-center">
  <form
@@ -112,5 +113,5 @@ export function registerView() {
         }
       });
     },
-  };
+  });
 }

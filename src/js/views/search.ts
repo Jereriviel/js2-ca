@@ -18,6 +18,7 @@ export function searchView() {
   }
 
   return protectedView({
+    footer: footer(),
     html: `
     <section>
     <form id="searchForm">

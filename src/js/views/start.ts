@@ -1,5 +1,6 @@
 import { goTo } from "../utils/navigate";
 import { isLoggedIn } from "../store/userStore";
+import { renderView } from "../utils/protectedView";
 
 export function startView() {
   if (isLoggedIn()) {
@@ -10,7 +11,7 @@ export function startView() {
     };
   }
 
-  return {
+  renderView({
     html: `
     <section class="flex flex-col gap-12 h-lvh justify-center text-lg">
       <div class="flex flex-col items-center gap-2">
@@ -36,5 +37,5 @@ export function startView() {
       loginBtn.addEventListener("click", () => goTo("/login"));
       registerBtn.addEventListener("click", () => goTo("/register"));
     },
-  };
+  });
 }
