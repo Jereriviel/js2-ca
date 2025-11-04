@@ -9,8 +9,14 @@ import { getUser } from "../store/userStore";
 import { getCachedProfile } from "../utils/profileCache";
 import { initProfileLinks } from "../utils/initProfileLinks";
 import { goTo } from "../utils/navigate";
+import { footer } from "../components/footer";
 
 export function profileFollowersView(username?: string) {
+  const footerElement = document.querySelector("footer");
+  if (footerElement) {
+    footerElement.innerHTML = footer();
+  }
+
   return protectedView({
     html: `
     <header class="flex items-center gap-2 pt-8 pb-2">
@@ -18,7 +24,7 @@ export function profileFollowersView(username?: string) {
       <span class="material-symbols-outlined">arrow_left_alt</span>
       Followers</button>
     </header>
-      <section id="followersContainer" class="h-screen"></section>
+      <section id="followersContainer"></section>
     `,
     init: async () => {
       const container = document.getElementById("followersContainer")!;

@@ -23,19 +23,16 @@
   <body>
     <div
       id="layout"
-      class="mx-auto flex max-w-4xl flex-col justify-items-center sm:flex-row-reverse"
+      class="mx-auto flex max-w-4xl flex-col justify-center sm:flex-row-reverse"
     >
-      <div class="w-full">
-        <main>
-          <div id="app" class="main-app px-4"></div>
+      <div class="flex min-h-screen w-full flex-col">
+        <header></header>
+        <main class="w-full flex-grow">
+          <div id="app" class="main-app px-4 pb-14 sm:pb-0"></div>
         </main>
         <footer
           class="mb-[56px] flex flex-col bg-white md:sticky md:bottom-0 md:mb-0"
-        >
-          <p class="text-gray-dark self-center py-4 text-sm">
-            Copyright © 2025 Hearth
-          </p>
-        </footer>
+        ></footer>
       </div>
       <aside id="navbar" class="aside-navbar"></aside>
     </div>

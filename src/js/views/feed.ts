@@ -7,15 +7,19 @@ import type { Profile } from "../types/profile";
 import { initPaginatedList } from "../utils/initPaginatedList";
 import { feedHeader, initFeedHeader } from "../components/feedHeader";
 import { goTo } from "../utils/navigate";
+import { footer } from "../components/footer";
 
 export function feedView() {
+  const footerElement = document.querySelector("footer");
+  if (footerElement) {
+    footerElement.innerHTML = footer();
+  }
+
   return protectedView({
     html: `
       ${feedHeader("feed")}
-      <div class="h-screen">
       <section id="feedContainer"></section>
       <section id="loadMoreContainer" class="load-more-container flex justify-center py-8"></section>
-      </div>
     `,
     init: async () => {
       const headerContainer =

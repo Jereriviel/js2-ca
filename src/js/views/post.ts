@@ -12,8 +12,14 @@ import {
 } from "../components/commentForm";
 import { renderComments, renderComment } from "../components/commentList";
 import { initProfileLinks } from "../utils/initProfileLinks";
+import { footer } from "../components/footer";
 
 export function postView() {
+  const footerElement = document.querySelector("footer");
+  if (footerElement) {
+    footerElement.innerHTML = footer();
+  }
+
   return protectedView({
     html: `
     <header class="flex items-center gap-2 pt-8 pb-2">
@@ -21,10 +27,8 @@ export function postView() {
       <span class="material-symbols-outlined">arrow_left_alt</span>
       Post</button>
     </header>
-    <div class="h-screen">
       <section id="postContainer"></section>
       <section id="commentsContainer"></section>
-    </div>
     `,
     init: async () => {
       const container = document.getElementById("postContainer")!;

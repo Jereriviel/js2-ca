@@ -9,11 +9,17 @@ import { getCurrentUserProfile } from "../services/profileService";
 import { getCachedProfile } from "../utils/profileCache";
 import { initPaginatedList } from "../utils/initPaginatedList";
 import { profileListItem } from "../components/profileListItem";
+import { footer } from "../components/footer";
 
 export function searchView() {
+  const footerElement = document.querySelector("footer");
+  if (footerElement) {
+    footerElement.innerHTML = footer();
+  }
+
   return protectedView({
     html: `
-    <section class="h-screen">
+    <section>
     <form id="searchForm">
         <div class="flex mt-8 mb-4 bg-gray-light pl-4 border border-gray-medium rounded-full gap-2">
           <button type="submit">

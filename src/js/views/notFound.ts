@@ -1,9 +1,15 @@
 import { goTo } from "../utils/navigate";
+import { footer } from "../components/footer";
 
 export function notFoundView() {
+  const footerElement = document.querySelector("footer");
+  if (footerElement) {
+    footerElement.innerHTML = footer();
+  }
+
   return {
     html: `
-    <section class="flex flex-col gap-4 items-center mt-12 h-screen">
+    <section class="flex flex-col gap-4 items-center mt-12">
     <div class="flex flex-col items-center">
       <figure class="max-w-[200px]">
         <img

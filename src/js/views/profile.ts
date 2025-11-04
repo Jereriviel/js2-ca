@@ -9,12 +9,18 @@ import type { Post } from "../types/post";
 import { getPaginatedProfilePosts } from "../services/postsService";
 import { initPaginatedList } from "../utils/initPaginatedList";
 import { goTo } from "../utils/navigate";
+import { footer } from "../components/footer";
 
 export function profileView(username?: string | number) {
+  const footerElement = document.querySelector("footer");
+  if (footerElement) {
+    footerElement.innerHTML = footer();
+  }
+
   return protectedView({
     html: `
       <header id="profileHeader"></header>
-      <section id="profilePosts" class="h-screen"></section>
+      <section id="profilePosts"></section>
       <div id="loadMoreContainer" class="load-more-container flex justify-center py-8"></div>
     `,
     init: async () => {
