@@ -27,7 +27,7 @@ export function notFoundView() {
       </div>
       <button
         id="btnBackStart"
-        class="bg-primary hover:bg-primary-hover text-white w-fit py-5 px-5 rounded-full"
+        class="bg-primary hover:bg-primary-hover text-white py-3 w-[300px] rounded-full"
       >
         Back to Home
       </button>

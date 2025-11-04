@@ -5,7 +5,7 @@ export function showErrorModal(message: string): Promise<void> {
     const modal = createModal(`
       <div class="flex flex-col gap-4 w-full min-w-[300px] error-modal">
         <p class="text-lg">${message}</p>
-        <button id="errorOkBtn" class="bg-primary hover:bg-primary-hover text-white py-3 px-5 rounded-full w-fit self-end">OK</button>
+        <button id="errorOkBtn" class="bg-primary hover:bg-primary-hover text-white py-2 px-5 rounded-full w-fit self-end">OK</button>
       </div>
     `);
 

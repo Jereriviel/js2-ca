@@ -63,7 +63,7 @@ export async function navigation(): Promise<string> {
       <span class="material-symbols-outlined text-2xl">logout</span>
       <span class="hidden sm:inline">Log out</span>
     </button>
-    <button id="newPostBtn" class="flex flex-col items-center justify-center p-2 sm:flex-row sm:gap-2 bg-primary hover:bg-primary-hover text-white rounded-full sm:py-3 sm:px-5 mt-0 sm:mt-4 sm:flex-none">
+    <button id="newPostBtn" class="flex flex-col items-center justify-center py-1 px-2 sm:flex-row sm:gap-2 bg-primary hover:bg-primary-hover text-white rounded-full sm:py-2 sm:px-5 mt-0 sm:mt-4 sm:flex-none">
       <span class="material-symbols-outlined">edit_square</span>
       <span class="hidden sm:inline">New Post</span>
     </button>

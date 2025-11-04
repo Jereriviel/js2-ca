@@ -52,14 +52,14 @@ export function registerView() {
     <div class="flex flex-col gap-4 items-center">
       <button
         type="submit"
-        class="bg-primary hover:bg-primary-hover text-white py-6 w-[300px] rounded-full"
+        class="bg-primary hover:bg-primary-hover text-white py-3 w-[300px] rounded-full"
       >
         Register
       </button>
       <button
         type="button"
         id="btnToStart"
-        class="bg-secondary hover:bg-secondary-hover text-white py-6 w-[300px] rounded-full"
+        class="bg-secondary hover:bg-secondary-hover text-white py-3 w-[300px] rounded-full"
       >
         Back
       </button>

@@ -6,8 +6,8 @@ export function showConfirmModal(message: string): Promise<boolean> {
       <div class="flex flex-col gap-4 w-full min-w-[300px]">
         <p class="text-lg">${message}</p>
         <div class="flex justify-between gap-2 mt-4">
-          <button id="cancelBtn" class="font-medium hover:bg-gray-medium w-fit py-4 px-5 rounded-full mt-4">Cancel</button>
-          <button id="confirmBtn" class="bg-red-500 hover:bg-red-700 text-white text- w-fit py-4 px-5 rounded-full mt-4">Yes, delete</button>
+          <button id="cancelBtn" class="font-medium hover:bg-gray-medium w-fit py-2 px-5 rounded-full mt-4">Cancel</button>
+          <button id="confirmBtn" class="bg-red-500 hover:bg-red-700 text-white text- w-fit py-2 px-5 rounded-full mt-4">Yes, delete</button>
         </div>
       </div>
     `);

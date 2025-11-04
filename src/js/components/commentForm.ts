@@ -15,7 +15,7 @@ export function commentForm(postId: number): string {
             id: "comment",
           })}
       <div class="flex justify-end">
-      <button type="submit" class="bg-primary hover:bg-primary-hover text-white text- w-fit py-4 px-5 rounded-full">Post Comment</button>
+      <button type="submit" class="bg-primary hover:bg-primary-hover text-white text- w-fit py-2 px-5 rounded-full">Post Comment</button>
       </div>
     </form>
   `;

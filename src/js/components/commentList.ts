@@ -20,7 +20,7 @@ export function renderComment(c: Comment): string {
         <div class="text-xs text-gray-dark">${createdDate}</div>
         ${
           isOwnComment
-            ? `<button class="delete-comment-btn hover:bg-red-500 hover:text-white text-sm font-medium w-fit py-3 px-4 rounded-full" data-comment-id="${c.id}" data-post-id="${c.postId}">Delete</button>`
+            ? `<button class="delete-comment-btn hover:bg-red-500 hover:text-white text-sm font-medium w-fit py-2 px-4 rounded-full" data-comment-id="${c.id}" data-post-id="${c.postId}">Delete</button>`
             : ""
         }
       </div>

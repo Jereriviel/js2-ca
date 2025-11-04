@@ -15,7 +15,7 @@ export function openUpdatePostModal(post: Post) {
       class="update-post-form flex flex-col gap-4 min-w-[375px]">
       <div class="flex justify-between items-center">
       <h2 class="font-semibold text-xl">Edit Post</h2>
-      <button type="button" id="cancelBtn" class="font-medium hover:bg-gray-medium w-fit py-4 px-5 rounded-full">Cancel</button>
+      <button type="button" id="cancelBtn" class="font-medium hover:bg-gray-medium w-fit py-2 px-5 rounded-full">Cancel</button>
       </div>
       <div class="flex flex-col gap-4">
       ${inputModal({
@@ -55,8 +55,8 @@ export function openUpdatePostModal(post: Post) {
       })}
       </div>
       <div class="modal-actions flex justify-between">
-        <button type="button" id="deleteBtn" class="bg-red-500 hover:bg-red-700 text-white text- w-fit py-4 px-5 rounded-full mt-4">Delete</button>
-        <button type="submit" class="bg-primary hover:bg-primary-hover text-white text- w-fit py-4 px-5 rounded-full mt-4">Save Changes</button>
+        <button type="button" id="deleteBtn" class="bg-red-500 hover:bg-red-700 text-white text- w-fit py-2 px-5 rounded-full mt-4">Delete</button>
+        <button type="submit" class="bg-primary hover:bg-primary-hover text-white text- w-fit py-2 px-5 rounded-full mt-4">Save Changes</button>
         </div>
       <p class="error-message"></p>
     </form>

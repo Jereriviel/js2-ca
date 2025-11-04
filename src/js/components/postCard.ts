@@ -83,7 +83,7 @@ export async function postCard(
         }
         ${
           isOwnPost
-            ? `<button class="edit-post-btn bg-secondary hover:bg-secondary-hover text-white text-sm py-4 px-4 rounded-full" data-id="${post.id}">Edit post</button>`
+            ? `<button class="edit-post-btn bg-secondary hover:bg-secondary-hover text-white text-sm py-2 px-4 rounded-full" data-id="${post.id}">Edit post</button>`
             : ""
         }
       </div>

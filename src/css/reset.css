@@ -51,35 +51,6 @@ ol {
   padding: 0px;
 }
 
-/* button {
-  border-style: none;
-  border-width: 0px;
-  padding-block: 0px;
-  padding-inline: 0px;
-} */
-
-/* a {
-  text-decoration: none;
-  color: inherit;
-} */
-
-button {
-  line-height: 0;
-}
-
-/* h1,
-h2,
-h3,
-h4,
-h5 {
-  line-height: 1.1;
-}
-
-p,
-li {
-  line-height: 2;
-} */
-
 @media (min-height: 600px) {
   p,
   li {

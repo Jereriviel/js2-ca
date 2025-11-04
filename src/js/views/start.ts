@@ -25,8 +25,8 @@ export function startView() {
         <p class="font-medium text-xl">Your Stories, Your Community</p>
       </div>
       <div class="flex flex-col gap-4 items-center">
-        <button id="btnLogin" class=" bg-primary hover:bg-primary-hover text-white py-6 w-[300px] rounded-full">Sign In</button>
-        <button id="btnRegister" class=" bg-secondary hover:bg-secondary-hover text-white py-6 w-[300px] rounded-full">Create Account</button>
+        <button id="btnLogin" class=" bg-primary hover:bg-primary-hover text-white py-3 w-[300px] rounded-full">Sign In</button>
+        <button id="btnRegister" class=" bg-secondary hover:bg-secondary-hover text-white py-3 w-[300px] rounded-full">Create Account</button>
       </div>
     </section>
     `,

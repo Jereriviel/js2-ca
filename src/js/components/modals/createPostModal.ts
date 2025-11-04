@@ -50,8 +50,8 @@ export function openCreatePostModal() {
       })}
       </div>
       <div class="modal-actions flex justify-between">
-        <button type="button" id="cancelBtn" class="font-medium hover:bg-gray-medium w-fit py-4 px-5 rounded-full mt-4">Cancel</button>
-        <button type="submit" class=" bg-primary hover:bg-primary-hover text-white text- w-fit py-4 px-5 rounded-full mt-4">Publish</button>
+        <button type="button" id="cancelBtn" class="font-medium hover:bg-gray-medium w-fit py-2 px-5 rounded-full mt-4">Cancel</button>
+        <button type="submit" class=" bg-primary hover:bg-primary-hover text-white text- w-fit py-2 px-5 rounded-full mt-4">Publish</button>
       </div>
       <p class="error-message"></p>
     </form>

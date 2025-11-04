@@ -8,7 +8,7 @@ export function profileCard(profile: Profile, isFollowing: boolean): string {
   const isOwnProfile = loggedInUser?.name === profile.name;
 
   const actionButton = isOwnProfile
-    ? `<button id="editProfileBtn" class="bg-secondary hover:bg-secondary-hover text-white text-sm py-4 px-4 rounded-full">Edit Profile</button>`
+    ? `<button id="editProfileBtn" class="bg-secondary hover:bg-secondary-hover text-white text-sm py-2 px-4 rounded-full">Edit Profile</button>`
     : followButton(profile, isFollowing);
 
   const bannerHtml = profile.banner
