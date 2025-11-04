@@ -5,11 +5,16 @@ import { getUser } from "../store/userStore";
 import { getPaginatedFollowingPosts } from "../services/postsService";
 import type { Profile } from "../types/profile";
 import { initPaginatedList } from "../utils/initPaginatedList";
-import { feedHeader, initFeedHeader } from "../components/feedHeader";
+import { feedHeader, initFeedHeader } from "../components/headers/feedHeader";
 import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
 
 export function followingView() {
+  const headerElement = document.querySelector("header");
+  if (headerElement) {
+    headerElement.innerHTML = feedHeader("following");
+  }
+
   const footerElement = document.querySelector("footer");
   if (footerElement) {
     footerElement.innerHTML = footer();
@@ -17,7 +22,6 @@ export function followingView() {
 
   return protectedView({
     html: `
-      ${feedHeader("following")}
       <section id="followingContainer"></section>
       <section id="loadMoreContainer" class="load-more-container flex justify-center py-8"></section>
     `,

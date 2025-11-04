@@ -10,8 +10,14 @@ import { getPaginatedProfilePosts } from "../services/postsService";
 import { initPaginatedList } from "../utils/initPaginatedList";
 import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
+import { profileHeader } from "../components/headers/profileHeader";
 
 export function profileView(username?: string | number) {
+  const headerElement = document.querySelector("header");
+  if (headerElement) {
+    headerElement.innerHTML = profileHeader();
+  }
+
   const footerElement = document.querySelector("footer");
   if (footerElement) {
     footerElement.innerHTML = footer();
@@ -19,7 +25,6 @@ export function profileView(username?: string | number) {
 
   return protectedView({
     html: `
-      <header id="profileHeader"></header>
       <section id="profilePosts"></section>
       <div id="loadMoreContainer" class="load-more-container flex justify-center py-8"></div>
     `,

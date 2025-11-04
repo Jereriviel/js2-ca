@@ -5,11 +5,16 @@ import { getUser } from "../store/userStore";
 import { getPaginatedPosts } from "../services/postsService";
 import type { Profile } from "../types/profile";
 import { initPaginatedList } from "../utils/initPaginatedList";
-import { feedHeader, initFeedHeader } from "../components/feedHeader";
+import { feedHeader, initFeedHeader } from "../components/headers/feedHeader";
 import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
 
 export function feedView() {
+  const headerElement = document.querySelector("header");
+  if (headerElement) {
+    headerElement.innerHTML = feedHeader("feed");
+  }
+
   const footerElement = document.querySelector("footer");
   if (footerElement) {
     footerElement.innerHTML = footer();
@@ -17,7 +22,6 @@ export function feedView() {
 
   return protectedView({
     html: `
-      ${feedHeader("feed")}
       <section id="feedContainer"></section>
       <section id="loadMoreContainer" class="load-more-container flex justify-center py-8"></section>
     `,
