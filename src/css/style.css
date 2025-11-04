@@ -6,14 +6,18 @@
   --font-display: "righteous", "sans-serif";
 
   /* Colors */
-  --color-primary: oklch(0.6745 0.1443 52.85);
-  --color-primary-hover: oklch(0.6129 0.1421 53.93);
-  --color-primary-active: oklch(0.5393 0.1214 52.28);
-  --color-secondary: oklch(0.6256 0.1128 123.75);
-  --color-secondary-hover: oklch(0.5322 0.1102 124.88);
+  --color-primary: oklch(0.5748 0.1509 50.48);
+  --color-primary-hover: oklch(0.4853 0.1266 50.93);
+  --color-primary-active: oklch(0.3931 0.1003 52.58);
+  --color-secondary: oklch(0.4821 0.0796 216.35);
+  --color-secondary-hover: oklch(0.3957 0.067 217.21);
+  --color-secondary-active: oklch(0.3148 0.0553 217.76);
+  --color-secondary-light: oklch(0.8577 0.0466 211.83);
+  --color-secondary-ultra-light: oklch(0.9588 0.0187 213.41);
   --color-gray-dark: oklch(0.4926 0 0);
   --color-gray-medium: oklch(0.8297 0 0);
   --color-gray-light: oklch(0.9791 0 0);
+  --color-logo: oklch(0.6989 0.1703 49.56);
 }
 
 @layer base {
@@ -36,7 +40,7 @@
     color: var(--color-gray-light);
   }
   .active {
-    color: var(--color-primary-active);
+    color: var(--color-primary);
   }
 }
 

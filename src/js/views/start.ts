@@ -13,7 +13,7 @@ export function startView() {
 
   renderView({
     html: `
-    <section class="flex flex-col gap-12 h-lvh justify-center text-lg">
+    <section class="flex flex-col gap-12 h-lvh justify-center text-lg bg-gradient-to-tr from-secondary-light to-secondary-ultra-light">
       <div class="flex flex-col items-center gap-2">
         <figure class="w-[100px]">
           <img
@@ -21,8 +21,8 @@ export function startView() {
             alt="Hearth logo depicting a fireplace with a flame inside."
           />
         </figure>
-        <h1 class="font-display text-[40px] text-primary">HEARTH</h1>
-        <p>Your Stories, Your Community</p>
+        <h1 class="font-display text-[40px] text-logo">HEARTH</h1>
+        <p class="font-medium text-xl">Your Stories, Your Community</p>
       </div>
       <div class="flex flex-col gap-4 items-center">
         <button id="btnLogin" class=" bg-primary hover:bg-primary-hover text-white py-6 w-[300px] rounded-full">Sign In</button>

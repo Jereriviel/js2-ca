@@ -9,7 +9,7 @@ import { renderView } from "../utils/protectedView";
 export function registerView() {
   renderView({
     html: `
-    <section class="flex flex-col h-lvh justify-center items-center">
+    <section class="flex flex-col h-lvh justify-center items-center bg-gradient-to-tr from-secondary-light to-secondary-ultra-light">
  <form
       id="registerForm"
       class="flex flex-col gap-8 w-fit"
