@@ -51,67 +51,61 @@ export async function postCard(
     }
   }
 
-  const authorHtml = authorProfile
-    ? `
-    <div class="profile-link flex items-start gap-2 p-t-4" data-username="${
-      authorProfile.name
-    }">
-      <figure class="w-12 h-12">
-        <img
-          class="rounded-full w-full h-full object-cover"
-          src="${authorProfile.avatar?.url || "/default-avatar.png"}"
-          alt="${authorProfile.avatar?.alt || authorProfile.name}"
-        />
-      </figure>
-      <div class="flex flex-col gap-1">
-        <h4 class="font-medium">${authorProfile.name}</h4>
-        <span class="post-time text-sm text-gray-dark">${createdTime}${updatedTime}</span>
-      </div>
-    </div>
-  `
-    : `<span>Unknown</span>`;
-
   return `
-  <article class="post flex flex-col gap-4 pt-4" data-post-id="${post.id}">
-    <div class="post-header flex justify-between items-start">
-      ${authorHtml}
-      <div class="post-actions flex gap-2">
-        ${
-          !isOwnPost && post.author
-            ? followButton(post.author, isFollowing)
-            : ""
-        }
-        ${
-          isOwnPost
-            ? `<button class="edit-post-btn bg-secondary hover:bg-secondary-hover text-white text-sm py-2 px-4 rounded-full" data-id="${post.id}">Edit post</button>`
-            : ""
-        }
+  <article class="post flex flex-col pt-4 w-full" data-post-id="${post.id}">
+    <div class=flex>
+      <div class="profile-link pr-4">
+        <figure class="w-12 h-12">
+          <img
+            class="rounded-full w-full h-full object-cover"
+            src="${authorProfile?.avatar?.url ?? "/default-avatar.png"}"
+            alt="${authorProfile?.avatar?.alt ?? authorProfile?.name ?? "User avatar"}"
+          />
+        </figure>
+      </div>
+      <div class="flex flex-col grow">
+        <div class="post-header flex justify-between items-start">
+          <div class="profile-link flex items-start gap-1" data-username="${authorProfile?.name ?? "Unknown"}">
+            <div class="flex flex-col gap-1">
+              <h4 class="font-medium">${authorProfile?.name ?? "Unknown"}</h4>
+              <span class="post-time text-sm text-gray-dark">${createdTime}${updatedTime}</span>
+            </div>
+          </div>
+          <div class="post-actions flex gap-2">
+            ${!isOwnPost && post.author ? followButton(post.author, isFollowing) : ""}
+            ${
+              isOwnPost
+                ? `<button class="edit-post-btn bg-secondary hover:bg-secondary-hover text-white text-sm py-2 px-4 rounded-full" data-id="${post.id}">Edit post</button>`
+                : ""
+            }
+          </div>
+        </div>
+        <div class="flex flex-col gap-1 py-3">
+          <h2 class="post-link text-l font-semibold" data-id="${post.id}">${
+            post.title
+          }</h2>
+          <p class="post-link" data-id="${post.id}">${post.body ?? ""}</p>
+        </div>
+        <figure>
+          ${
+            post.media
+              ? `<img 
+                  class="post-link rounded-lg lazy-load w-full max-h-[600px] object-cover" 
+                  data-id="${post.id}" 
+                  data-src="${post.media.url}"
+                  src="../public/img/placeholder.png"
+                  alt="${post.media.alt ?? ""}"/>`
+              : ""
+          }
+        </figure>
+        <div class="post-footer pt-3 text-sm text-gray-dark">
+          <span class="post-link" data-id="${post.id}">
+            ${post._count.comments} comments
+          </span>
+        </div>
       </div>
     </div>
-    <div class="flex flex-col gap-2">
-    <h2 class="post-link text-l font-semibold" data-id="${post.id}">${
-      post.title
-    }</h2>
-    <p class="post-link" data-id="${post.id}">${post.body ?? ""}</p>
-   </div>
-   <figure>
-    ${
-      post.media
-        ? `<img 
-            class="post-link rounded-lg lazy-load" 
-            data-id="${post.id}" 
-            data-src="${post.media.url}"
-            src="../public/img/placeholder.png"
-            alt="${post.media.alt ?? ""}"/>`
-        : ""
-    }
-  </figure>
-    <div class="post-footer text-sm text-gray-dark">
-      <span class="post-link" data-id="${post.id}">
-        ${post._count.comments} comments
-      </span>
-    </div>
-    <hr class="h-[1px] bg-gray-medium border-none">
+    <hr class="h-[1px] bg-gray-medium border-none my-4">
   </article>
 `;
 }
