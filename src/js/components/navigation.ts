@@ -39,7 +39,7 @@ export async function navigation(): Promise<string> {
       profile.name
     }">
       <figure class="size-12">
-        <img class="rounded-full w-full h-auto object-cover" 
+        <img class="rounded-full w-full h-full object-cover" 
              src="${profile.avatar?.url || "/default-avatar.png"}" 
              alt="${profile.avatar?.alt || profile.name}" />
       </figure>

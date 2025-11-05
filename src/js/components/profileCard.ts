@@ -29,12 +29,12 @@ export function profileCard(profile: Profile, isFollowing: boolean): string {
             </button>
       ${bannerHtml}
       <figure class="w-[90px] h-[90px] position: absolute top-[104px] left-[10px]">
-      <img class="rounded-full border-2 border-white w-full h-full" src="${
+      <img class="rounded-full border-2 border-white w-full h-full object-cover" src="${
         profile.avatar?.url || "/default-avatar.png"
       }"
            alt="${profile.avatar?.alt || profile.name}"/>
       </figure>
-      <div class="flex flex-col py-4">
+      <div class="flex flex-col p-4">
       <div class="flex justify-end">
       ${actionButton}
       </div>
