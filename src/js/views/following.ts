@@ -38,7 +38,8 @@ export function followingView() {
         container,
         loadMoreContainer: document.getElementById("loadMoreContainer")!,
         fetchItems: (page) => getPaginatedFollowingPosts(page, 10),
-        renderItem: (post) => postCard(post, currentUserFollowingNames),
+        renderItem: (post) =>
+          postCard(post, currentUserFollowingNames, { lazy: true }),
         isPostList: true,
       });
 

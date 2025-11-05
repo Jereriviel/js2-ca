@@ -30,7 +30,9 @@ import { followButton } from "./followButton";
 export async function postCard(
   post: Post,
   loggedInUserFollowing: string[],
+  options: { lazy?: boolean } = { lazy: true },
 ): Promise<string> {
+  const { lazy } = options;
   const isFollowing = post.author?.name
     ? loggedInUserFollowing.includes(post.author.name)
     : false;
@@ -90,11 +92,11 @@ export async function postCard(
           ${
             post.media
               ? `<img 
-                  class="post-link rounded-lg lazy-load w-full max-h-[600px] object-cover" 
-                  data-id="${post.id}" 
-                  data-src="${post.media.url}"
-                  src="../public/img/placeholder.png"
-                  alt="${post.media.alt ?? ""}"/>`
+                class="post-link rounded-lg ${lazy ? "lazy-load" : ""} w-full max-h-[600px] object-cover" 
+                data-id="${post.id}" 
+                ${lazy ? `data-src="${post.media.url}" src="../public/img/placeholder.png"` : `src="${post.media.url}"`}
+                alt="${post.media.alt ?? ""}"
+              />`
               : ""
           }
         </figure>

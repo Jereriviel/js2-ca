@@ -60,7 +60,9 @@ export function postView() {
         }
         const post = response.data;
 
-        container.innerHTML = await postCard(post, loggedInUserFollowingNames);
+        container.innerHTML = await postCard(post, loggedInUserFollowingNames, {
+          lazy: false,
+        });
 
         commentsContainer.innerHTML = commentForm(post.id);
         commentsContainer.insertAdjacentHTML(

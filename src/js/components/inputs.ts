@@ -47,7 +47,7 @@ export function textArea(props: InputProps): string {
             ${props.required ? "required" : ""}
             ${props.minlength ? `minlength="${props.minlength}"` : ""}
             placeholder="${props.placeholder || ""}"
-            class="min-h-35"
+            class="min-h-25"
           /></textarea>
         </div>`;
 }

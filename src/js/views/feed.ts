@@ -38,7 +38,8 @@ export function feedView() {
         container,
         loadMoreContainer: document.getElementById("loadMoreContainer")!,
         fetchItems: (page) => getPaginatedPosts(page, 10),
-        renderItem: (post) => postCard(post, currentUserFollowingNames),
+        renderItem: (post) =>
+          postCard(post, currentUserFollowingNames, { lazy: true }),
         isPostList: true,
       });
 

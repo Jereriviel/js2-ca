@@ -75,7 +75,8 @@ export function profileView(username?: string | number) {
           container: postsContainer,
           loadMoreContainer,
           fetchItems: (page) => getPaginatedProfilePosts(username!, page, 5),
-          renderItem: (post) => postCard(post, loggedInUserFollowing),
+          renderItem: (post) =>
+            postCard(post, loggedInUserFollowing, { lazy: true }),
           isPostList: true,
         });
       } catch (error) {

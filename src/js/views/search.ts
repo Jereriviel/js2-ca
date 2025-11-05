@@ -84,7 +84,8 @@ export function searchView() {
             container: postsResultsContainer,
             loadMoreContainer: postsLoadMoreContainer,
             fetchItems: (page) => getPaginatedSearchPosts(q, page, 10),
-            renderItem: (post) => postCard(post, loggedInUserFollowingNames),
+            renderItem: (post) =>
+              postCard(post, loggedInUserFollowingNames, { lazy: true }),
             isPostList: true,
           });
         } else {
