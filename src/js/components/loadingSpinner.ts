@@ -1,3 +1,5 @@
+//Code from: https://flowbite.com/docs/components/spinner/
+
 export function loadingSpinner(): string {
   return `
 <div role="status">
@@ -10,5 +12,3 @@ export function loadingSpinner(): string {
 
 `;
 }
-
-//From: https://flowbite.com/docs/components/spinner/
