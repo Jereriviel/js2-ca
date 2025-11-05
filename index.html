@@ -26,7 +26,7 @@
       class="mx-auto flex max-w-4xl flex-col justify-center sm:flex-row-reverse"
     >
       <div class="flex min-h-screen w-full flex-col">
-        <header></header>
+        <header class="sticky top-0 bg-white px-4"></header>
         <main class="w-full flex-grow">
           <div id="app" class="main-app px-4 pb-14 sm:pb-0"></div>
         </main>
@@ -34,7 +34,10 @@
           class="mb-[56px] flex flex-col bg-white md:sticky md:bottom-0 md:mb-0"
         ></footer>
       </div>
-      <aside id="navbar" class="aside-navbar"></aside>
+      <aside
+        id="navbar"
+        class="aside-navbar sticky top-0 h-screen self-start"
+      ></aside>
     </div>
   </body>
 </html>
