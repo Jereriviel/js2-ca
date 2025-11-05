@@ -6,6 +6,7 @@ import { validateForm } from "../utils/validation";
 import { handleError } from "../errors/handleError";
 import { renderView } from "../utils/protectedView";
 import { loadingSpinner } from "../components/loadingSpinner";
+import { toggleButtonLoading } from "../utils/toggleButtonLoading";
 
 export function registerView() {
   renderView({
@@ -80,10 +81,6 @@ export function registerView() {
       const registerBtn = document.getElementById(
         "registerBtn",
       ) as HTMLButtonElement;
-      const buttonText = registerBtn.querySelector(
-        ".button-text",
-      ) as HTMLElement;
-      const spinner = registerBtn.querySelector(".spinner") as HTMLElement;
 
       backBtn.addEventListener("click", () => goTo(`/`));
 
@@ -114,12 +111,10 @@ export function registerView() {
           return;
         }
 
-        fieldset.disabled = true;
-        buttonText.classList.add("hidden");
-        spinner.classList.remove("hidden");
-        registerBtn.classList.add("opacity-80");
-
         try {
+          toggleButtonLoading(registerBtn, true);
+          fieldset.disabled = true;
+
           await registerUser(name, email, password);
           await loginUser(email, password);
           await renderLayout();
@@ -129,10 +124,8 @@ export function registerView() {
           errorEl.textContent = message;
           errorEl.style.display = "block";
         } finally {
+          toggleButtonLoading(registerBtn, false);
           fieldset.disabled = false;
-          buttonText.classList.remove("hidden");
-          spinner.classList.add("hidden");
-          registerBtn.classList.remove("opacity-80");
         }
       });
     },

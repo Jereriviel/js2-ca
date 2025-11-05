@@ -6,6 +6,7 @@ import { validateForm } from "../utils/validation";
 import { handleError } from "../errors/handleError";
 import { renderView } from "../utils/protectedView";
 import { loadingSpinner } from "../components/loadingSpinner";
+import { toggleButtonLoading } from "../utils/toggleButtonLoading";
 
 export function loginView() {
   renderView({
@@ -62,8 +63,6 @@ export function loginView() {
       const errorEl = document.getElementById("loginError") as HTMLElement;
       const backBtn = document.getElementById("btnToStart")!;
       const loginBtn = document.getElementById("loginBtn") as HTMLButtonElement;
-      const buttonText = loginBtn.querySelector(".button-text") as HTMLElement;
-      const spinner = loginBtn.querySelector(".spinner") as HTMLElement;
 
       backBtn.addEventListener("click", () => goTo(`/`));
 
@@ -84,12 +83,10 @@ export function loginView() {
           errorEl.style.display = "none";
         }
 
-        fieldset.disabled = true;
-        buttonText.classList.add("hidden");
-        spinner.classList.remove("hidden");
-        loginBtn.classList.add("opacity-80");
-
         try {
+          fieldset.disabled = true;
+          toggleButtonLoading(loginBtn, true);
+
           await loginUser(email, password);
           await renderLayout();
           goTo("/feed");
@@ -98,10 +95,8 @@ export function loginView() {
           errorEl.textContent = message;
           errorEl.style.display = "block";
         } finally {
+          toggleButtonLoading(loginBtn, false);
           fieldset.disabled = false;
-          buttonText.classList.remove("hidden");
-          spinner.classList.add("hidden");
-          loginBtn.classList.remove("opacity-80");
         }
       });
     },

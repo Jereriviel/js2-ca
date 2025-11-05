@@ -1,4 +1,5 @@
 import type { PaginatedResponse } from "../types/post";
+import { toggleButtonLoading } from "../utils/toggleButtonLoading";
 
 export function createLoadMoreButton<T>(options: {
   container: HTMLElement;
@@ -25,8 +26,7 @@ export function createLoadMoreButton<T>(options: {
 
   async function fetchAndRender(page: number) {
     isFetching = true;
-    button.textContent = "Loading...";
-    button.disabled = true;
+    toggleButtonLoading(button, true, "Loading more posts...");
 
     try {
       const response = await fetchItems(page);
@@ -36,6 +36,7 @@ export function createLoadMoreButton<T>(options: {
       const htmlPromises = items.map((item) =>
         Promise.resolve(renderItem(item)),
       );
+
       const htmlArr = await Promise.all(htmlPromises);
 
       container.insertAdjacentHTML("beforeend", htmlArr.join(""));
@@ -44,9 +45,6 @@ export function createLoadMoreButton<T>(options: {
 
       if (meta?.isLastPage) {
         button.style.display = "none";
-      } else {
-        button.textContent = "Load More";
-        button.disabled = false;
       }
     } catch (error) {
       console.error("Failed to load items:", error);
@@ -54,6 +52,7 @@ export function createLoadMoreButton<T>(options: {
       button.disabled = false;
     } finally {
       isFetching = false;
+      toggleButtonLoading(button, false);
     }
   }
 

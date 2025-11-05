@@ -26,6 +26,7 @@ export async function initPaginatedList<T>(options: {
   try {
     const response = await fetchItems(1);
     const items = response.data;
+    const meta = response.meta;
 
     const htmlArr = await Promise.all(
       items.map((item) => Promise.resolve(renderItem(item))),
@@ -41,23 +42,29 @@ export async function initPaginatedList<T>(options: {
     if (onAfterRender) onAfterRender(items);
     initLazyLoadImages();
 
-    const btnContainer =
-      loadMoreContainer ?? container.parentElement ?? container;
-    const loadMoreBtn = createLoadMoreButton({
-      container,
-      fetchItems,
-      renderItem,
-      onAfterRender: async (newItems) => {
-        if (isPostList) initEditPostButtons(newItems as Post[]);
-        initPostLinks(container);
-        initProfileLinks(container);
-        initFollowButtons();
-        initLazyLoadImages();
-        if (onAfterRender) onAfterRender(newItems);
-      },
-    });
+    if (!meta?.isLastPage) {
+      const btnContainer =
+        loadMoreContainer ?? container.parentElement ?? container;
 
-    btnContainer.appendChild(loadMoreBtn);
+      const existingButton = btnContainer.querySelector("#load-more-btn");
+      if (existingButton) existingButton.remove();
+
+      const loadMoreBtn = createLoadMoreButton({
+        container,
+        fetchItems,
+        renderItem,
+        onAfterRender: async (newItems) => {
+          if (isPostList) initEditPostButtons(newItems as Post[]);
+          initPostLinks(container);
+          initProfileLinks(container);
+          initFollowButtons();
+          initLazyLoadImages();
+          if (onAfterRender) onAfterRender(newItems);
+        },
+      });
+
+      btnContainer.appendChild(loadMoreBtn);
+    }
   } catch (error) {
     let message = "Error loading items.";
     if (error instanceof Error) {
