@@ -1,6 +1,6 @@
 //Altered code from https://flowbite.com/docs/components/skeleton/
 
-export function cardSkeleton(): string {
+export function PostCardSkeleton(): string {
   return `
 <div role="status" class="flex animate-pulse pt-4">
             <div>
@@ -77,17 +77,30 @@ export function commentSkeleton(): string {
 `;
 }
 
-export function profileSkeleton(): string {
+export function profileCardSkeleton(): string {
   return `
-<div role="status" class="max-w-sm animate-pulse">
-    <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
-    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
-    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
-    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
-    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
-    <span class="sr-only">Loading...</span>
-</div>
+          <div role="status" class="relative animate-pulse">
+            <div
+              class="profile-banner mb-8 h-[150px] w-full overflow-hidden bg-gray-200 dark:bg-gray-700"
+            ></div>
+            <div
+              class="position: absolute top-[104px] left-[10px] h-[90px] w-[90px] rounded-full border-2 border-white bg-gray-200 dark:bg-gray-700"
+            ></div>
+            <div class="flex flex-col p-4">
+              <div class="flex justify-end"></div>
+              <div class="flex flex-col gap-2">
+                <div
+                  class="mb-4 h-3 max-w-[120px] rounded-full bg-gray-200 dark:bg-gray-700"
+                ></div>
+                <div
+                  class="mb-4 h-2.5 max-w-[500px] rounded-full bg-gray-200 dark:bg-gray-700"
+                ></div>
+                <div
+                  class="mb-2.5 h-2 max-w-[280px] rounded-full bg-gray-200 dark:bg-gray-700"
+                ></div>
+              </div>
+            </div>
+          </div>
 `;
 }
 
