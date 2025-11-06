@@ -11,6 +11,8 @@ import { initPaginatedList } from "../utils/initPaginatedList";
 import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
 import { profileHeader } from "../components/headers/profileHeader";
+import { profileCardSkeleton } from "../components/loadingSkeletons";
+import { postCardSkeleton } from "../components/loadingSkeletons";
 
 export function profileView(username?: string | number) {
   return protectedView({
@@ -24,6 +26,8 @@ export function profileView(username?: string | number) {
       const header = document.getElementById("profileHeader")!;
       const postsContainer = document.getElementById("profilePosts")!;
       const loadMoreContainer = document.getElementById("loadMoreContainer")!;
+
+      header.innerHTML = profileCardSkeleton();
 
       if (!username) {
         const currentUser = getUser();
@@ -70,6 +74,10 @@ export function profileView(username?: string | number) {
             goTo(`/profile/${username}/following`);
           }
         });
+
+        postsContainer.innerHTML = Array.from({ length: 10 })
+          .map(() => postCardSkeleton())
+          .join("");
 
         await initPaginatedList<Post>({
           container: postsContainer,
