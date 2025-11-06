@@ -14,6 +14,7 @@ import { renderComments, renderComment } from "../components/commentList";
 import { initProfileLinks } from "../utils/initProfileLinks";
 import { footer } from "../components/footer";
 import { backHeader } from "../components/headers/backHeader";
+import { postCardSkeleton } from "../components/loadingSkeletons";
 
 export function postView() {
   return protectedView({
@@ -29,7 +30,7 @@ export function postView() {
       const backBtn = document.getElementById("backBtn")!;
       backBtn.addEventListener("click", () => history.back());
 
-      container.innerHTML = `<p>Loading post...</p>`;
+      container.innerHTML = postCardSkeleton();
 
       try {
         const id = Number(location.pathname.split("/")[2]);

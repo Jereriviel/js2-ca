@@ -1,6 +1,6 @@
 //Altered code from https://flowbite.com/docs/components/skeleton/
 
-export function PostCardSkeleton(): string {
+export function postCardSkeleton(): string {
   return `
 <div role="status" class="flex animate-pulse pt-4">
             <div>

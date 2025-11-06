@@ -8,6 +8,7 @@ import { initPaginatedList } from "../utils/initPaginatedList";
 import { feedHeader, initFeedHeader } from "../components/headers/feedHeader";
 import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
+import { postCardSkeleton } from "../components/loadingSkeletons";
 
 export function feedView() {
   return protectedView({
@@ -23,7 +24,10 @@ export function feedView() {
       initFeedHeader(headerContainer);
 
       const container = document.getElementById("feedContainer")!;
-      container.innerHTML = `<p>Loading posts...</p>`;
+
+      container.innerHTML = Array.from({ length: 10 })
+        .map(() => postCardSkeleton())
+        .join("");
 
       const currentUser = getUser();
       let currentUserFollowingNames: string[] = [];

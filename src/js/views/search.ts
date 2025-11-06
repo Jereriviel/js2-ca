@@ -10,6 +10,7 @@ import { getCachedProfile } from "../utils/profileCache";
 import { initPaginatedList } from "../utils/initPaginatedList";
 import { profileListItem } from "../components/profileListItem";
 import { footer } from "../components/footer";
+import { postCardSkeleton } from "../components/loadingSkeletons";
 
 export function searchView() {
   const footerElement = document.querySelector("footer");
@@ -69,7 +70,10 @@ export function searchView() {
         const q = input.value.trim();
         if (!q) return;
 
-        postsContainer.innerHTML = "";
+        postsContainer.innerHTML = Array.from({ length: 5 })
+          .map(() => postCardSkeleton())
+          .join("");
+
         profilesContainer.innerHTML = "";
 
         const postsRes = await getPaginatedSearchPosts(q, 1, 10);
@@ -80,6 +84,7 @@ export function searchView() {
 `;
           const postsResultsContainer =
             document.getElementById("postsResults")!;
+
           await initPaginatedList({
             container: postsResultsContainer,
             loadMoreContainer: postsLoadMoreContainer,
