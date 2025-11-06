@@ -11,6 +11,7 @@ import { initProfileLinks } from "../utils/initProfileLinks";
 import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
 import { backHeader } from "../components/headers/backHeader";
+import { profileListSkeleton } from "../components/loadingSkeletons";
 
 export function profileFollowingView(username?: string) {
   return protectedView({
@@ -34,7 +35,9 @@ export function profileFollowingView(username?: string) {
         username = currentUser.name;
       }
 
-      container.innerHTML = `<p>Loading following...</p>`;
+      container.innerHTML = Array.from({ length: 5 })
+        .map(() => profileListSkeleton())
+        .join("");
 
       try {
         const following = await getProfileFollowing(username);

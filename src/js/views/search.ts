@@ -11,6 +11,7 @@ import { initPaginatedList } from "../utils/initPaginatedList";
 import { profileListItem } from "../components/profileListItem";
 import { footer } from "../components/footer";
 import { postCardSkeleton } from "../components/loadingSkeletons";
+import { profileListSkeleton } from "../components/loadingSkeletons";
 
 export function searchView() {
   const footerElement = document.querySelector("footer");
@@ -74,7 +75,9 @@ export function searchView() {
           .map(() => postCardSkeleton())
           .join("");
 
-        profilesContainer.innerHTML = "";
+        profilesContainer.innerHTML = Array.from({ length: 5 })
+          .map(() => profileListSkeleton())
+          .join("");
 
         const postsRes = await getPaginatedSearchPosts(q, 1, 10);
         if (postsRes.data.length > 0) {

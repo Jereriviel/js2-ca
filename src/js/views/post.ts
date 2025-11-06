@@ -15,6 +15,7 @@ import { initProfileLinks } from "../utils/initProfileLinks";
 import { footer } from "../components/footer";
 import { backHeader } from "../components/headers/backHeader";
 import { postCardSkeleton } from "../components/loadingSkeletons";
+import { commentSkeleton } from "../components/loadingSkeletons";
 
 export function postView() {
   return protectedView({
@@ -31,6 +32,12 @@ export function postView() {
       backBtn.addEventListener("click", () => history.back());
 
       container.innerHTML = postCardSkeleton();
+      commentsContainer.innerHTML = `
+    ${commentSkeleton()}
+    ${Array.from({ length: 3 })
+      .map(() => commentSkeleton())
+      .join("")}
+  `;
 
       try {
         const id = Number(location.pathname.split("/")[2]);
