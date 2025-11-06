@@ -50,10 +50,3 @@ ol {
   margin: 0px;
   padding: 0px;
 }
-
-@media (min-height: 600px) {
-  p,
-  li {
-    line-height: 1.8;
-  }
-}

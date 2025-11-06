@@ -21,7 +21,7 @@ export function postView() {
     footer: footer(),
     html: `
       <section id="postContainer"></section>
-      <section id="commentsContainer"></section>
+      <section id="commentsContainer" class="py-4"></section>
     `,
     init: async () => {
       const container = document.getElementById("postContainer")!;
@@ -67,7 +67,7 @@ export function postView() {
         commentsContainer.innerHTML = await commentForm(post.id);
         commentsContainer.insertAdjacentHTML(
           "beforeend",
-          renderComments((post.comments || []).slice().reverse()),
+          await renderComments((post.comments || []).slice().reverse()),
         );
 
         initCommentForms(async (postId, body) => {
@@ -79,9 +79,12 @@ export function postView() {
 
           const heading = commentsList.querySelector("h2");
           if (heading) {
-            heading.insertAdjacentHTML("afterend", renderComment(newComment));
+            heading.insertAdjacentHTML(
+              "afterend",
+              await renderComment(newComment),
+            );
           } else {
-            commentsList.outerHTML = renderComments([newComment]);
+            commentsList.outerHTML = await renderComments([newComment]);
           }
           initDeleteCommentButtons(commentsContainer);
         });
