@@ -37,7 +37,7 @@ export function inputModal(props: InputProps): string {
 export function textArea(props: InputProps): string {
   return `
      <div class="flex flex-col gap-2">
-          <label for="${props.id}" class="font-medium">${
+          <label for="${props.id}" class="font-medium text-lg">${
             props.label || ""
           }</label>
           <textarea

@@ -2,22 +2,53 @@ import { deleteComment } from "../services/postsService";
 import { showErrorModal } from "./modals/errorModal";
 import { showConfirmModal } from "./modals/confirmModal";
 import { textArea } from "./inputs";
+import { getCurrentUserProfile } from "../services/profileService";
+import type { Profile } from "../types/profile";
+import { getUser } from "../store/userStore";
 
-export function commentForm(postId: number): string {
+export async function commentForm(postId: number): Promise<string> {
+  const loggedInUser = getUser();
+  if (!loggedInUser) {
+    return `<p class="text-gray-dark text-sm italic">You must be logged in to comment.</p>`;
+  }
+
+  let userProfile: Profile | undefined;
+
+  try {
+    userProfile = await getCurrentUserProfile(loggedInUser.name);
+  } catch (error) {
+    console.warn("Failed to fetch logged-in user profile", error);
+  }
+
   return `
-    <form class="comment-form flex flex-col gap-4 py-4" data-post-id="${postId}">
-          ${textArea({
-            type: "text",
-            name: "comment",
-            placeholder: "Write your comment here...",
-            required: true,
-            label: "Post a comment",
-            id: "comment",
-          })}
-      <div class="flex justify-end">
-      <button type="submit" class="bg-primary hover:bg-primary-hover text-white text- w-fit py-2 px-5 rounded-full">Post Comment</button>
+    <div class="flex items-start gap-4 py-4" data-post-id="${postId}">
+      <div class="profile-link">
+        <figure class="w-12 h-12">
+          <img
+            class="rounded-full w-full h-full object-cover"
+            src="${userProfile?.avatar?.url ?? "/default-avatar.png"}"
+            alt="${userProfile?.avatar?.alt ?? userProfile?.name ?? "User avatar"}"
+          />
+        </figure>
       </div>
-    </form>
+      <form class="comment-form flex flex-col grow gap-4" data-post-id="${postId}">
+        ${textArea({
+          type: "text",
+          name: "comment",
+          placeholder: "Write your comment here...",
+          required: true,
+          label: "Post a comment",
+          id: `comment-${postId}`,
+        })}
+        <div class="flex justify-end">
+          <button 
+            type="submit" 
+            class="bg-primary hover:bg-primary-hover text-white text-sm w-fit py-2 px-5 rounded-full">
+            Post Comment
+          </button>
+        </div>
+      </form>
+    </div>
   `;
 }
 

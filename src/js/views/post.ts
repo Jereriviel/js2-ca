@@ -64,7 +64,7 @@ export function postView() {
           lazy: false,
         });
 
-        commentsContainer.innerHTML = commentForm(post.id);
+        commentsContainer.innerHTML = await commentForm(post.id);
         commentsContainer.insertAdjacentHTML(
           "beforeend",
           renderComments((post.comments || []).slice().reverse()),
