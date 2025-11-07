@@ -27,16 +27,34 @@ export async function getProfilePosts(name: string): Promise<Post[]> {
   }
 }
 
-export async function getCurrentUserProfile(name: string): Promise<Profile> {
-  try {
-    const response = await get<ProfileResponse>(
-      `/social/profiles/${name}?_following=true`,
-    );
-    if (!response) throw new Error("No response received from server.");
-    return response.data;
-  } catch (error) {
-    throw new Error(handleError(error));
+const currentUserProfileCache: Record<string, Profile> = {};
+const inflightRequests: Record<string, Promise<Profile> | undefined> = {};
+
+export async function getCurrentUserProfile(
+  username: string,
+): Promise<Profile> {
+  if (currentUserProfileCache[username]) {
+    return currentUserProfileCache[username];
   }
+
+  if (inflightRequests[username]) {
+    return inflightRequests[username];
+  }
+
+  inflightRequests[username] = (async () => {
+    const response = await get<{ data: Profile }>(
+      `/social/profiles/${username}?_followers=true&_following=true`,
+    );
+    const profile = response?.data;
+    if (!profile) throw new Error("No profile returned from API");
+
+    currentUserProfileCache[username] = profile;
+    delete inflightRequests[username];
+
+    return profile;
+  })();
+
+  return inflightRequests[username];
 }
 
 export async function updateProfile(

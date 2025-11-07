@@ -8,6 +8,7 @@ async function apiFetch<T>(
   endpoint: string,
   options: RequestInit = {},
 ): Promise<T | null> {
+  console.log("API CALL:", endpoint);
   const url = API_BASE + endpoint;
 
   const headers: Record<string, string> = {
