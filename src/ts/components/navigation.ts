@@ -3,6 +3,7 @@ import { renderLayout } from "../app";
 import { getCurrentUserProfile } from "../services/profileService";
 import { openCreatePostModal } from "./modals/createPostModal";
 import { goTo } from "../utils/navigate";
+import { navbarSkeleton } from "./loadingSkeletons";
 
 /**
  * Generates the HTML for the main application navigation bar.
@@ -27,10 +28,15 @@ export async function navigation(): Promise<string> {
   if (!user) return "";
 
   try {
+    const container = document.getElementById("navbar");
+    if (!container) return "";
+    container.innerHTML = navbarSkeleton();
+
     const profile = await getCurrentUserProfile(user.name);
 
     return `
   <nav 
+    id="navbar"
     class="navbar 
            fixed bottom-0 left-0 w-full py-2
            flex flex-row justify-around items-center bg-white 
