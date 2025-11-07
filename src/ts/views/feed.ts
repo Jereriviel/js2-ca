@@ -2,20 +2,20 @@ import { protectedView } from "../utils/protectedView";
 import { postCard } from "../components/postCard";
 import { getCachedProfile } from "../utils/profileCache";
 import { getUser } from "../store/userStore";
-import { getPaginatedFollowingPosts } from "../services/postsService";
+import { getPaginatedPosts } from "../services/postsService";
 import type { Profile } from "../types/profile";
-import { initPaginatedList } from "../utils/initPaginatedList";
+import { initPaginatedList } from "../utils/initialization/initPaginatedList";
 import { feedHeader, initFeedHeader } from "../components/headers/feedHeader";
 import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
 import { postCardSkeleton } from "../components/loadingSkeletons";
 
-export function followingView() {
+export function feedView() {
   return protectedView({
-    header: feedHeader("following"),
+    header: feedHeader("feed"),
     footer: footer(),
     html: `
-      <section id="followingContainer"></section>
+      <section id="feedContainer"></section>
       <section id="loadMoreContainer" class="load-more-container flex justify-center py-8"></section>
     `,
     init: async () => {
@@ -23,7 +23,7 @@ export function followingView() {
         document.querySelector<HTMLElement>(".feed-header")!;
       initFeedHeader(headerContainer);
 
-      const container = document.getElementById("followingContainer")!;
+      const container = document.getElementById("feedContainer")!;
 
       container.innerHTML = Array.from({ length: 10 })
         .map(() => postCardSkeleton())
@@ -41,16 +41,16 @@ export function followingView() {
       await initPaginatedList({
         container,
         loadMoreContainer: document.getElementById("loadMoreContainer")!,
-        fetchItems: (page) => getPaginatedFollowingPosts(page, 10),
+        fetchItems: (page) => getPaginatedPosts(page, 10),
         renderItem: (post) =>
           postCard(post, currentUserFollowingNames, { lazy: true }),
         isPostList: true,
       });
 
-      const feedLink = document.getElementById("feedLink");
-      feedLink?.addEventListener("click", (e) => {
+      const followingLink = document.getElementById("followingLink");
+      followingLink?.addEventListener("click", (e) => {
         e.preventDefault();
-        goTo("/feed");
+        goTo("/feed/following");
       });
     },
   });

@@ -11,7 +11,7 @@ import {
   initDeleteCommentButtons,
 } from "../components/commentForm";
 import { renderComments, renderComment } from "../components/commentList";
-import { initProfileLinks } from "../utils/initProfileLinks";
+import { initProfileLinks } from "../utils/initialization/initProfileLinks";
 import { footer } from "../components/footer";
 import { backHeader } from "../components/headers/backHeader";
 import { postCardSkeleton } from "../components/loadingSkeletons";

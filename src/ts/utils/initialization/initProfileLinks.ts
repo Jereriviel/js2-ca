@@ -1,4 +1,4 @@
-import { goTo } from "./navigate";
+import { goTo } from "../navigate";
 
 export function initProfileLinks(container: HTMLElement) {
   container.addEventListener("click", (e) => {

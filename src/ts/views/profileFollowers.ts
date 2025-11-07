@@ -1,27 +1,27 @@
 import { protectedView } from "../utils/protectedView";
 import {
-  getProfileFollowing,
+  getProfileFollowers,
   getCurrentUserProfile,
 } from "../services/profileService";
 import { profileListItem } from "../components/profileListItem";
 import { initFollowButtons } from "../components/followButton";
 import { getUser } from "../store/userStore";
 import { getCachedProfile } from "../utils/profileCache";
-import { initProfileLinks } from "../utils/initProfileLinks";
+import { initProfileLinks } from "../utils/initialization/initProfileLinks";
 import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
 import { backHeader } from "../components/headers/backHeader";
 import { profileListSkeleton } from "../components/loadingSkeletons";
 
-export function profileFollowingView(username?: string) {
+export function profileFollowersView(username?: string) {
   return protectedView({
     header: backHeader(),
     footer: footer(),
     html: `
-      <section id="followingContainer"></section>
+      <section id="followersContainer"></section>
     `,
     init: async () => {
-      const container = document.getElementById("followingContainer")!;
+      const container = document.getElementById("followersContainer")!;
       const backBtn = document.getElementById("backBtn")!;
 
       backBtn.addEventListener("click", () => goTo(`/profile/${username}`));
@@ -40,7 +40,7 @@ export function profileFollowingView(username?: string) {
         .join("");
 
       try {
-        const following = await getProfileFollowing(username);
+        const followers = await getProfileFollowers(username);
 
         const currentUser = getUser();
         let currentUserFollowingNames: string[] = [];
@@ -59,11 +59,11 @@ export function profileFollowingView(username?: string) {
           }
         }
 
-        if (following.length === 0) {
-          container.innerHTML = `<p>Not following anyone yet.</p>`;
+        if (followers.length === 0) {
+          container.innerHTML = `<p>No followers yet.</p>`;
         } else {
           const profilesHtml = await Promise.all(
-            following.map(async (profile) => {
+            followers.map(async (profile) => {
               const cachedProfile = await getCachedProfile(profile.name);
               return profileListItem(
                 cachedProfile,
@@ -77,10 +77,10 @@ export function profileFollowingView(username?: string) {
         initFollowButtons();
         initProfileLinks(container);
       } catch (error) {
-        let message = "Error loading following";
+        let message = "Error loading followers";
         if (error instanceof Error) message += `: ${error.message}`;
         container.innerHTML = `<p>${message}</p>`;
-        console.error("profileFollowingView init error:", error);
+        console.error("profileFollowersView init error:", error);
       }
     },
   });

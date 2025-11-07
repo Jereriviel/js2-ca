@@ -1,5 +1,5 @@
 import { isLoggedIn } from "../store/userStore";
-import { goTo } from "../utils/navigate";
+import { goTo } from "./navigate";
 
 /**
  * Renders any view (public or protected) into the DOM.

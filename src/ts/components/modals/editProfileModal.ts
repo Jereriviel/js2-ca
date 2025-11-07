@@ -3,7 +3,7 @@ import { getProfile, updateProfile } from "../../services/profileService";
 import { profileCard, initProfileCard } from "../profileCard";
 import type { Profile } from "../../types/profile";
 import { updateNavMiniProfile } from "../navigation";
-import { showErrorModal } from "../modals/errorModal";
+import { showErrorModal } from "./errorModal";
 import { createModal } from "../../utils/createModal";
 import { inputModal, textArea } from "../inputs";
 

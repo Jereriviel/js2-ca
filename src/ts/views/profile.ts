@@ -7,7 +7,7 @@ import { getUser } from "../store/userStore";
 import type { Profile } from "../types/profile";
 import type { Post } from "../types/post";
 import { getPaginatedProfilePosts } from "../services/postsService";
-import { initPaginatedList } from "../utils/initPaginatedList";
+import { initPaginatedList } from "../utils/initialization/initPaginatedList";
 import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
 import { profileHeader } from "../components/headers/profileHeader";

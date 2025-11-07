@@ -1,8 +1,8 @@
 import { updatePost, deletePost } from "../../services/postsService";
 import { router } from "../../app";
 import type { Post } from "../../types/post";
-import { showErrorModal } from "../modals/errorModal";
-import { showConfirmModal } from "../modals/confirmModal";
+import { showErrorModal } from "./errorModal";
+import { showConfirmModal } from "./confirmModal";
 import { goTo } from "../../utils/navigate";
 import { inputModal, textArea } from "../inputs";
 import { createModal } from "../../utils/createModal";

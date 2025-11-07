@@ -1,7 +1,7 @@
 import { createPost } from "../../services/postsService";
 import { router } from "../../app";
 import type { Post } from "../../types/post";
-import { showErrorModal } from "../modals/errorModal";
+import { showErrorModal } from "./errorModal";
 import { inputModal, textArea } from "../inputs";
 import { createModal } from "../../utils/createModal";
 
