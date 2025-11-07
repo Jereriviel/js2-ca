@@ -15,6 +15,7 @@ export function validateConfirmPassword(
 }
 
 interface FormErrors {
+  name?: string;
   email?: string;
   password?: string;
   confirmPassword?: string;

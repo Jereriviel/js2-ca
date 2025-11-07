@@ -49,6 +49,7 @@ export function registerView() {
                 id: "confirmPassword",
               })}
             </div>
+            <p id="registerError" class="text-red-500 text-sm text-center hidden"></p>
             <div class="flex flex-col gap-4 items-center">
               <button
                 type="submit"
@@ -66,7 +67,6 @@ export function registerView() {
                 Back
               </button>
             </div>
-            <p id="registerError" class="error-message" style="display: none"></p>
           </fieldset>
         </form>
       </section>
@@ -77,17 +77,43 @@ export function registerView() {
         "registerFieldset",
       ) as HTMLFieldSetElement;
       const errorEl = document.getElementById("registerError") as HTMLElement;
-      const backBtn = document.getElementById("btnToStart")!;
+      const backBtn = document.getElementById(
+        "btnToStart",
+      ) as HTMLButtonElement;
       const registerBtn = document.getElementById(
         "registerBtn",
       ) as HTMLButtonElement;
+
+      const nameInput = document.getElementById("name") as HTMLInputElement;
+      const emailInput = document.getElementById("email") as HTMLInputElement;
+      const passwordInput = document.getElementById(
+        "password",
+      ) as HTMLInputElement;
+      const confirmInput = document.getElementById(
+        "confirmPassword",
+      ) as HTMLInputElement;
+
+      const nameError = document.getElementById("nameError") as HTMLElement;
+      const emailError = document.getElementById("emailError") as HTMLElement;
+      const passwordError = document.getElementById(
+        "passwordError",
+      ) as HTMLElement;
+      const confirmError = document.getElementById(
+        "confirmPasswordError",
+      ) as HTMLElement;
 
       backBtn.addEventListener("click", () => goTo(`/`));
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        errorEl.textContent = "";
-        errorEl.style.display = "none";
+
+        [nameInput, emailInput, passwordInput, confirmInput].forEach((input) =>
+          input.classList.remove("border-red-500"),
+        );
+        [nameError, emailError, passwordError, confirmError].forEach((el) =>
+          el.classList.add("hidden"),
+        );
+        errorEl.classList.add("hidden");
 
         const formData = new FormData(form);
         const name = formData.get("name") as string;
@@ -102,12 +128,26 @@ export function registerView() {
         );
 
         if (!isValid) {
-          errorEl.textContent =
-            errors.email ||
-            errors.password ||
-            errors.confirmPassword ||
-            "Invalid input";
-          errorEl.style.display = "block";
+          if (errors.name) {
+            nameInput.classList.add("border-red-500");
+            nameError.textContent = errors.name;
+            nameError.classList.remove("hidden");
+          }
+          if (errors.email) {
+            emailInput.classList.add("border-red-500");
+            emailError.textContent = errors.email;
+            emailError.classList.remove("hidden");
+          }
+          if (errors.password) {
+            passwordInput.classList.add("border-red-500");
+            passwordError.textContent = errors.password;
+            passwordError.classList.remove("hidden");
+          }
+          if (errors.confirmPassword) {
+            confirmInput.classList.add("border-red-500");
+            confirmError.textContent = errors.confirmPassword;
+            confirmError.classList.remove("hidden");
+          }
           return;
         }
 
@@ -122,7 +162,7 @@ export function registerView() {
         } catch (error) {
           const message = handleError(error);
           errorEl.textContent = message;
-          errorEl.style.display = "block";
+          errorEl.classList.remove("hidden");
         } finally {
           toggleButtonLoading(registerBtn, false);
           fieldset.disabled = false;
