@@ -7,8 +7,17 @@ import { handleError } from "../errors/handleError";
 import { renderView } from "../utils/protectedView";
 import { loadingSpinner } from "../components/loadingSpinner";
 import { toggleButtonLoading } from "../utils/toggleButtonLoading";
+import { isLoggedIn } from "../store/userStore";
 
 export function registerView() {
+  if (isLoggedIn()) {
+    setTimeout(() => goTo("/feed"), 0);
+    return {
+      html: ``,
+      init: () => {},
+    };
+  }
+
   return renderView({
     html: `
       <section class="flex flex-col h-lvh justify-center items-center bg-gradient-to-tr from-secondary-light to-secondary-ultra-light">
