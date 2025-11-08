@@ -1,5 +1,7 @@
 # Cross Course Project: Hearth Social Media App
 
+![image](https://jereriviel.github.io/portfolio/assets/img/thumbnail_hearth.webp)
+
 ## Description
 
 This project was originally developed as part of the JavaScript 2 Course Assignment, where the task was to build a front-end user interface for a social media application using Noroff's API. Since then the project has been expanded with new features and improvements through the Workflow and CSS Frameworks courses.
@@ -19,7 +21,7 @@ The front-end is built with the Tailwind CSS Framework, providing a responsive a
 - Vitest
 - Playwright
 
-### Installing
+## Installing
 
 1. Clone the repo:
 
@@ -63,7 +65,7 @@ Run the Playwright E2E tests using:
 npm run test:e2e
 ```
 
-## Environment Variables
+### Environment Variables
 
 Create an .env file in the root of the project and copy these variables from the .env.example file:
 
