@@ -5,6 +5,7 @@ import { initProfileLinks } from "./initProfileLinks";
 import { initEditPostButtons } from "../../components/postCard";
 import type { PaginatedResponse, Post } from "../../types/post";
 import { initLazyLoadImages } from "../lazyLoadImages";
+import { showErrorModal } from "../../components/modals/errorModal";
 
 export async function initPaginatedList<T>(options: {
   container: HTMLElement;
@@ -70,7 +71,7 @@ export async function initPaginatedList<T>(options: {
     if (error instanceof Error) {
       message = error.message;
     }
-    container.innerHTML = `<p>${message}</p>`;
+    await showErrorModal(message);
     console.error("initPaginatedList error:", error);
   }
 }

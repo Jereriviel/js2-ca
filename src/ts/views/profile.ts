@@ -13,6 +13,7 @@ import { footer } from "../components/footer";
 import { profileHeader } from "../components/headers/profileHeader";
 import { profileCardSkeleton } from "../components/loadingSkeletons";
 import { postCardSkeleton } from "../components/loadingSkeletons";
+import { showErrorModal } from "../components/modals/errorModal";
 
 export function profileView(username?: string | number) {
   return protectedView({
@@ -90,7 +91,7 @@ export function profileView(username?: string | number) {
       } catch (error) {
         let message = "Error loading profile";
         if (error instanceof Error) message += `: ${error.message}`;
-        header.innerHTML = `<p>${message}</p>`;
+        await showErrorModal(message);
         postsContainer.innerHTML = "";
         console.error("profileView init error:", error);
       }

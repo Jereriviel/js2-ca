@@ -12,6 +12,7 @@ import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
 import { backHeader } from "../components/headers/backHeader";
 import { profileListSkeleton } from "../components/loadingSkeletons";
+import { showErrorModal } from "../components/modals/errorModal";
 
 export function profileFollowersView(username?: string) {
   return protectedView({
@@ -79,7 +80,7 @@ export function profileFollowersView(username?: string) {
       } catch (error) {
         let message = "Error loading followers";
         if (error instanceof Error) message += `: ${error.message}`;
-        container.innerHTML = `<p>${message}</p>`;
+        await showErrorModal(message);
         console.error("profileFollowersView init error:", error);
       }
     },

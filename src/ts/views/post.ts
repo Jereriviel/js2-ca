@@ -16,6 +16,7 @@ import { footer } from "../components/footer";
 import { backHeader } from "../components/headers/backHeader";
 import { postCardSkeleton } from "../components/loadingSkeletons";
 import { commentSkeleton } from "../components/loadingSkeletons";
+import { showErrorModal } from "../components/modals/errorModal";
 
 export function postView() {
   return protectedView({
@@ -105,7 +106,7 @@ export function postView() {
       } catch (error) {
         let message = "Error loading post";
         if (error instanceof Error) message += `: ${error.message}`;
-        container.innerHTML = `<p>${message}</p>`;
+        await showErrorModal(message);
         console.error("postView init error:", error);
       }
     },
