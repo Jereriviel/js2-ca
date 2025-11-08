@@ -15,7 +15,7 @@ import { profileCardSkeleton } from "../components/loadingSkeletons";
 import { postCardSkeleton } from "../components/loadingSkeletons";
 import { showErrorModal } from "../components/modals/errorModal";
 
-export function profileView(username?: string | number) {
+export function profileView(username?: string) {
   return protectedView({
     header: profileHeader(),
     footer: footer(),
