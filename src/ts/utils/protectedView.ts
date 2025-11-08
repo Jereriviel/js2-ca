@@ -15,6 +15,7 @@ import { goTo } from "./navigate";
  * @param {string} [options.header] - Optional header HTML.
  * @param {string} [options.footer] - Optional footer HTML.
  */
+
 export function renderView({
   html,
   init,
@@ -25,7 +26,7 @@ export function renderView({
   init?: () => void | Promise<void>;
   header?: string;
   footer?: string;
-}) {
+}): { html: string; init?: () => void | Promise<void> } {
   const headerEl = document.querySelector("header");
   const footerEl = document.querySelector("footer");
   const app = document.getElementById("app");
@@ -35,6 +36,8 @@ export function renderView({
   if (app) app.innerHTML = html;
 
   if (init) init();
+
+  return { html, init };
 }
 
 /**

@@ -9,7 +9,7 @@ import { loadingSpinner } from "../components/loadingSpinner";
 import { toggleButtonLoading } from "../utils/toggleButtonLoading";
 
 export function loginView() {
-  renderView({
+  return renderView({
     html: `
       <section class="flex flex-col h-lvh justify-center items-center bg-gradient-to-tr from-secondary-light to-secondary-ultra-light">
         <form id="loginForm">
