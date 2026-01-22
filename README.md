@@ -72,6 +72,8 @@ Create an .env file in the root of the project and copy these variables from the
 ```bash
 TEST_USER_EMAIL
 TEST_USER_PASSWORD
+VITE_API_KEY
+VITE_API_BASE
 ```
 
 ## Linting and Formatting
