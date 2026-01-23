@@ -2,7 +2,7 @@ import { getUser } from "../../store/userStore";
 import { getProfile, updateProfile } from "../../services/profileService";
 import { profileCard, initProfileCard } from "../profileCard";
 import type { Profile } from "../../types/profile";
-import { updateNavMiniProfile } from "../navigation";
+import { loadNavMiniProfile } from "../navigation";
 import { showErrorModal } from "./errorModal";
 import { createModal } from "../../utils/createModal";
 import { inputModal, textArea } from "../inputs";
@@ -126,7 +126,7 @@ export async function openEditProfileModal() {
       if (header) header.innerHTML = profileCard(updatedProfile, false);
 
       initProfileCard();
-      await updateNavMiniProfile();
+      await loadNavMiniProfile();
 
       modal.close();
       modal.remove();

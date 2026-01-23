@@ -5,101 +5,102 @@ import { openCreatePostModal } from "./modals/createPostModal";
 import { goTo } from "../utils/navigate";
 import { navbarSkeleton } from "./loadingSkeletons";
 
-/**
- * Generates the HTML for the main application navigation bar.
- *
- * The navbar displays the user's mini profile, navigation links (Home, Search, Profile),
- * and action buttons (Logout, New Post). On small screens, the navbar is fixed to the bottom
- * with only icons visible; on larger screens (sm breakpoint and above), it appears as a
- * vertical sidebar with text labels and the mini profile visible.
- *
- * @async
- * @function navigation
- * @returns {Promise<string>} HTML string representing the navigation bar.
- * @throws Will log an error to the console if the user profile cannot be fetched.
- *
- * @example
- * const navHtml = await navigation();
- * document.getElementById('navbar')!.innerHTML = navHtml;
- */
+function createNavLink(
+  icon: string,
+  label: string,
+  route: string,
+): HTMLAnchorElement {
+  const link = document.createElement("a");
+  link.href = "#";
+  link.className =
+    "nav-link flex flex-col items-center sm:flex-row sm:gap-3 hover:text-primary-hover";
+  link.dataset.route = route;
 
-export async function navigation(): Promise<string> {
+  const iconSpan = document.createElement("span");
+  iconSpan.className = "material-symbols-outlined text-2xl";
+  iconSpan.textContent = icon;
+
+  const textSpan = document.createElement("span");
+  textSpan.className = "hidden sm:inline";
+  textSpan.textContent = label;
+
+  link.append(iconSpan, textSpan);
+  return link;
+}
+
+export function navigation(): HTMLElement | null {
   const user = getUser();
-  if (!user) return "";
+  if (!user) return null;
 
-  try {
-    const container = document.getElementById("navbar");
-    if (!container) return "";
-    container.innerHTML = navbarSkeleton();
+  const nav = document.createElement("nav");
+  nav.id = "navbar";
+  nav.className = `
+    navbar fixed bottom-0 left-0 w-full py-2
+    flex flex-row justify-around items-center bg-white
+    sm:static sm:flex-col sm:items-start sm:gap-4 sm:text-lg sm:p-8 sm:w-3xs
+  `;
 
-    const profile = await getCurrentUserProfile(user.name);
+  const miniProfile = document.createElement("div");
+  miniProfile.id = "nav-mini-profile";
+  miniProfile.className =
+    "profile-link hidden sm:flex gap-4 font-semibold text-lg mb-4 cursor-pointer";
 
-    return `
-  <nav 
-    id="navbar"
-    class="navbar 
-           fixed bottom-0 left-0 w-full py-2
-           flex flex-row justify-around items-center bg-white 
-           sm:static sm:flex-col sm:items-start sm:gap-4 sm:text-lg sm:p-8 sm:w-3xs">
-    <div class="profile-link hidden sm:flex gap-4 font-semibold text-lg mb-4" data-username="${
-      profile.name
-    }">
-      <figure class="size-12">
-        <img class="rounded-full w-full h-full object-cover" 
-             src="${profile.avatar?.url || "/default-avatar.png"}" 
-             alt="${profile.avatar?.alt || profile.name}" />
-      </figure>
-      <h4>${profile.name}</h4>
-    </div>
-    <a href="#" class="nav-link flex flex-col items-center sm:flex-row sm:gap-3 hover:text-primary-hover sm:flex-none" data-route="/feed">
-      <span class="material-symbols-outlined text-2xl">home</span>
-      <span class="hidden sm:inline">Home</span>
-    </a>
-    <a href="#" class="nav-link flex flex-col items-center sm:flex-row sm:gap-3 hover:text-primary-hover sm:flex-none" data-route="/search">
-      <span class="material-symbols-outlined text-2xl">search</span>
-      <span class="hidden sm:inline">Search</span>
-    </a>
-    <a href="#" class="nav-link flex flex-col items-center sm:flex-row sm:gap-3 hover:text-primary-hover sm:flex-none" data-route="/profile/${
-      profile.name
-    }">
-      <span class="material-symbols-outlined text-2xl">account_circle</span>
-      <span class="hidden sm:inline">Profile</span>
-    </a>
-    <button id="logoutBtn" class="flex flex-col items-center sm:flex-row sm:gap-3 hover:text-primary-hover sm:flex-none">
-      <span class="material-symbols-outlined text-2xl">logout</span>
-      <span class="hidden sm:inline">Log out</span>
-    </button>
-    <button id="newPostBtn" class="flex flex-col items-center justify-center py-1 px-2 sm:flex-row sm:gap-2 bg-primary hover:bg-primary-hover text-white rounded-full sm:py-2 sm:px-5 mt-0 sm:mt-4 sm:flex-none">
-      <span class="material-symbols-outlined">edit_square</span>
-      <span class="hidden sm:inline">New Post</span>
-    </button>
-  </nav>
-`;
-  } catch (error) {
-    console.error("Failed to fetch profile for navbar", error);
-    return "";
-  }
+  miniProfile.append(
+    (() => {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = navbarSkeleton();
+      return wrapper;
+    })(),
+  );
+
+  nav.appendChild(miniProfile);
+
+  nav.append(
+    createNavLink("home", "Home", "/feed"),
+    createNavLink("search", "Search", "/search"),
+    createNavLink("account_circle", "Profile", `/profile/${user.name}`),
+  );
+
+  const logoutBtn = document.createElement("button");
+  logoutBtn.id = "logoutBtn";
+  logoutBtn.className =
+    "flex flex-col items-center sm:flex-row sm:gap-3 hover:text-primary-hover";
+
+  logoutBtn.innerHTML = `
+    <span class="material-symbols-outlined text-2xl">logout</span>
+    <span class="hidden sm:inline">Log out</span>
+  `;
+
+  const newPostBtn = document.createElement("button");
+  newPostBtn.id = "newPostBtn";
+  newPostBtn.className =
+    "flex flex-col items-center justify-center py-1 px-2 sm:flex-row sm:gap-2 bg-primary hover:bg-primary-hover text-white rounded-full sm:py-2 sm:px-5 sm:mt-4";
+
+  newPostBtn.innerHTML = `
+    <span class="material-symbols-outlined">edit_square</span>
+    <span class="hidden sm:inline">New Post</span>
+  `;
+
+  nav.append(logoutBtn, newPostBtn);
+
+  return nav;
 }
 
 export function initNavigation() {
   const logoutBtn = document.getElementById("logoutBtn");
   const newPostBtn = document.getElementById("newPostBtn");
   const navLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
-  const miniProfile = document.querySelector(".profile-link[data-username]");
+  const miniProfile = document.getElementById("nav-mini-profile");
 
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      clearUser();
-      renderLayout();
-      goTo("/");
-    });
-  }
+  logoutBtn?.addEventListener("click", () => {
+    clearUser();
+    renderLayout();
+    goTo("/");
+  });
 
-  if (newPostBtn) {
-    newPostBtn.addEventListener("click", () => {
-      openCreatePostModal();
-    });
-  }
+  newPostBtn?.addEventListener("click", () => {
+    openCreatePostModal();
+  });
 
   navLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
@@ -107,50 +108,36 @@ export function initNavigation() {
       const route = link.dataset.route;
       if (route) goTo(route);
 
-      const currentActive = document.querySelector(".nav-link.active");
-      if (currentActive) {
-        currentActive.classList.remove("active");
-      }
+      document.querySelector(".nav-link.active")?.classList.remove("active");
       link.classList.add("active");
     });
   });
 
-  if (miniProfile) {
-    miniProfile.addEventListener("click", () => {
-      const username = miniProfile.getAttribute("data-username");
-      if (username) goTo(`/profile/${username}`);
-    });
-  }
+  miniProfile?.addEventListener("click", () => {
+    const user = getUser();
+    if (user) goTo(`/profile/${user.name}`);
+  });
 }
 
-export async function updateNavMiniProfile() {
-  const miniProfile = document.querySelector(".profile-link[data-username]");
+export async function loadNavMiniProfile() {
+  const container = document.getElementById("nav-mini-profile");
   const user = getUser();
-  if (!user || !miniProfile) return;
+  if (!container || !user) return;
 
   try {
     const profile = await getCurrentUserProfile(user.name);
 
-    miniProfile.outerHTML = `
-      <div class="profile-link" data-username="${profile.name}">
+    container.innerHTML = `
+      <figure class="size-12">
         <img 
-          class="rounded-full" 
-          src="${profile.avatar?.url || "/default-avatar.png"}" 
+          class="rounded-full w-full h-full object-cover" 
+          src="${profile.avatar?.url || "/default-avatar.png"}"
           alt="${profile.avatar?.alt || profile.name}" 
         />
-        <h4>${profile.name}</h4>
-      </div>
+      </figure>
+      <h4>${profile.name}</h4>
     `;
-
-    const newMiniProfile = document.querySelector(
-      ".profile-link[data-username]",
-    );
-    if (newMiniProfile) {
-      newMiniProfile.addEventListener("click", () => {
-        goTo(`/profile/${profile.name}`);
-      });
-    }
   } catch (error) {
-    console.error("Failed to update mini profile in nav", error);
+    console.error("Failed to load nav mini profile", error);
   }
 }

@@ -134,7 +134,7 @@ export function navbarSkeleton(): string {
   return `
           <div
             role="status"
-            class="hidden animate-pulse gap-4 p-8 sm:static sm:flex sm:flex-col sm:w-[256px]"
+            class="hidden animate-pulse gap-4 mb-4 sm:static sm:flex sm:flex-col sm:w-[256px]"
           >
             <div class="mb-4 flex items-start gap-1">
               <div
@@ -146,18 +146,6 @@ export function navbarSkeleton(): string {
                 ></div>
               </div>
             </div>
-            <div
-              class="mb-2.5 h-2.5 max-w-[80px] rounded-full bg-gray-200 dark:bg-gray-700"
-            ></div>
-            <div
-              class="mb-2.5 h-2.5 max-w-[80px] rounded-full bg-gray-200 dark:bg-gray-700"
-            ></div>
-            <div
-              class="mb-2.5 h-2.5 max-w-[80px] rounded-full bg-gray-200 dark:bg-gray-700"
-            ></div>
-            <div
-              class="mb-2.5 h-2.5 max-w-[80px] rounded-full bg-gray-200 dark:bg-gray-700"
-            ></div>
           </div>
 `;
 }

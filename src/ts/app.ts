@@ -1,7 +1,11 @@
 import { Router } from "./router/Router";
 import { routes } from "./router/routes";
 import { setNavigate } from "./utils/navigate";
-import { navigation, initNavigation } from "./components/navigation";
+import {
+  navigation,
+  initNavigation,
+  loadNavMiniProfile,
+} from "./components/navigation";
 import { getUser } from "./store/userStore";
 import { initGlobalErrorHandling } from "./errors/GlobalError";
 
@@ -12,17 +16,22 @@ export const router = new Router(routes, outlet);
 
 setNavigate(router.navigate.bind(router));
 
-export async function renderLayout() {
+export function renderLayout() {
   const navbarContainer = document.getElementById("navbar")!;
   const user = getUser();
 
   if (user) {
     navbarContainer.classList.remove("hidden");
-    navbarContainer.innerHTML = await navigation();
+    navbarContainer.innerHTML = "";
+
+    const nav = navigation();
+    if (nav) navbarContainer.appendChild(nav);
 
     initNavigation();
+    loadNavMiniProfile();
   } else {
     navbarContainer.classList.add("hidden");
+    navbarContainer.innerHTML = "";
   }
 }
 
