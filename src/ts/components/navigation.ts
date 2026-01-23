@@ -32,7 +32,7 @@ function createNavLink(
   link.dataset.route = route;
 
   const iconSpan = document.createElement("span");
-  iconSpan.className = "material-symbols-outlined text-2xl";
+  iconSpan.className = "material-symbols-outlined !text-[28px]";
   iconSpan.textContent = icon;
 
   const textSpan = document.createElement("span");
@@ -65,7 +65,7 @@ export function navigation(): HTMLElement | null {
   const nav = document.createElement("nav");
   nav.id = "navbar";
   nav.className = `
-    navbar fixed bottom-0 left-0 w-full py-2
+    navbar fixed bottom-0 left-0 w-full py-3 pr-20
     flex flex-row justify-around items-center bg-white
     sm:static sm:flex-col sm:items-start sm:gap-4 sm:text-lg sm:p-8 sm:w-3xs
   `;
@@ -97,17 +97,17 @@ export function navigation(): HTMLElement | null {
     "flex flex-col items-center sm:flex-row sm:gap-3 hover:text-primary-hover";
 
   logoutBtn.innerHTML = `
-    <span class="material-symbols-outlined text-2xl">logout</span>
+    <span class="material-symbols-outlined !text-[28px]">logout</span>
     <span class="hidden sm:inline">Log out</span>
   `;
 
   const newPostBtn = document.createElement("button");
   newPostBtn.id = "newPostBtn";
   newPostBtn.className =
-    "flex flex-col items-center justify-center py-1 px-2 sm:flex-row sm:gap-2 bg-primary hover:bg-primary-hover text-white rounded-full sm:py-2 sm:px-5 sm:mt-4";
+    "flex items-center justify-center fixed right-4 bg-primary hover:bg-primary-hover text-white shadow-lg rounded-full mb-6 mr-2 h-14 w-14 sm:m-0 sm:py-2 sm:px-5 sm:mt-4 sm:h-auto sm:w-auto sm:shadow-none sm:gap-2 sm:static sm:mt-4 sm:b-auto sm:right-auto";
 
   newPostBtn.innerHTML = `
-    <span class="material-symbols-outlined">edit_square</span>
+    <span class="material-symbols-outlined !text-[28px]">edit_square</span>
     <span class="hidden sm:inline">New Post</span>
   `;
 
