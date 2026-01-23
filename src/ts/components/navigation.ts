@@ -5,6 +5,21 @@ import { openCreatePostModal } from "./modals/createPostModal";
 import { goTo } from "../utils/navigate";
 import { navbarSkeleton } from "./loadingSkeletons";
 
+/**
+ * Creates a navigation link element for the main navbar.
+ *
+ * This helper builds a fully styled anchor element containing
+ * a Material Symbol icon and an optional text label. The route
+ * is stored in a data attribute and handled by the SPA router.
+ *
+ * This function does not attach event listeners.
+ *
+ * @param {string} icon - Material Symbols icon name.
+ * @param {string} label - Visible text label for larger screens.
+ * @param {string} route - SPA route path to navigate to.
+ * @returns {HTMLAnchorElement} The constructed navigation link element.
+ */
+
 function createNavLink(
   icon: string,
   label: string,
@@ -27,6 +42,21 @@ function createNavLink(
   link.append(iconSpan, textSpan);
   return link;
 }
+
+/**
+ * Creates and returns the main application navigation bar element.
+ *
+ * This function synchronously builds the navbar DOM structure using
+ * `document.createElement`, allowing it to render immediately without
+ * blocking on asynchronous data.
+ *
+ * The mini profile section is rendered with a loading skeleton and
+ * populated later by `loadNavMiniProfile()`.
+ *
+ * If no authenticated user is found, the function returns `null`.
+ *
+ * @returns {HTMLElement | null} The navbar element, or null if no user is logged in.
+ */
 
 export function navigation(): HTMLElement | null {
   const user = getUser();
@@ -86,6 +116,20 @@ export function navigation(): HTMLElement | null {
   return nav;
 }
 
+/**
+ * Initializes all interactive behavior for the navigation bar.
+ *
+ * This function attaches event listeners for:
+ * - SPA navigation links
+ * - Logout button
+ * - New post modal trigger
+ * - Mini profile navigation
+ *
+ * It must be called after the navbar has been rendered into the DOM.
+ *
+ * @returns {void}
+ */
+
 export function initNavigation() {
   const logoutBtn = document.getElementById("logoutBtn");
   const newPostBtn = document.getElementById("newPostBtn");
@@ -118,6 +162,20 @@ export function initNavigation() {
     if (user) goTo(`/profile/${user.name}`);
   });
 }
+
+/**
+ * Loads and injects the authenticated user's mini profile into the navbar.
+ *
+ * This function fetches the current user's profile data asynchronously
+ * and replaces the loading skeleton inside the mini profile container
+ * with the user's avatar and name.
+ *
+ * It is safe to call this function multiple times and should be invoked
+ * after each navbar render.
+ *
+ * @async
+ * @returns {Promise<void>}
+ */
 
 export async function loadNavMiniProfile() {
   const container = document.getElementById("nav-mini-profile");
