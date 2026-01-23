@@ -49,7 +49,7 @@ export async function commentForm(postId: number): Promise<string> {
         </div>
       </form>
     </div>
-    <hr class="h-[1px] bg-gray-medium border-none my-4">
+    <hr class="h-[px] bg-gray-medium border-none my-4">
   `;
 }
 

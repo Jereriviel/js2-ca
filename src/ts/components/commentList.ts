@@ -54,7 +54,7 @@ export async function renderComment(comment: Comment): Promise<string> {
         </div>
         </div>
       </div>
-      <hr class="h-[1px] bg-gray-medium border-none">
+      <hr class="h-[px] bg-gray-medium border-none">
     </article>
   `;
 }

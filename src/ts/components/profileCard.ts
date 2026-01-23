@@ -57,7 +57,7 @@ export function profileCard(profile: Profile, isFollowing: boolean): string {
       </div>
       </div>
     </section>
-    <hr class="h-[1px] bg-gray-medium border-none">
+    <hr class="h-[px] bg-gray-medium border-none">
   `;
 }
 

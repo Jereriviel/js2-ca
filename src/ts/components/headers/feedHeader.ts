@@ -17,7 +17,7 @@ export function feedHeader(current: "feed" | "following"): string {
     }
   </h1>
 </div>
-    <hr class="h-[1px] bg-gray-medium border-none mt-4">
+    <hr class="h-[px] bg-gray-medium border-none mt-4">
   `;
 }
 

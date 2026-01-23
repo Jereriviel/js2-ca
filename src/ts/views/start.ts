@@ -13,7 +13,7 @@ export function startView() {
 
   return renderView({
     html: `
-    <section class="flex flex-col gap-12 h-lvh justify-center text-lg bg-gradient-to-tr from-secondary-light to-secondary-ultra-light">
+    <section class="flex flex-col gap-12 h-lvh justify-center text-lg bg-linear-to-tr from-secondary-light to-secondary-ultra-light">
       <div class="flex flex-col items-center gap-2">
         <figure class="w-[100px]">
           <img

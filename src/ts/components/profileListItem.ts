@@ -26,6 +26,6 @@ export function profileListItem(
       </div>
       ${isOwnProfile ? "" : followButton(profile, isFollowing)}
     </div>
-    <hr class="h-[1px] bg-gray-medium border-none">
+    <hr class="h-[px] bg-gray-medium border-none">
   `;
 }
