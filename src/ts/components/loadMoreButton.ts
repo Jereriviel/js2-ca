@@ -15,10 +15,12 @@ export function createLoadMoreButton<T>(options: {
   button.classList.add(
     "font-medium",
     "hover:bg-gray-medium",
-    "w-fit",
+    "w-[8rem]",
     "py-2",
     "px-5",
     "rounded-full",
+    "flex",
+    "justify-center",
   );
 
   let currentPage = 1;
