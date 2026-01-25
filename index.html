@@ -18,18 +18,26 @@
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Righteous&display=swap"
       rel="stylesheet"
     />
-    <script defer type="module" src="/src/js/app.ts"></script>
+    <script defer type="module" src="/src/ts/app.ts"></script>
   </head>
   <body>
     <div
       id="layout"
       class="mx-auto flex max-w-4xl flex-col justify-center sm:flex-row-reverse"
     >
-      <main class="w-full">
-        <div id="app" class="main-app px-4 pb-14 sm:pb-0"></div>
-        <footer class="h-12"></footer>
-      </main>
-      <aside id="navbar" class="aside-navbar"></aside>
+      <div class="flex min-h-screen w-full flex-col">
+        <header class="sticky top-0 bg-white px-4"></header>
+        <main class="w-full flex-grow">
+          <div id="app" class="main-app px-4 pb-0 sm:pb-14"></div>
+        </main>
+        <footer
+          class="mb-[56px] flex flex-col bg-white md:sticky md:bottom-0 md:mb-0"
+        ></footer>
+      </div>
+      <aside
+        id="navbar"
+        class="aside-navbar sticky top-0 self-start sm:h-screen"
+      ></aside>
     </div>
   </body>
 </html>

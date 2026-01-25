@@ -1,0 +1,88 @@
+import { protectedView } from "../utils/protectedView";
+import {
+  getProfileFollowing,
+  getCurrentUserProfile,
+} from "../services/profileService";
+import { profileListItem } from "../components/profileListItem";
+import { initFollowButtons } from "../components/followButton";
+import { getUser } from "../store/userStore";
+import { getCachedProfile } from "../utils/profileCache";
+import { initProfileLinks } from "../utils/initialization/initProfileLinks";
+import { goTo } from "../utils/navigate";
+import { footer } from "../components/footer";
+import { backHeader } from "../components/headers/backHeader";
+import { profileListSkeleton } from "../components/loadingSkeletons";
+import { showErrorModal } from "../components/modals/errorModal";
+
+export function profileFollowingView(username?: string) {
+  return protectedView({
+    header: backHeader(),
+    footer: footer(),
+    html: `
+      <section id="followingContainer"></section>
+    `,
+    init: async () => {
+      const container = document.getElementById("followingContainer")!;
+      const backBtn = document.getElementById("backBtn")!;
+
+      backBtn.addEventListener("click", () => goTo(`/profile/${username}`));
+
+      if (!username) {
+        const currentUser = getUser();
+        if (!currentUser) {
+          container.innerHTML = `<p>No profile specified</p>`;
+          return;
+        }
+        username = currentUser.name;
+      }
+
+      container.innerHTML = Array.from({ length: 5 })
+        .map(() => profileListSkeleton())
+        .join("");
+
+      try {
+        const following = await getProfileFollowing(username);
+
+        const currentUser = getUser();
+        let currentUserFollowingNames: string[] = [];
+
+        if (currentUser) {
+          try {
+            const currentUserProfile = await getCurrentUserProfile(
+              currentUser.name,
+            );
+            currentUserFollowingNames =
+              currentUserProfile.following?.map((f) => f.name) || [];
+          } catch (error) {
+            let message = "Failed to fetch current user profile";
+            if (error instanceof Error) message += `: ${error.message}`;
+            console.error(message, error);
+          }
+        }
+
+        if (following.length === 0) {
+          container.innerHTML = `<p>Not following anyone yet.</p>`;
+        } else {
+          const profilesHtml = await Promise.all(
+            following.map(async (profile) => {
+              const cachedProfile = await getCachedProfile(profile.name);
+              return profileListItem(
+                cachedProfile,
+                currentUserFollowingNames.includes(cachedProfile.name),
+              );
+            }),
+          );
+          container.innerHTML = profilesHtml.join("");
+        }
+
+        initFollowButtons();
+        initProfileLinks(container);
+      } catch (error) {
+        let message = "Error loading following";
+        if (error instanceof Error) message += `: ${error.message}`;
+        await showErrorModal(message);
+        console.error("profileFollowingView init error:", error);
+      }
+    },
+  });
+}
