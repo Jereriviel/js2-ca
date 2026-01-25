@@ -39,7 +39,10 @@ export function profileCard(profile: Profile, isFollowing: boolean): string {
       ${actionButton}
       </div>
       <div class="flex flex-col gap-2">
-        <h3 class="text-xl font-extrabold">${profile.name}</h3>
+        <div class="flex flex-col">
+          <h3 class="text-2xl font-extrabold">${profile.name}</h3>
+          <p class="text-sm font-light">${profile.email}</p>
+        </div>
         <p>${profile.bio || "No bio written yet."}</p>
       <div class="flex gap-4 text-sm">
         <p>Posts: ${profile._count?.posts ?? 0}</p>
