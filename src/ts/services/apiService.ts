@@ -1,8 +1,8 @@
-import { API_BASE } from "../constants";
+import { API_BASE, API_KEY } from "../constants";
 import { ApiError } from "../errors/ApiError";
 import { handleError } from "../errors/handleError";
 
-const apiKey = import.meta.env.VITE_API_KEY;
+const apiKey = API_KEY;
 
 async function apiFetch<T>(
   endpoint: string,
