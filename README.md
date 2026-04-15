@@ -104,4 +104,4 @@ This site is deployed using Netlify: https://jereriviel-js2-ca.netlify.app/
 
 ## Contact
 
-Contact information will be added at a later stage.
+If you have any questions or feedback, feel free to contact me on [LinkedIn](www.linkedin.com/in/carina-mariell-pedersen-2a8648403).
