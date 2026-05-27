@@ -40,7 +40,7 @@ export function navigation(): HTMLElement | null {
   nav.className = `
     navbar fixed bottom-0 left-0 w-full py-3 pr-20
     flex flex-row justify-around items-center bg-white
-    sm:static sm:flex-col sm:items-start sm:gap-4 sm:text-lg sm:py-8 sm:px-4 sm:w-3xs sm:h-full sm:justify-start
+    sm:static sm:flex-col sm:items-start sm:gap-4 sm:text-lg sm:py-8 sm:px-8 sm:w-3xs sm:h-full sm:justify-start
   `;
 
   // MINI PROFILE (skeleton)
