@@ -22,8 +22,8 @@ export function profileView(username?: string) {
     header: "",
     footer: footer(),
     html: `
-      <section id="profileHeader"></section>
-      <section id="profilePosts"></section>
+      <section id="profileHeader" class="px-4 sm:px-8"></section>
+      <section id="profilePosts" class="px-4 sm:px-8"></section>
       <div id="loadMoreContainer" class="load-more-container flex justify-center py-4 sm:py-8"></div>
     `,
     init: async () => {

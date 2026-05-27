@@ -6,12 +6,12 @@ export function notFoundView() {
   return protectedView({
     footer: footer(),
     html: `
-    <section class="flex flex-col gap-4 items-center mt-12">
+    <section class="flex flex-col gap-4 items-center py-4 sm:py-8">
     <div class="flex flex-col items-center">
       <figure class="max-w-[200px]">
         <img
           class="rounded-full w-full h-full object-cover"
-          src="/img/404.jpg"
+          src="/src/assets/404.jpg""
           alt="Not found illustration."
         />
       </figure>

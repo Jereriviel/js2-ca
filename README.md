@@ -1,6 +1,6 @@
 # Cross Course Project: Hearth Social Media App
 
-![image](https://jereriviel.github.io/portfolio/assets/img/thumbnail_hearth.webp)
+![image](https://jereriviel-js2-ca.netlify.app/hearth_thumbnail.webp)
 
 ## Description
 

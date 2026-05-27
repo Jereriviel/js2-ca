@@ -15,7 +15,7 @@ export function feedView() {
     header: feedHeader("feed"),
     footer: footer(),
     html: `
-      <section id="feedContainer"></section>
+      <section id="feedContainer" class="px-4 sm:px-8"></section>
       <section id="loadMoreContainer" class="load-more-container flex justify-center py-4 sm:py-8"></section>
     `,
     init: async () => {

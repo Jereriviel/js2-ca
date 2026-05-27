@@ -27,8 +27,8 @@ export function postView() {
     header: backHeader(),
     footer: footer(),
     html: `
-      <section id="postContainer"></section>
-      <section id="commentsContainer" class="py-4"></section>
+      <section id="postContainer" class="px-4 sm:px-8"></section>
+      <section id="commentsContainer" class="py-4 px-4 sm:px-8"></section>
     `,
 
     init: async () => {

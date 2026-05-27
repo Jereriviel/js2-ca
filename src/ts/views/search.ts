@@ -22,8 +22,8 @@ export function searchView() {
   return protectedView({
     footer: footer(),
     html: `
-    <section class="h-full">
-    <form id="searchForm" class="py-4 sm:py-8 h-full">
+    <section class="flex flex-col flex-grow px-4 sm:px-8">
+    <form id="searchForm" class="py-4 sm:py-8">
         <div class="flex bg-gray-light pl-4 border border-gray-medium rounded-full gap-2">
           <button type="submit">
           <span class="material-symbols-outlined text-gray-dark">search</span>
@@ -37,7 +37,7 @@ export function searchView() {
         />
         </div>
     </form>
-      <div id="searchResults">
+      <div id="searchResults" class="flex-grow">
         <div id="searchPosts" class="py-4"></div>
         <div id="postsLoadMoreContainer" class="load-more-container flex justify-center py-4 sm:py-8"></div>
         <div id="searchProfiles" class="py-4"></div>

@@ -20,7 +20,7 @@ export function profileFollowingView(username?: string) {
     header: backHeader(),
     footer: footer(),
     html: `
-      <section id="followingContainer"></section>
+      <section id="followingContainer" class="px-4 sm:px-8"></section>
     `,
     init: async () => {
       const container = document.getElementById("followingContainer")!;

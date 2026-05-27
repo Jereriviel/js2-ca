@@ -15,7 +15,7 @@ export function followingView() {
     header: feedHeader("following"),
     footer: footer(),
     html: `
-      <section id="followingContainer"></section>
+      <section id="followingContainer" class="px-4 sm:px-8"></section>
       <section id="loadMoreContainer" class="load-more-container flex justify-center py-4 sm:py-8"></section>
     `,
     init: async () => {
