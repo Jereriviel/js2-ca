@@ -1,111 +1,63 @@
-import { deleteComment } from "../services/postsService";
-import { showErrorModal } from "./modals/errorModal";
-import { showConfirmModal } from "./modals/confirmModal";
-import { textArea } from "./inputs";
-import { getCurrentUserProfile } from "../services/profileService";
-import type { Profile } from "../types/profile";
 import { getUser } from "../store/userStore";
+import type { Profile } from "../types/profile";
 
-export async function commentForm(postId: number): Promise<string> {
+export function commentForm(postId: number, userProfile: Profile): HTMLElement {
+  const wrapper = document.createElement("div");
+
   const loggedInUser = getUser();
+
   if (!loggedInUser) {
-    return `<p class="text-gray-dark text-sm italic">You must be logged in to comment.</p>`;
+    const message = document.createElement("p");
+    message.className = "text-gray-dark text-sm italic";
+    message.textContent = "You must be logged in to comment.";
+    wrapper.appendChild(message);
+    return wrapper;
   }
 
-  let userProfile: Profile | undefined;
+  const container = document.createElement("div");
+  container.className = "flex items-start gap-4 py-4";
+  container.dataset.postId = String(postId);
 
-  try {
-    userProfile = await getCurrentUserProfile(loggedInUser.name);
-  } catch (error) {
-    console.warn("Failed to fetch logged-in user profile", error);
-  }
+  const img = document.createElement("img");
+  img.className = "rounded-full w-12 h-12 object-cover";
+  img.src = userProfile?.avatar?.url || "/default-avatar.png";
+  img.alt = userProfile?.avatar?.alt || "User avatar";
 
-  return `
-    <div class="flex items-start gap-4 py-4" data-post-id="${postId}">
-      <div class="profile-link">
-        <figure class="w-12 h-12">
-          <img
-            class="rounded-full w-full h-full object-cover"
-            src="${userProfile?.avatar?.url ?? "/default-avatar.png"}"
-            alt="${userProfile?.avatar?.alt ?? userProfile?.name ?? "User avatar"}"
-          />
-        </figure>
-      </div>
-      <form class="comment-form flex flex-col grow gap-4" data-post-id="${postId}">
-        ${textArea({
-          type: "text",
-          name: "comment",
-          placeholder: "Write your comment here...",
-          required: true,
-          label: "Post a comment",
-          id: `comment-${postId}`,
-        })}
-        <div class="flex justify-end">
-          <button 
-            type="submit" 
-            class="bg-primary hover:bg-primary-hover text-white text-sm w-fit py-2 px-5 rounded-full">
-            Post Comment
-          </button>
-        </div>
-      </form>
-    </div>
-    <hr class="h-[px] bg-gray-medium border-none my-4">
-  `;
-}
+  const profileWrapper = document.createElement("div");
+  profileWrapper.className = "profile-link";
 
-export function initCommentForms(
-  onSubmit: (postId: number, body: string) => Promise<void>,
-) {
-  document
-    .querySelectorAll<HTMLFormElement>(".comment-form")
-    .forEach((form) => {
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const postId = Number(form.dataset.postId);
-        const textarea = form.querySelector<HTMLTextAreaElement>("textarea")!;
-        const body = textarea.value.trim();
-        if (!body) return;
+  const figure = document.createElement("figure");
+  figure.appendChild(img);
+  profileWrapper.appendChild(figure);
 
-        try {
-          await onSubmit(postId, body);
-          textarea.value = "";
+  const form = document.createElement("form");
+  form.className = "comment-form flex flex-col grow gap-4";
+  form.dataset.postId = String(postId);
 
-          const commentsContainer = form
-            .closest("article")
-            ?.querySelector(".comments-container") as HTMLElement | null;
-          if (commentsContainer) {
-            initDeleteCommentButtons(commentsContainer);
-          }
-        } catch (error) {
-          console.error("Failed to post comment:", error);
-          await showErrorModal("Failed to post comment. Please try again.");
-        }
-      });
-    });
-}
+  const textarea = document.createElement("textarea");
+  textarea.name = "comment";
+  textarea.placeholder = "Write your comment here...";
+  textarea.required = true;
+  textarea.className = "w-full rounded-xl border border-gray-medium p-4";
 
-export function initDeleteCommentButtons(container: HTMLElement) {
-  container
-    .querySelectorAll<HTMLButtonElement>(".delete-comment-btn")
-    .forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const commentId = Number(btn.dataset.commentId);
-        const postId = Number(btn.dataset.postId);
-        if (!commentId || !postId) return;
+  const buttonWrapper = document.createElement("div");
+  buttonWrapper.className = "flex justify-end";
 
-        const confirmed = await showConfirmModal(
-          "Are you sure you want to delete this comment?",
-        );
-        if (!confirmed) return;
+  const button = document.createElement("button");
+  button.type = "submit";
+  button.className =
+    "bg-primary hover:bg-primary-hover text-white text-sm w-fit py-2 px-5 rounded-full";
+  button.textContent = "Post Comment";
 
-        try {
-          await deleteComment(postId, commentId);
-          const commentDiv = btn.closest(".comment");
-          if (commentDiv) commentDiv.remove();
-        } catch (error) {
-          console.error("Failed to delete comment:", error);
-          await showErrorModal("Failed to delete comment. Please try again.");
-        }
-      });
-    });
+  buttonWrapper.appendChild(button);
+  form.append(textarea, buttonWrapper);
+
+  container.append(profileWrapper, form);
+
+  const hr = document.createElement("hr");
+  hr.className = "h-px bg-gray-medium border-none my-4";
+
+  wrapper.append(container, hr);
+
+  return wrapper;
 }

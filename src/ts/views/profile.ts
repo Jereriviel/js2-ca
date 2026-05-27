@@ -1,5 +1,5 @@
 import { protectedView } from "../utils/protectedView";
-import { profileCard, initProfileCard } from "../components/profileCard";
+import { profileCard } from "../components/profileCard";
 import { postCard } from "../components/postCard";
 import { getCurrentUserProfile } from "../services/profileService";
 import { getCachedProfile } from "../utils/profileCache";
@@ -10,16 +10,19 @@ import { getPaginatedProfilePosts } from "../services/postsService";
 import { initPaginatedList } from "../utils/initialization/initPaginatedList";
 import { goTo } from "../utils/navigate";
 import { footer } from "../components/footer";
-import { profileHeader } from "../components/headers/profileHeader";
-import { profileCardSkeleton } from "../components/loadingSkeletons";
-import { postCardSkeleton } from "../components/loadingSkeletons";
+import {
+  profileCardSkeleton,
+  postCardSkeleton,
+} from "../components/loadingSkeletons";
 import { showErrorModal } from "../components/modals/errorModal";
+import { handleError } from "../errors/handleError";
 
 export function profileView(username?: string) {
   return protectedView({
-    header: profileHeader(),
+    header: "",
     footer: footer(),
     html: `
+      <section id="profileHeader"></section>
       <section id="profilePosts"></section>
       <div id="loadMoreContainer" class="load-more-container flex justify-center py-4 sm:py-8"></div>
     `,
@@ -28,20 +31,22 @@ export function profileView(username?: string) {
       const postsContainer = document.getElementById("profilePosts")!;
       const loadMoreContainer = document.getElementById("loadMoreContainer")!;
 
-      header.innerHTML = profileCardSkeleton();
+      const currentUser = getUser();
+      const resolvedUsername = username ?? currentUser?.name;
 
-      if (!username) {
-        const currentUser = getUser();
-        if (!currentUser) {
-          header.innerHTML = `<p>No profile specified</p>`;
-          return;
-        }
-        username = currentUser.name;
+      if (!resolvedUsername) {
+        header.textContent = "No profile specified";
+        return;
       }
 
+      header.innerHTML = profileCardSkeleton();
+      postsContainer.innerHTML = Array.from({ length: 10 })
+        .map(() => postCardSkeleton())
+        .join("");
+
       try {
-        const profile: Profile = await getCachedProfile(username);
-        const currentUser = getUser();
+        const profile: Profile = await getCachedProfile(resolvedUsername);
+
         let loggedInUserFollowing: string[] = [];
 
         if (currentUser) {
@@ -49,19 +54,17 @@ export function profileView(username?: string) {
             const currentUserProfile = await getCurrentUserProfile(
               currentUser.name,
             );
+
             loggedInUserFollowing =
               currentUserProfile.following?.map((f) => f.name) || [];
           } catch (error) {
-            let message = "Failed to fetch current user profile";
-            if (error instanceof Error) message += `: ${error.message}`;
-            console.error(message, error);
+            await showErrorModal(handleError(error));
           }
         }
 
         const isFollowingProfile = loggedInUserFollowing.includes(profile.name);
-        header.innerHTML = profileCard(profile, isFollowingProfile);
 
-        initProfileCard();
+        header.replaceChildren(profileCard(profile, isFollowingProfile));
 
         header.addEventListener("click", (e) => {
           const target = e.target as HTMLElement;
@@ -71,29 +74,24 @@ export function profileView(username?: string) {
           if (target.classList.contains("followers-link")) {
             goTo(`/profile/${username}/followers`);
           }
+
           if (target.classList.contains("following-link")) {
             goTo(`/profile/${username}/following`);
           }
         });
 
-        postsContainer.innerHTML = Array.from({ length: 10 })
-          .map(() => postCardSkeleton())
-          .join("");
-
         await initPaginatedList<Post>({
           container: postsContainer,
           loadMoreContainer,
-          fetchItems: (page) => getPaginatedProfilePosts(username!, page, 5),
+          fetchItems: (page) =>
+            getPaginatedProfilePosts(resolvedUsername, page, 5),
           renderItem: (post) =>
             postCard(post, loggedInUserFollowing, { lazy: true }),
           isPostList: true,
         });
       } catch (error) {
-        let message = "Error loading profile";
-        if (error instanceof Error) message += `: ${error.message}`;
-        await showErrorModal(message);
-        postsContainer.innerHTML = "";
-        console.error("profileView init error:", error);
+        await showErrorModal(handleError(error));
+        postsContainer.replaceChildren();
       }
     },
   });

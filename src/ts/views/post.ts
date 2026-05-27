@@ -5,18 +5,22 @@ import { getUser } from "../store/userStore";
 import { getCurrentUserProfile } from "../services/profileService";
 import { initFollowButtons } from "../components/followButton";
 import type { Profile } from "../types/profile";
-import {
-  commentForm,
-  initCommentForms,
-  initDeleteCommentButtons,
-} from "../components/commentForm";
-import { renderComments, renderComment } from "../components/commentList";
+
+import { commentForm } from "../components/commentForm";
+import { renderComments } from "../components/commentList";
+
 import { initProfileLinks } from "../utils/initialization/initProfileLinks";
 import { footer } from "../components/footer";
 import { backHeader } from "../components/headers/backHeader";
-import { postCardSkeleton } from "../components/loadingSkeletons";
-import { commentSkeleton } from "../components/loadingSkeletons";
+
+import {
+  postCardSkeleton,
+  commentSkeleton,
+} from "../components/loadingSkeletons";
+
 import { showErrorModal } from "../components/modals/errorModal";
+import { handleError } from "../errors/handleError";
+import { initCommentHandlers } from "../utils/initialization/initCommentHandlers";
 
 export function postView() {
   return protectedView({
@@ -26,88 +30,102 @@ export function postView() {
       <section id="postContainer"></section>
       <section id="commentsContainer" class="py-4"></section>
     `,
+
     init: async () => {
       const container = document.getElementById("postContainer")!;
       const commentsContainer = document.getElementById("commentsContainer")!;
       const backBtn = document.getElementById("backBtn")!;
+
       backBtn.addEventListener("click", () => history.back());
 
       container.innerHTML = postCardSkeleton();
       commentsContainer.innerHTML = `
-    ${commentSkeleton()}
-    ${Array.from({ length: 3 })
-      .map(() => commentSkeleton())
-      .join("")}
-  `;
+        ${commentSkeleton()}
+        ${Array.from({ length: 3 })
+          .map(() => commentSkeleton())
+          .join("")}
+      `;
 
       try {
         const id = Number(location.pathname.split("/")[2]);
         if (isNaN(id)) {
-          container.innerHTML = `<p>Invalid post ID</p>`;
+          container.textContent = "Invalid post ID";
           return;
         }
 
         const currentUser = getUser();
+        if (!currentUser) return;
+
+        let profile: Profile | undefined;
         let loggedInUserFollowingNames: string[] = [];
 
-        if (currentUser) {
-          try {
-            const profile = await getCurrentUserProfile(currentUser.name);
-            loggedInUserFollowingNames =
-              profile.following?.map((f: Profile) => f.name) || [];
-          } catch (error) {
-            let message = "Failed to fetch current user profile";
-            if (error instanceof Error) message += `: ${error.message}`;
-            console.error(message, error);
-          }
+        try {
+          profile = await getCurrentUserProfile(currentUser.name);
+          loggedInUserFollowingNames =
+            profile.following?.map((f: Profile) => f.name) || [];
+        } catch (error) {
+          await showErrorModal(
+            `Error loading user profile: ${
+              error instanceof Error ? error.message : "Unknown error"
+            }`,
+          );
         }
 
         const response = await getPost(id);
+
         if (!response) {
-          container.innerHTML = `<p>Post not found</p>`;
+          await showErrorModal("Post not found.");
+          container.textContent = "Post not found";
           return;
         }
+
         const post = response.data;
 
-        container.innerHTML = await postCard(post, loggedInUserFollowingNames, {
-          lazy: false,
-        });
-
-        commentsContainer.innerHTML = await commentForm(post.id);
-        commentsContainer.insertAdjacentHTML(
-          "beforeend",
-          await renderComments((post.comments || []).slice().reverse()),
+        container.innerHTML = "";
+        container.appendChild(
+          await postCard(post, loggedInUserFollowingNames, {
+            lazy: false,
+          }),
         );
 
-        initCommentForms(async (postId, body) => {
-          const newComment = await addComment(postId, body);
-          if (!newComment) return;
-          const commentsList = commentsContainer.querySelector(
-            ".comments-container",
-          )!;
+        commentsContainer.innerHTML = "";
 
-          const heading = commentsList.querySelector("h2");
-          if (heading) {
-            heading.insertAdjacentHTML(
-              "afterend",
-              await renderComment(newComment),
-            );
-          } else {
-            commentsList.outerHTML = await renderComments([newComment]);
-          }
-          initDeleteCommentButtons(commentsContainer);
+        if (!profile) return;
+
+        const formEl = await commentForm(post.id, profile);
+        commentsContainer.appendChild(formEl);
+
+        const refreshComments = async (postId: number) => {
+          const refreshed = await getPost(postId);
+          if (!refreshed) return;
+
+          const updatedComments =
+            refreshed.data.comments?.slice().reverse() || [];
+
+          const newCommentsList = await renderComments(updatedComments);
+
+          const oldList = commentsContainer.querySelector(
+            ".comments-container",
+          );
+
+          oldList?.remove();
+          commentsContainer.appendChild(newCommentsList);
+        };
+
+        await refreshComments(post.id);
+
+        initCommentHandlers(async (postId, body) => {
+          await addComment(postId, body);
+          await refreshComments(postId);
         });
 
-        initDeleteCommentButtons(commentsContainer);
         initFollowButtons();
         initEditPostButton(post);
         initProfileLinks(container);
         initProfileLinks(commentsContainer);
       } catch (error) {
-        let message = "Error loading post";
-        if (error instanceof Error) message += `: ${error.message}`;
-        await showErrorModal(message);
-        console.error("postView init error:", error);
+        await showErrorModal(handleError(error));
+        container.textContent = "Failed to load post";
       }
     },
   });

@@ -1,9 +1,14 @@
 import { profileCard } from "../profileCard";
+import type { Profile } from "../../types/profile";
 
-export function profileHeader(): string {
-  return `
-     <div id="profileHeader">
-        ${profileCard}
-    </div>
-`;
+export function profileHeader(
+  profile: Profile,
+  isFollowing: boolean,
+): HTMLElement {
+  const wrapper = document.createElement("div");
+  wrapper.id = "profileHeader";
+
+  wrapper.appendChild(profileCard(profile, isFollowing));
+
+  return wrapper;
 }

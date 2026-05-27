@@ -13,6 +13,7 @@ import { footer } from "../components/footer";
 import { backHeader } from "../components/headers/backHeader";
 import { profileListSkeleton } from "../components/loadingSkeletons";
 import { showErrorModal } from "../components/modals/errorModal";
+import { handleError } from "../errors/handleError";
 
 export function profileFollowingView(username?: string) {
   return protectedView({
@@ -51,37 +52,36 @@ export function profileFollowingView(username?: string) {
             const currentUserProfile = await getCurrentUserProfile(
               currentUser.name,
             );
+
             currentUserFollowingNames =
               currentUserProfile.following?.map((f) => f.name) || [];
           } catch (error) {
-            let message = "Failed to fetch current user profile";
-            if (error instanceof Error) message += `: ${error.message}`;
-            console.error(message, error);
+            await showErrorModal(handleError(error));
           }
         }
 
         if (following.length === 0) {
           container.innerHTML = `<p>Not following anyone yet.</p>`;
         } else {
-          const profilesHtml = await Promise.all(
+          const profileElements = await Promise.all(
             following.map(async (profile) => {
               const cachedProfile = await getCachedProfile(profile.name);
+
               return profileListItem(
                 cachedProfile,
                 currentUserFollowingNames.includes(cachedProfile.name),
               );
             }),
           );
-          container.innerHTML = profilesHtml.join("");
+
+          container.replaceChildren(...profileElements);
         }
 
         initFollowButtons();
         initProfileLinks(container);
       } catch (error) {
-        let message = "Error loading following";
-        if (error instanceof Error) message += `: ${error.message}`;
-        await showErrorModal(message);
-        console.error("profileFollowingView init error:", error);
+        await showErrorModal(handleError(error));
+        container.innerHTML = `<p>Failed to load following</p>`;
       }
     },
   });

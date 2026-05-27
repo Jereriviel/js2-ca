@@ -1,98 +1,117 @@
 import { getUser } from "../../store/userStore";
 import { getProfile, updateProfile } from "../../services/profileService";
-import { profileCard, initProfileCard } from "../profileCard";
+import { profileCard } from "../profileCard";
 import type { Profile } from "../../types/profile";
 import { loadNavMiniProfile } from "../navigation";
 import { showErrorModal } from "./errorModal";
 import { createModal } from "../../utils/createModal";
 import { inputModal, textArea } from "../inputs";
+import { handleError } from "../../errors/handleError";
 
 export async function openEditProfileModal() {
   const currentUser = getUser();
   if (!currentUser) return;
 
-  const profile: Profile = await getProfile(currentUser.name);
+  let profile: Profile;
+
+  try {
+    profile = await getProfile(currentUser.name);
+  } catch (error) {
+    await showErrorModal(handleError(error));
+    return;
+  }
 
   const existingModal = document.querySelector<HTMLDialogElement>(
     ".edit-profile-modal",
   );
   if (existingModal) existingModal.remove();
 
-  const modal = createModal(`
-    <form
-    method="dialog"
-    class="edit-profile-form min-w-[375px] flex flex-col gap-4">
-      <h2 class="font-semibold text-xl">Edit Profile</h2>
-      <div class="flex flex-col gap-4">
-      ${textArea({
-        type: "text",
-        name: "bio",
-        placeholder: "Your bio",
-        label: "Bio",
-        id: "bio",
-        required: false,
-      }).replace("></textarea>", `>${profile.bio ?? ""}</textarea>`)}  
+  const modal = createModal("");
 
-      ${inputModal({
-        type: "url",
-        name: "avatarUrl",
-        placeholder: "https://...",
-        label: "Profile image URL",
-        id: "avatarUrl",
-        required: false,
-      }).replace('value=""', `value="${profile.avatar?.url ?? ""}"`)}
+  const form = document.createElement("form");
+  form.method = "dialog";
+  form.className = "edit-profile-form min-w-[375px] flex flex-col gap-4";
 
-      ${inputModal({
-        type: "text",
-        name: "avatarAlt",
-        placeholder: "Profile image alt text",
-        label: "Avatar Alt",
-        id: "avatarAlt",
-        required: false,
-      }).replace('value=""', `value="${profile.avatar?.alt ?? ""}"`)}
+  const title = document.createElement("h2");
+  title.className = "font-semibold text-xl";
+  title.textContent = "Edit Profile";
 
-      ${inputModal({
-        type: "url",
-        name: "bannerUrl",
-        placeholder: "https://...",
-        label: "Profile banner URL",
-        id: "bannerUrl",
-        required: false,
-      }).replace('value=""', `value="${profile.banner?.url ?? ""}"`)}
+  const fields = document.createElement("div");
+  fields.className = "flex flex-col gap-4";
 
-      ${inputModal({
-        type: "text",
-        name: "bannerAlt",
-        placeholder: "Profile banner alt text",
-        label: "Banner Alt",
-        id: "bannerAlt",
-        required: false,
-      }).replace('value=""', `value="${profile.banner?.alt ?? ""}"`)}
-      </div>
-      <div class="modal-actions flex justify-between">
-        <button type="button" id="cancelBtn" class="font-medium hover:bg-gray-medium w-fit py-2 px-5 rounded-full mt-4">Cancel</button>
-        <button type="submit" class="bg-primary hover:bg-primary-hover text-white text- w-fit py-2 px-5 rounded-full mt-4">Save</button>
-      </div>
-      <p class="error-message"></p>
-    </form>
-  `);
+  fields.innerHTML = `
+    ${textArea({
+      type: "text",
+      name: "bio",
+      placeholder: "Your bio",
+      label: "Bio",
+      id: "bio",
+      required: false,
+    }).replace("></textarea>", `>${profile.bio ?? ""}</textarea>`)}
+
+    ${inputModal({
+      type: "url",
+      name: "avatarUrl",
+      placeholder: "https://...",
+      label: "Profile image URL",
+      id: "avatarUrl",
+      required: false,
+    }).replace('value=""', `value="${profile.avatar?.url ?? ""}"`)}
+
+    ${inputModal({
+      type: "text",
+      name: "avatarAlt",
+      placeholder: "Profile image alt text",
+      label: "Avatar Alt",
+      id: "avatarAlt",
+      required: false,
+    }).replace('value=""', `value="${profile.avatar?.alt ?? ""}"`)}
+
+    ${inputModal({
+      type: "url",
+      name: "bannerUrl",
+      placeholder: "https://...",
+      label: "Profile banner URL",
+      id: "bannerUrl",
+      required: false,
+    }).replace('value=""', `value="${profile.banner?.url ?? ""}"`)}
+
+    ${inputModal({
+      type: "text",
+      name: "bannerAlt",
+      placeholder: "Profile banner alt text",
+      label: "Banner Alt",
+      id: "bannerAlt",
+      required: false,
+    }).replace('value=""', `value="${profile.banner?.alt ?? ""}"`)}
+  `;
+
+  const actions = document.createElement("div");
+  actions.className = "modal-actions flex justify-between";
+
+  const cancelBtn = document.createElement("button");
+  cancelBtn.type = "button";
+  cancelBtn.id = "cancelBtn";
+  cancelBtn.className =
+    "font-medium hover:bg-gray-medium w-fit py-2 px-5 rounded-full mt-4";
+  cancelBtn.textContent = "Cancel";
+
+  const saveBtn = document.createElement("button");
+  saveBtn.type = "submit";
+  saveBtn.className =
+    "bg-primary hover:bg-primary-hover text-white w-fit py-2 px-5 rounded-full mt-4";
+  saveBtn.textContent = "Save";
+
+  const errorEl = document.createElement("p");
+  errorEl.className = "error-message text-red-500 text-sm";
+
+  actions.append(cancelBtn, saveBtn);
+
+  form.append(title, fields, actions, errorEl);
+  modal.appendChild(form);
 
   document.body.appendChild(modal);
   modal.showModal();
-
-  const form = modal.querySelector<HTMLFormElement>("form.edit-profile-form")!;
-  const cancelBtn = form.querySelector<HTMLButtonElement>("#cancelBtn")!;
-  const errorEl = form.querySelector<HTMLParagraphElement>(".error-message")!;
-
-  form.querySelector<HTMLTextAreaElement>("#bio")!.value = profile.bio || "";
-  form.querySelector<HTMLInputElement>("#avatarUrl")!.value =
-    profile.avatar?.url || "";
-  form.querySelector<HTMLInputElement>("#avatarAlt")!.value =
-    profile.avatar?.alt || "";
-  form.querySelector<HTMLInputElement>("#bannerUrl")!.value =
-    profile.banner?.url || "";
-  form.querySelector<HTMLInputElement>("#bannerAlt")!.value =
-    profile.banner?.alt || "";
 
   cancelBtn.addEventListener("click", () => modal.close());
 
@@ -101,6 +120,7 @@ export async function openEditProfileModal() {
     errorEl.textContent = "";
 
     const formData = new FormData(form);
+
     const bio = formData.get("bio") as string;
     const avatarUrl = formData.get("avatarUrl") as string;
     const avatarAlt = formData.get("avatarAlt") as string;
@@ -108,11 +128,22 @@ export async function openEditProfileModal() {
     const bannerAlt = formData.get("bannerAlt") as string;
 
     const updates: Partial<Profile> = {};
+
     if (bio) updates.bio = bio;
-    if (avatarUrl)
-      updates.avatar = { url: avatarUrl, alt: avatarAlt || "Avatar" };
-    if (bannerUrl)
-      updates.banner = { url: bannerUrl, alt: bannerAlt || "Banner" };
+
+    if (avatarUrl) {
+      updates.avatar = {
+        url: avatarUrl,
+        alt: avatarAlt || "Avatar",
+      };
+    }
+
+    if (bannerUrl) {
+      updates.banner = {
+        url: bannerUrl,
+        alt: bannerAlt || "Banner",
+      };
+    }
 
     if (Object.keys(updates).length === 0) {
       errorEl.textContent = "Please provide at least one field to update.";
@@ -123,20 +154,18 @@ export async function openEditProfileModal() {
       const updatedProfile = await updateProfile(currentUser.name, updates);
 
       const header = document.getElementById("profileHeader");
-      if (header) header.innerHTML = profileCard(updatedProfile, false);
 
-      initProfileCard();
+      if (header) {
+        const newHeader = profileCard(updatedProfile, false);
+        header.replaceWith(newHeader);
+      }
+
       await loadNavMiniProfile();
 
       modal.close();
       modal.remove();
     } catch (error) {
-      console.error("Failed to update profile:", error);
-      await showErrorModal(
-        error instanceof Error
-          ? error.message
-          : "Failed to update profile. Please check the URLs.",
-      );
+      await showErrorModal(handleError(error));
     }
   });
 

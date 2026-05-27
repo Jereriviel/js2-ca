@@ -85,6 +85,7 @@ export function searchView() {
   <h2 class="font-bold text-xl">Posts</h2>
   <div id="postsResults" class="py-4"></div>
 `;
+
           const postsResultsContainer =
             document.getElementById("postsResults")!;
 
@@ -92,8 +93,12 @@ export function searchView() {
             container: postsResultsContainer,
             loadMoreContainer: postsLoadMoreContainer,
             fetchItems: (page) => getPaginatedSearchPosts(q, page, 10),
+
             renderItem: (post) =>
-              postCard(post, loggedInUserFollowingNames, { lazy: true }),
+              postCard(post, loggedInUserFollowingNames, {
+                lazy: true,
+              }),
+
             isPostList: true,
           });
         } else {
@@ -107,14 +112,18 @@ export function searchView() {
   <h2 class="font-bold text-xl">Profiles</h2>
   <div id="profilesResults" class="py-4"></div>
 `;
+
           const profilesResultsContainer =
             document.getElementById("profilesResults")!;
+
           await initPaginatedList({
             container: profilesResultsContainer,
             loadMoreContainer: profilesLoadMoreContainer,
             fetchItems: (page) => getPaginatedSearchProfiles(q, page, 10),
+
             renderItem: async (profile) => {
               const cachedProfile = await getCachedProfile(profile.name);
+
               return profileListItem(
                 cachedProfile,
                 loggedInUserFollowingNames.includes(cachedProfile.name),

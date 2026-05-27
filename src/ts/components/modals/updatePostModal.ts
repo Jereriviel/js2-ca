@@ -6,70 +6,100 @@ import { showConfirmModal } from "./confirmModal";
 import { goTo } from "../../utils/navigate";
 import { inputModal, textArea } from "../inputs";
 import { createModal } from "../../utils/createModal";
+import { handleError } from "../../errors/handleError";
 
 export function openUpdatePostModal(post: Post) {
-  const modal = createModal(`
+  const modal = createModal("");
 
-<form
-      method="dialog"
-      class="update-post-form flex flex-col gap-4 min-w-[375px]">
-      <div class="flex justify-between items-center">
-      <h2 class="font-semibold text-xl">Edit Post</h2>
-      <button type="button" id="cancelBtn" class="font-medium hover:bg-gray-medium w-fit py-2 px-5 rounded-full">Cancel</button>
-      </div>
-      <div class="flex flex-col gap-4">
-      ${inputModal({
-        type: "text",
-        name: "title",
-        placeholder: "Write a title for your post...",
-        required: true,
-        label: "Title",
-        id: "title",
-      })}
+  const form = document.createElement("form");
+  form.method = "dialog";
+  form.className = "update-post-form flex flex-col gap-4 min-w-[375px]";
 
-      ${textArea({
-        type: "text",
-        name: "body",
-        placeholder: "Write your post...",
-        required: true,
-        label: "Post",
-        id: "body",
-      })}
+  const header = document.createElement("div");
+  header.className = "flex justify-between items-center";
 
-      ${inputModal({
-        type: "url",
-        name: "imageUrl",
-        placeholder: "https://...",
-        required: false,
-        label: "Image URL",
-        id: "imageUrl",
-      })}
+  const title = document.createElement("h2");
+  title.className = "font-semibold text-xl";
+  title.textContent = "Edit Post";
 
-      ${inputModal({
-        type: "text",
-        name: "imageAlt",
-        placeholder: "Image description...",
-        required: false,
-        label: "Image alt text",
-        id: "imageAlt",
-      })}
-      </div>
-      <div class="modal-actions flex justify-between">
-        <button type="button" id="deleteBtn" class="bg-red-500 hover:bg-red-700 text-white text- w-fit py-2 px-5 rounded-full mt-4">Delete</button>
-        <button type="submit" class="bg-primary hover:bg-primary-hover text-white text- w-fit py-2 px-5 rounded-full mt-4">Save Changes</button>
-        </div>
-      <p class="error-message"></p>
-    </form>
-  `);
+  const cancelBtn = document.createElement("button");
+  cancelBtn.type = "button";
+  cancelBtn.id = "cancelBtn";
+  cancelBtn.className =
+    "font-medium hover:bg-gray-medium w-fit py-2 px-5 rounded-full";
+  cancelBtn.textContent = "Cancel";
+
+  header.append(title, cancelBtn);
+
+  const fields = document.createElement("div");
+  fields.className = "flex flex-col gap-4";
+
+  fields.innerHTML = `
+    ${inputModal({
+      type: "text",
+      name: "title",
+      placeholder: "Write a title for your post...",
+      required: true,
+      label: "Title",
+      id: "title",
+    })}
+
+    ${textArea({
+      type: "text",
+      name: "body",
+      placeholder: "Write your post...",
+      required: true,
+      label: "Post",
+      id: "body",
+    })}
+
+    ${inputModal({
+      type: "url",
+      name: "imageUrl",
+      placeholder: "https://...",
+      required: false,
+      label: "Image URL",
+      id: "imageUrl",
+    })}
+
+    ${inputModal({
+      type: "text",
+      name: "imageAlt",
+      placeholder: "Image description...",
+      required: false,
+      label: "Image alt text",
+      id: "imageAlt",
+    })}
+  `;
+
+  const actions = document.createElement("div");
+  actions.className = "modal-actions flex justify-between";
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.type = "button";
+  deleteBtn.id = "deleteBtn";
+  deleteBtn.className =
+    "bg-red-500 hover:bg-red-700 text-white w-fit py-2 px-5 rounded-full mt-4";
+  deleteBtn.textContent = "Delete";
+
+  const saveBtn = document.createElement("button");
+  saveBtn.type = "submit";
+  saveBtn.className =
+    "bg-primary hover:bg-primary-hover text-white w-fit py-2 px-5 rounded-full mt-4";
+  saveBtn.textContent = "Save Changes";
+
+  const errorEl = document.createElement("p");
+  errorEl.className = "error-message text-red-500 text-sm";
+
+  actions.append(deleteBtn, saveBtn);
+
+  form.append(header, fields, actions, errorEl);
+  modal.appendChild(form);
 
   document.body.appendChild(modal);
   modal.showModal();
 
-  const form = modal.querySelector<HTMLFormElement>("form.update-post-form")!;
-  const cancelBtn = form.querySelector<HTMLButtonElement>("#cancelBtn")!;
-  const deleteBtn = form.querySelector<HTMLButtonElement>("#deleteBtn")!;
-  const errorEl = form.querySelector<HTMLParagraphElement>(".error-message")!;
-
+  // Populate existing values
   form.querySelector<HTMLInputElement>("#title")!.value = post.title || "";
   form.querySelector<HTMLTextAreaElement>("#body")!.value = post.body || "";
   form.querySelector<HTMLInputElement>("#imageUrl")!.value =
@@ -84,6 +114,7 @@ export function openUpdatePostModal(post: Post) {
     errorEl.textContent = "";
 
     const formData = new FormData(form);
+
     const title = formData.get("title") as string;
     const body = formData.get("body") as string;
     const mediaUrl = formData.get("imageUrl") as string;
@@ -95,25 +126,25 @@ export function openUpdatePostModal(post: Post) {
     }
 
     const postData: Partial<Post> = { title };
+
     if (body) postData.body = body;
+
     if (mediaUrl) {
       postData.media = {
         url: mediaUrl,
         alt: mediaAlt || "Post image",
       };
     }
+
     try {
       await updatePost(post.id, postData);
+
       modal.close();
       modal.remove();
+
       await router.refresh();
     } catch (error) {
-      console.error("Failed to update post:", error);
-      await showErrorModal(
-        error instanceof Error
-          ? error.message
-          : "Failed to update post. Please try again.",
-      );
+      await showErrorModal(handleError(error));
     }
   });
 
@@ -121,24 +152,22 @@ export function openUpdatePostModal(post: Post) {
     const confirmed = await showConfirmModal(
       "Are you sure you want to delete this post?",
     );
+
     if (!confirmed) return;
 
     try {
       await deletePost(post.id);
+
       modal.close();
       modal.remove();
+
       if (history.length > 1) {
         history.back();
       } else {
         goTo("/feed");
       }
     } catch (error) {
-      console.error("Failed to delete post:", error);
-      await showErrorModal(
-        error instanceof Error
-          ? error.message
-          : "Failed to delete post. Please try again.",
-      );
+      await showErrorModal(handleError(error));
     }
   });
 

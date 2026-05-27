@@ -2,8 +2,6 @@ import { ApiError } from "./ApiError";
 
 export function handleError(error: unknown): string {
   if (error instanceof ApiError) {
-    console.error(`[API Error] ${error.statusCode}: ${error.message}`);
-
     switch (error.statusCode) {
       case 400:
         return "Bad request. Please try again.";
@@ -19,13 +17,13 @@ export function handleError(error: unknown): string {
       case 504:
         return "Server error. Please try again later.";
       default:
-        return "An unexpected error occurred.";
+        return error.message || "An unexpected error occurred.";
     }
-  } else if (error instanceof Error) {
-    console.error(`[General Error] ${error.message}`);
-    return error.message;
-  } else {
-    console.error("[Unknown Error]", error);
-    return "Something went wrong. Please try again.";
   }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return "Something went wrong. Please try again.";
 }

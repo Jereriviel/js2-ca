@@ -6,11 +6,12 @@ import { initEditPostButtons } from "../../components/postCard";
 import type { PaginatedResponse, Post } from "../../types/post";
 import { initLazyLoadImages } from "../lazyLoadImages";
 import { showErrorModal } from "../../components/modals/errorModal";
+import { handleError } from "../../errors/handleError";
 
 export async function initPaginatedList<T>(options: {
   container: HTMLElement;
   fetchItems: (page: number) => Promise<PaginatedResponse<T>>;
-  renderItem: (item: T) => string | Promise<string>;
+  renderItem: (item: T) => Promise<HTMLElement> | HTMLElement;
   onAfterRender?: (items: T[]) => void;
   isPostList?: boolean;
   loadMoreContainer?: HTMLElement;
@@ -29,19 +30,22 @@ export async function initPaginatedList<T>(options: {
     const items = response.data;
     const meta = response.meta;
 
-    const htmlArr = await Promise.all(
-      items.map((item) => Promise.resolve(renderItem(item))),
-    );
-    container.innerHTML = htmlArr.join("");
+    container.innerHTML = "";
+
+    const elements = await Promise.all(items.map((item) => renderItem(item)));
+
+    elements.forEach((el) => container.appendChild(el));
 
     if (isPostList) {
       initPostLinks(container);
       initEditPostButtons(items as Post[]);
     }
+
     initProfileLinks(container);
     initFollowButtons();
-    if (onAfterRender) onAfterRender(items);
     initLazyLoadImages();
+
+    if (onAfterRender) onAfterRender(items);
 
     if (!meta?.isLastPage) {
       const btnContainer =
@@ -55,11 +59,19 @@ export async function initPaginatedList<T>(options: {
         fetchItems,
         renderItem,
         onAfterRender: async (newItems) => {
+          const newElements = await Promise.all(
+            newItems.map((item) => renderItem(item)),
+          );
+
+          newElements.forEach((el) => container.appendChild(el));
+
           if (isPostList) initEditPostButtons(newItems as Post[]);
+
           initPostLinks(container);
           initProfileLinks(container);
           initFollowButtons();
           initLazyLoadImages();
+
           if (onAfterRender) onAfterRender(newItems);
         },
       });
@@ -67,11 +79,6 @@ export async function initPaginatedList<T>(options: {
       btnContainer.appendChild(loadMoreBtn);
     }
   } catch (error) {
-    let message = "Error loading items.";
-    if (error instanceof Error) {
-      message = error.message;
-    }
-    await showErrorModal(message);
-    console.error("initPaginatedList error:", error);
+    await showErrorModal(handleError(error));
   }
 }

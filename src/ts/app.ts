@@ -7,9 +7,6 @@ import {
   loadNavMiniProfile,
 } from "./components/navigation";
 import { getUser } from "./store/userStore";
-import { initGlobalErrorHandling } from "./errors/GlobalError";
-
-initGlobalErrorHandling();
 
 const outlet = document.getElementById("app") as HTMLElement;
 export const router = new Router(routes, outlet);
@@ -17,8 +14,13 @@ export const router = new Router(routes, outlet);
 setNavigate(router.navigate.bind(router));
 
 export function renderLayout() {
-  const navbarContainer = document.getElementById("navbar")!;
+  const navbarContainer = document.getElementById("navbar-container");
   const user = getUser();
+
+  if (!navbarContainer) {
+    console.error("Navbar container missing from DOM");
+    return;
+  }
 
   if (user) {
     navbarContainer.classList.remove("hidden");

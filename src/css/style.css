@@ -6,9 +6,9 @@
   --font-display: "righteous", "sans-serif";
 
   /* Colors */
-  --color-primary: oklch(0.5748 0.1509 50.48);
-  --color-primary-hover: oklch(0.4853 0.1266 50.93);
-  --color-primary-active: oklch(0.3931 0.1003 52.58);
+  --color-primary: oklch(0.6732 0.1918 45.2);
+  --color-primary-hover: oklch(0.5766 0.1622 45.96);
+  --color-primary-active: oklch(0.4759 0.1312 47.19);
   --color-secondary: oklch(0.4821 0.0796 216.35);
   --color-secondary-hover: oklch(0.3957 0.067 217.21);
   --color-secondary-active: oklch(0.3148 0.0553 217.76);

@@ -1,6 +1,5 @@
 import { API_BASE, API_KEY } from "../constants";
 import { ApiError } from "../errors/ApiError";
-import { handleError } from "../errors/handleError";
 
 const apiKey = API_KEY;
 
@@ -21,22 +20,18 @@ async function apiFetch<T>(
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  try {
-    const response = await fetch(url, { ...options, headers });
+  const response = await fetch(url, { ...options, headers });
 
-    if (!response.ok) {
-      throw await ApiError.fromResponse(response);
-    }
-
-    if (response.status === 204) {
-      return null;
-    }
-
-    const data: T = await response.json();
-    return data;
-  } catch (error) {
-    throw new Error(handleError(error));
+  if (!response.ok) {
+    throw await ApiError.fromResponse(response);
   }
+
+  if (response.status === 204) {
+    return null;
+  }
+
+  const data: T = await response.json();
+  return data;
 }
 
 export async function get<T>(endpoint: string): Promise<T | null> {

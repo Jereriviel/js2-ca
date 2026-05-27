@@ -5,111 +5,174 @@ import { formatTimePost } from "../utils/formatTimePost";
 import { getCurrentUserProfile } from "../services/profileService";
 import type { Profile } from "../types/profile";
 import { followButton } from "./followButton";
-
-/**
- * Generates the HTML for a single blog post.
- *
- * Fetches the author's full profile if available, and renders:
- * - Author information (avatar, name, post time)
- * - Post title and body
- * - Optional media (image)
- * - Post actions (Follow/Unfollow button if not own post, Edit button if own post)
- * - Comment count
- *
- * @async
- * @function postCard
- * @param {Post} post - The post object to render.
- * @param {string[]} loggedInUserFollowing - Array of usernames that the logged-in user follows, used to determine follow button state.
- * @returns {Promise<string>} HTML string representing the post card.
- *
- * @example
- * const html = await postCard(postData, loggedInUserFollowing);
- * document.getElementById('postContainer')!.innerHTML = html;
- */
+import { showErrorModal } from "./modals/errorModal";
+import { handleError } from "../errors/handleError";
 
 export async function postCard(
   post: Post,
   loggedInUserFollowing: string[],
   options: { lazy?: boolean } = { lazy: true },
-): Promise<string> {
+): Promise<HTMLElement> {
   const { lazy } = options;
+
   const isFollowing = post.author?.name
     ? loggedInUserFollowing.includes(post.author.name)
     : false;
+
   const loggedInUser = getUser();
+
   const isOwnPost = loggedInUser?.name === post.author?.name;
+
   const createdTime = formatTimePost(post.created);
+
   const updatedTime =
     post.updated && post.updated !== post.created
       ? ` (updated ${formatTimePost(post.updated)})`
       : "";
 
   let authorProfile: Profile | undefined = post.author;
+
   if (post.author?.name) {
     try {
       authorProfile = await getCurrentUserProfile(post.author.name);
     } catch (error) {
-      console.warn("Failed to fetch author profile", error);
+      await showErrorModal(handleError(error));
     }
   }
 
-  return `
-  <article class="post flex flex-col pt-4 w-full" data-post-id="${post.id}">
-    <div class=flex>
-      <div class="profile-link pr-4">
-        <figure class="w-12 h-12">
-          <img
-            class="rounded-full w-full h-full object-cover"
-            src="${authorProfile?.avatar?.url ?? "/default-avatar.png"}"
-            alt="${authorProfile?.avatar?.alt ?? authorProfile?.name ?? "User avatar"}"
-          />
-        </figure>
-      </div>
-      <div class="flex flex-col grow">
-        <div class="post-header flex justify-between items-start">
-          <div class="profile-link flex items-start gap-1" data-username="${authorProfile?.name ?? "Unknown"}">
-            <div class="flex flex-col gap-1">
-              <h4 class="font-medium">${authorProfile?.name ?? "Unknown"}</h4>
-              <span class="post-time text-sm text-gray-dark">${createdTime}${updatedTime}</span>
-            </div>
-          </div>
-          <div class="post-actions flex gap-2">
-            ${!isOwnPost && post.author ? followButton(post.author, isFollowing) : ""}
-            ${
-              isOwnPost
-                ? `<button class="edit-post-btn bg-secondary hover:bg-secondary-hover text-white text-sm py-2 px-4 rounded-full" data-id="${post.id}">Edit post</button>`
-                : ""
-            }
-          </div>
-        </div>
-        <div class="flex flex-col gap-1 py-3">
-          <h2 class="post-link text-l font-semibold" data-id="${post.id}">${
-            post.title
-          }</h2>
-          <p class="post-link" data-id="${post.id}">${post.body ?? ""}</p>
-        </div>
-        <figure>
-          ${
-            post.media
-              ? `<img 
-                class="post-link rounded-lg ${lazy ? "lazy-load" : ""} w-full max-h-[600px] object-cover" 
-                data-id="${post.id}" 
-                ${lazy ? `data-src="${post.media.url}" src="../public/img/placeholder.png"` : `src="${post.media.url}"`}
-                alt="${post.media.alt ?? ""}"
-              />`
-              : ""
-          }
-        </figure>
-        <div class="post-footer pt-3 text-sm text-gray-dark">
-          <span class="post-link" data-id="${post.id}">
-            ${post._count.comments} comments
-          </span>
-        </div>
-      </div>
-    </div>
-    <hr class="h-[px] bg-gray-medium border-none my-4">
-  </article>
-`;
+  const article = document.createElement("article");
+  article.className = "post flex flex-col pt-4 w-full";
+  article.dataset.postId = String(post.id);
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "flex";
+
+  // LEFT PROFILE
+  const profileWrapper = document.createElement("div");
+  profileWrapper.className = "profile-link pr-4";
+
+  const figure = document.createElement("figure");
+  figure.className = "w-12 h-12";
+
+  const img = document.createElement("img");
+  img.className = "rounded-full w-full h-full object-cover";
+
+  img.src = authorProfile?.avatar?.url ?? "/default-avatar.png";
+
+  img.alt = authorProfile?.avatar?.alt ?? authorProfile?.name ?? "User avatar";
+
+  figure.appendChild(img);
+  profileWrapper.appendChild(figure);
+
+  // MAIN COLUMN
+  const main = document.createElement("div");
+  main.className = "flex flex-col grow";
+
+  // HEADER
+  const header = document.createElement("div");
+  header.className = "post-header flex justify-between items-start";
+
+  const authorBox = document.createElement("div");
+  authorBox.className = "profile-link flex items-start gap-1";
+
+  authorBox.dataset.username = authorProfile?.name ?? "Unknown";
+
+  const textBox = document.createElement("div");
+  textBox.className = "flex flex-col gap-1";
+
+  const name = document.createElement("h4");
+  name.className = "font-medium";
+  name.textContent = authorProfile?.name ?? "Unknown";
+
+  const time = document.createElement("span");
+  time.className = "post-time text-sm text-gray-dark";
+  time.textContent = createdTime + updatedTime;
+
+  textBox.append(name, time);
+  authorBox.appendChild(textBox);
+
+  const actions = document.createElement("div");
+  actions.className = "post-actions flex gap-2";
+
+  if (!isOwnPost && post.author) {
+    actions.appendChild(followButton(post.author, isFollowing));
+  }
+
+  if (isOwnPost) {
+    const editBtn = document.createElement("button");
+    editBtn.className =
+      "edit-post-btn bg-secondary hover:bg-secondary-hover text-white text-sm py-2 px-4 rounded-full";
+
+    editBtn.dataset.id = String(post.id);
+    editBtn.textContent = "Edit post";
+
+    actions.appendChild(editBtn);
+  }
+
+  header.append(authorBox, actions);
+
+  // CONTENT
+  const content = document.createElement("div");
+  content.className = "flex flex-col gap-1 py-3";
+
+  const title = document.createElement("h2");
+  title.className = "post-link text-l font-semibold";
+  title.dataset.id = String(post.id);
+  title.textContent = post.title;
+
+  const body = document.createElement("p");
+  body.className = "post-link";
+  body.dataset.id = String(post.id);
+  body.textContent = post.body ?? "";
+
+  content.append(title, body);
+
+  // MEDIA
+  const figureMedia = document.createElement("figure");
+
+  if (post.media) {
+    const imgMedia = document.createElement("img");
+
+    imgMedia.className =
+      "post-link rounded-lg w-full max-h-[600px] object-cover";
+
+    imgMedia.dataset.id = String(post.id);
+
+    if (lazy) {
+      imgMedia.dataset.src = post.media.url;
+      imgMedia.src = "/img/placeholder.png";
+      imgMedia.classList.add("lazy-load");
+    } else {
+      imgMedia.src = post.media.url;
+    }
+
+    imgMedia.alt = post.media.alt ?? "";
+
+    figureMedia.appendChild(imgMedia);
+  }
+
+  // FOOTER
+  const footer = document.createElement("div");
+  footer.className = "post-footer pt-3 text-sm text-gray-dark";
+
+  const comments = document.createElement("span");
+  comments.className = "post-link";
+  comments.dataset.id = String(post.id);
+  comments.textContent = `${post._count.comments} comments`;
+
+  footer.appendChild(comments);
+
+  // ASSEMBLE
+  main.append(header, content, figureMedia, footer);
+  wrapper.append(profileWrapper, main);
+  article.appendChild(wrapper);
+
+  const hr = document.createElement("hr");
+  hr.className = "h-[1px] bg-gray-medium border-none my-4";
+
+  article.appendChild(hr);
+
+  return article;
 }
 
 export function initEditPostButtons(posts: Post[]) {
