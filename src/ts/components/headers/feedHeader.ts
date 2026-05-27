@@ -5,7 +5,21 @@ export function feedHeader(current: "feed" | "following"): string {
   const followingIsActive = current === "following";
 
   return `
-<div class="feed-header flex items-start justify-around pt-8 font-semibold text-l">
+        <figure class="w-full flex justify-center pt-2 sm:pt-4 sm:hidden">
+        <img
+          class=""
+          src="/img/hearth_logo_24x24.png"
+          alt="Hearth logo"
+        />
+      </figure>
+              <figure class="w-full sm:flex justify-center pt-2 sm:pt-4 hidden">
+        <img
+          class=""
+          src="/img/hearth_logo_32x32.png"
+          alt="Hearth logo"
+        />
+      </figure>
+<div class="feed-header flex items-start justify-around font-semibold text-l">
   <h1 class="${feedIsActive ? "border-b-3 border-primary pb-2" : ""}">
     ${feedIsActive ? "Feed" : `<a href="/feed" class="feed-link">Feed</a>`}
   </h1>
@@ -17,7 +31,7 @@ export function feedHeader(current: "feed" | "following"): string {
     }
   </h1>
 </div>
-    <hr  class= "text-gray-medium mt-4">
+    <hr  class= "text-gray-medium">
   `;
 }
 

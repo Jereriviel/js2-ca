@@ -156,7 +156,7 @@ export async function loadNavMiniProfile() {
 
     const email = document.createElement("p");
     email.textContent = profile.email;
-    email.className = "text-sm font-normal text-gray-dark break-words";
+    email.className = "text-sm font-normal text-gray-dark truncate";
 
     nameEmailContainer.append(name, email);
 

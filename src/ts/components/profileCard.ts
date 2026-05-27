@@ -31,12 +31,12 @@ export function profileCard(
 
   if (profile.banner) {
     bannerEl = document.createElement("figure");
-    bannerEl.className = "profile-banner w-full max-h-[150px] overflow-hidden";
+    bannerEl.className = "profile-banner w-full h-[150px] overflow-hidden";
 
     const img = document.createElement("img");
     img.src = profile.banner.url;
     img.alt = profile.banner.alt || "Banner";
-    img.className = "w-full h-auto object-cover";
+    img.className = "w-full h-full object-cover";
 
     bannerEl.appendChild(img);
   }
