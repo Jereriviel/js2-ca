@@ -101,7 +101,7 @@ export async function postCard(
   if (isOwnPost) {
     const editBtn = document.createElement("button");
     editBtn.className =
-      "edit-post-btn bg-secondary hover:bg-secondary-hover text-white text-sm py-2 px-4 rounded-full";
+      "edit-post-btn bg-secondary hover:bg-secondary-hover text-white text-sm py-2 px-4 rounded-full shrink-0";
 
     editBtn.dataset.id = String(post.id);
     editBtn.textContent = "Edit post";

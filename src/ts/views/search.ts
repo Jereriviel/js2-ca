@@ -22,9 +22,9 @@ export function searchView() {
   return protectedView({
     footer: footer(),
     html: `
-    <section>
-    <form id="searchForm">
-        <div class="flex mt-8 mb-4 bg-gray-light pl-4 border border-gray-medium rounded-full gap-2">
+    <section class="h-full">
+    <form id="searchForm" class="py-4 sm:py-8 h-full">
+        <div class="flex bg-gray-light pl-4 border border-gray-medium rounded-full gap-2">
           <button type="submit">
           <span class="material-symbols-outlined text-gray-dark">search</span>
           </button>
